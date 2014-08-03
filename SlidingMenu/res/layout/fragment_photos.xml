@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/background">
+
+    <TextView
+        android:id="@+id/cInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Connection Information" />
+
+    <TextView
+        android:id="@+id/cName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cPic"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Connection Name"
+        android:textSize="16dp" />
+
+    <ToggleButton
+        android:id="@+id/integ"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/prof"
+        android:layout_below="@+id/prof"
+        android:layout_marginTop="10dp"
+        android:textOff="Integrity" 
+        android:textOn="Integrity" 
+        android:textSize="12dp"/>
+
+    <ToggleButton
+        android:id="@+id/prod"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/prof"
+        android:layout_alignBottom="@+id/prof"
+        android:layout_marginLeft="38dp"
+        android:layout_toRightOf="@+id/prof"
+        android:textOff="Productivity"
+        android:textOn="Productivity"
+        android:textSize="12dp" />
+
+    <ToggleButton
+        android:id="@+id/adapt"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/integ"
+        android:layout_alignBottom="@+id/integ"
+        android:layout_alignLeft="@+id/prod"
+        android:textOff ="Adaptibility"
+        android:textOn ="Adaptibility"
+        android:textSize="12dp" />
+
+    <ToggleButton
+        android:id="@+id/comm"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/integ"
+        android:layout_below="@+id/integ"
+        android:layout_marginTop="10dp"
+        android:textOff="Communication"
+        android:textOn="Communication"
+        android:textSize="12dp" />
+
+    <ToggleButton
+        android:id="@+id/lead"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/comm"
+        android:layout_alignBottom="@+id/comm"
+        android:layout_alignLeft="@+id/adapt"
+        android:textOff="Leadership"
+        android:textOn="Leadership"
+        android:textSize="12dp" />
+
+    <ToggleButton
+        android:id="@+id/team"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/lead"
+        android:layout_below="@+id/lead"
+        android:layout_marginTop="10dp"
+        android:textOff="Teamwork"
+        android:textOn="Teamwork"
+        android:textSize="12dp"
+         />
+
+    <ToggleButton
+        android:id="@+id/innovation"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/team"
+        android:layout_alignBottom="@+id/team"
+        android:layout_alignLeft="@+id/comm"
+        android:textOff="Innovation"
+        android:textOn="Innovation"
+        android:textSize="12dp" />
+
+    <ImageView
+        android:id="@+id/cPic"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/default_face" />
+
+    <ToggleButton
+        android:id="@+id/prof"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="30dp"
+        android:textOff="Professionalism"
+        android:textOn="Professionalism"
+        android:textSize="12dp" />
+
+</RelativeLayout>
