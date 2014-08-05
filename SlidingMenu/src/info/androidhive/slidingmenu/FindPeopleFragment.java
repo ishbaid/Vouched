@@ -22,8 +22,9 @@ import android.widget.ListView;
 import android.widget.SectionIndexer;
 import co.pipevine.android.R;
 import co.pipevine.core.ContactDataListener;
-import co.pipevine.core.Login;
-import co.pipevine.core.ViewProfileActivity;
+
+import co.pipevine.core.ViewConnectionProfileActivity;
+
 
 public class FindPeopleFragment extends Fragment {
 
@@ -57,7 +58,7 @@ public class FindPeopleFragment extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent(getActivity(), ViewProfileActivity.class);
+				Intent intent = new Intent(getActivity(), ViewConnectionProfileActivity.class);
 
 				String reverseName = ContactDataListener.getNames().get(position);
 

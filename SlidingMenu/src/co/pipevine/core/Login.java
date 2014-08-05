@@ -165,6 +165,7 @@ public class Login extends Activity {
 			Log.d("Custom-UI",  "Profile Image URL  = " + profileMap.getProfileImageURL());
 
 			
+			
 			Intent returnIntent = new Intent();
 			returnIntent.putExtra("First Name", profileMap.getFirstName());
 			returnIntent.putExtra("Last Name", profileMap.getLastName());

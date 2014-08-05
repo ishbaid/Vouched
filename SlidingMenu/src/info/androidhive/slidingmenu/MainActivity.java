@@ -11,6 +11,7 @@ import org.brickred.socialauth.android.SocialAuthAdapter;
 import org.brickred.socialauth.android.SocialAuthAdapter.Provider;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -33,7 +34,6 @@ import android.widget.SearchView;
 import co.pipevine.android.R;
 import co.pipevine.core.ContactDataListener;
 import co.pipevine.core.Login;
-import co.pipevine.core.LoginFragment;
 import co.pipevine.core.Login.ResponseListener;
 
 
@@ -198,6 +198,8 @@ public class MainActivity extends Activity {
 	        	
 	        	//If we have loggedIn, then we can load connections
 	        	Login.adapter.getContactListAsync(new ContactDataListener());
+
+	        	
 	        	
 	        	//we successfully logged in
 				edit.putBoolean("LoggedIn", true);
@@ -209,6 +211,18 @@ public class MainActivity extends Activity {
 	        	
 	        	//we did not log in 
 	        	edit.putBoolean("LoggedIn", false);
+	        	
+	        	//error
+	        	AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();  
+				alertDialog.setTitle("Error ");  
+				alertDialog.setMessage("Problem signing in wiht LinkedIn");
+				alertDialog.setCanceledOnTouchOutside(true);
+				alertDialog.show(); 
+				
+				//try sign in again
+				Intent launch = new Intent(MainActivity.this, Login.class);
+				startActivityForResult(launch, 1);
+	        	
 	        }
 	        edit.commit();
 	    }

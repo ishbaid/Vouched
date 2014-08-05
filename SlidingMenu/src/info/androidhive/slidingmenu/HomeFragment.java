@@ -1,24 +1,31 @@
 package info.androidhive.slidingmenu;
 
+import java.util.List;
+
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import co.pipevine.android.R;
+import co.pipevine.core.ContactDataListener;
 import co.pipevine.core.DownloadImagesTask;
 import co.pipevine.core.OnSwipeTouchListener;
 
 
 public class HomeFragment extends Fragment {
 
-	RelativeLayout homeBackground;
-	TextView name, info;
+	FrameLayout homeBackground;
+	TextView name, info, score;
+	static TextView numConnections;
+	TextView numVouched;
 	//contains profile picture
 	ImageView proPic;
 	public HomeFragment(){}
@@ -27,9 +34,9 @@ public class HomeFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-		homeBackground = (RelativeLayout) rootView.findViewById(R.id.home_background);
+		homeBackground = (FrameLayout) rootView.findViewById(R.id.dashboard_background);
 		homeBackground.setOnTouchListener(new OnSwipeTouchListener(getActivity()){
 
 			//transition to new fragment
@@ -42,9 +49,8 @@ public class HomeFragment extends Fragment {
 
 				Fragment newFragment = new HomeFragment2();
 				
-				ft.replace(R.id.home_background, newFragment);
-				//ft.replace(R.id.details_fragment_container, newFragment, "detailFragment");
-
+				ft.replace(R.id.frame_container, newFragment);
+				
 				// Start the animated transition.
 				ft.commit();
 			}
@@ -53,6 +59,11 @@ public class HomeFragment extends Fragment {
 			
 		});
 		
+
+		
+		score = (TextView) rootView.findViewById(R.id.vouch_score);
+		numConnections = (TextView) rootView.findViewById(R.id.num_connections);
+		numVouched = (TextView) rootView.findViewById(R.id.num_vouched);
 		name = (TextView) rootView.findViewById(R.id.name);
 		info = (TextView) rootView.findViewById(R.id.info);
 		proPic = (ImageView) rootView.findViewById(R.id.proPic);
@@ -72,6 +83,9 @@ public class HomeFragment extends Fragment {
 			name.setText(MainActivity.fn + " " + MainActivity.ln);
 			info.setText(MainActivity.email + "\n" + MainActivity.location);
 		} 
+		//checks if user is loggedin
+		//it might be more efficient to combine all these if statements together
+		setConnectionNumber(getActivity());
 		
 		if(MainActivity.URL != null){
 			
@@ -86,6 +100,19 @@ public class HomeFragment extends Fragment {
 		}
 	}
 	
+	public static void setConnectionNumber(Context context){
+		
+		SharedPreferences prefs = context.getSharedPreferences("co.pipevine.core", Context.MODE_PRIVATE);
+		boolean loggedIn = prefs.getBoolean("LoggedIn", false);
+		if(loggedIn && numConnections != null){
+			
+			List<String> contacts = ContactDataListener.getNames();
+			if(contacts != null)
+				numConnections.setText(ContactDataListener.getNames().size() + "");
+			
+		}
+		
+	}
 
 	
 	
