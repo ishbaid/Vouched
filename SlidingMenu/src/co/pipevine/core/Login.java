@@ -163,7 +163,7 @@ public class Login extends Activity {
 			Log.d("Custom-UI",  "Language                 = " + profileMap.getLanguage());
 			Log.d("Custom-UI",  "Location                 = " + profileMap.getLocation());
 			Log.d("Custom-UI",  "Profile Image URL  = " + profileMap.getProfileImageURL());
-
+			
 			
 			
 			Intent returnIntent = new Intent();
@@ -172,6 +172,7 @@ public class Login extends Activity {
 			returnIntent.putExtra("Email", profileMap.getEmail());
 			returnIntent.putExtra("Location", profileMap.getLocation());
 			returnIntent.putExtra("Url", profileMap.getProfileImageURL());
+			returnIntent.putExtra("ID", profileMap.getValidatedId());
 			setResult(RESULT_OK,returnIntent);
 			finish();
 

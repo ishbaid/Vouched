@@ -7,6 +7,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +24,11 @@ import co.pipevine.core.OnSwipeTouchListener;
 public class HomeFragment extends Fragment {
 
 	FrameLayout homeBackground;
-	TextView name, info, score;
-	static TextView numConnections;
-	TextView numVouched;
+	TextView name, info;
+	static TextView score;
+	static TextView numGiven;
+	static TextView numReceived;
+	
 	//contains profile picture
 	ImageView proPic;
 	public HomeFragment(){}
@@ -62,8 +65,8 @@ public class HomeFragment extends Fragment {
 
 		
 		score = (TextView) rootView.findViewById(R.id.vouch_score);
-		numConnections = (TextView) rootView.findViewById(R.id.num_connections);
-		numVouched = (TextView) rootView.findViewById(R.id.num_vouched);
+		numGiven = (TextView) rootView.findViewById(R.id.num_given);
+		numReceived = (TextView) rootView.findViewById(R.id.num_received);
 		name = (TextView) rootView.findViewById(R.id.name);
 		info = (TextView) rootView.findViewById(R.id.info);
 		proPic = (ImageView) rootView.findViewById(R.id.proPic);
@@ -83,9 +86,7 @@ public class HomeFragment extends Fragment {
 			name.setText(MainActivity.fn + " " + MainActivity.ln);
 			info.setText(MainActivity.email + "\n" + MainActivity.location);
 		} 
-		//checks if user is loggedin
-		//it might be more efficient to combine all these if statements together
-		setConnectionNumber(getActivity());
+
 		
 		if(MainActivity.URL != null){
 			
@@ -99,18 +100,13 @@ public class HomeFragment extends Fragment {
 			proPic.setLayoutParams(params);
 		}
 	}
-	
-	public static void setConnectionNumber(Context context){
+	//updates stats
+	public static void setConnectionNumber(int vScore, int given, int received){
 		
-		SharedPreferences prefs = context.getSharedPreferences("co.pipevine.core", Context.MODE_PRIVATE);
-		boolean loggedIn = prefs.getBoolean("LoggedIn", false);
-		if(loggedIn && numConnections != null){
-			
-			List<String> contacts = ContactDataListener.getNames();
-			if(contacts != null)
-				numConnections.setText(ContactDataListener.getNames().size() + "");
-			
-		}
+		score.setText(vScore  + "");
+		numGiven.setText(given  + "");
+		numReceived.setText(received + "");
+		Log.d("Baid", "score: " + vScore + " Given: " + given + " Received: " + received);
 		
 	}
 

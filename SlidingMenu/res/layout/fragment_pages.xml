@@ -45,4 +45,14 @@
         android:text="Notifications"
         android:textSize="28dp" />
 
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_below="@+id/toggleButton2"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="47dp"
+        android:text="Reset" />
+
 </RelativeLayout>

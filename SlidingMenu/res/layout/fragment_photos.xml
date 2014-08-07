@@ -47,20 +47,22 @@
             <ToggleButton
                 android:id="@+id/prof"
                 android:layout_width="125dp"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_marginRight="10dp"
-                android:textOff="Professionalism"
-                android:textOn="Professionalism"
+                android:background="@drawable/prof0"
+                android:textOff=""
+                android:textOn=""
                 android:textSize="12dp" />
 
             <ToggleButton
                 android:id="@+id/prod"
                 android:layout_width="125dp"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_toRightOf="@+id/prof"
-                android:textOff="Productivity"
-                android:textOn="Productivity"
-                android:textSize="12dp" />
+                android:textOff=""
+                android:textOn=""
+                android:textSize="12dp"
+                android:background="@drawable/prod0" />
         </LinearLayout>
 
         <LinearLayout
@@ -72,20 +74,22 @@
             <ToggleButton
                 android:id="@+id/integ"
                 android:layout_width="125dp"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_marginRight="10dp"
-                android:textOff="Integrity"
-                android:textOn="Integrity"
-                android:textSize="12dp" />
+                android:textOff=""
+                android:textOn=""
+                android:textSize="12dp"
+                android:background="@drawable/integ0" />
 
             <ToggleButton
                 android:id="@+id/adapt"
                 android:layout_width="125dp"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_alignBaseline="@+id/integ"
-                android:textOff="Adaptibility"
-                android:textOn="Adaptibility"
-                android:textSize="12dp" />
+                android:textOff=""
+                android:textOn=""
+                android:textSize="12dp"
+                android:background="@drawable/adapt0" />
         </LinearLayout>
 
         <LinearLayout
@@ -98,19 +102,21 @@
             <ToggleButton
                 android:id="@+id/comm"
                 android:layout_width="125dp"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_marginRight="10dp"
-                android:textOff="Communication"
-                android:textOn="Communication"
-                android:textSize="12dp" />
+                android:textOff=""
+                android:textOn=""
+                android:textSize="12dp"
+                android:background="@drawable/comm0" />
 
             <ToggleButton
                 android:id="@+id/lead"
                 android:layout_width="125dp"
-                android:layout_height="wrap_content"
-                android:textOff="Leadership"
-                android:textOn="Leadership"
-                android:textSize="12dp" />
+                android:layout_height="30dp"
+                android:textOff=""
+                android:textOn=""
+                android:textSize="12dp"
+                android:background="@drawable/lead0" />
         </LinearLayout>
 
         <LinearLayout
@@ -122,19 +128,21 @@
             <ToggleButton
                 android:id="@+id/innovation"
                 android:layout_width="125dp"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_marginRight="10dp"
-                android:textOff="Innovation"
-                android:textOn="Innovation"
-                android:textSize="12dp" />
+                android:textOff=""
+                android:textOn=""
+                android:textSize="12dp"
+                android:background="@drawable/innovation0" />
 
             <ToggleButton
                 android:id="@+id/team"
                 android:layout_width="125dp"
-                android:layout_height="wrap_content"
-                android:textOff="Teamwork"
-                android:textOn="Teamwork"
-                android:textSize="12dp" />
+                android:layout_height="30dp"
+                android:textOff=""
+                android:textOn=""
+                android:textSize="12dp"
+                android:background="@drawable/team0" />
         </LinearLayout>
     </LinearLayout>
 

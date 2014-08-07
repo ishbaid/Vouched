@@ -9,17 +9,11 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sign in with LinkedIn" 
+        android:text="Click anywhere to login with linkedin" 
         android:layout_gravity="center"
         android:textSize="24dp"
         android:layout_marginTop="100dp"/>
 
-    <Button
-        android:id="@+id/linkedin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/linkedin" 
-        android:layout_gravity="center"
-        android:layout_marginTop="50dp"/>
+>
 
 </LinearLayout>

@@ -48,7 +48,7 @@ public class ViewConnectionProfileActivity extends FragmentActivity {
  
         List<Fragment> fragments = new Vector<Fragment>();
         fragments.add(Fragment.instantiate(this, ViewProfileFragment.class.getName()));
-        fragments.add(Fragment.instantiate(this, ViewProfileFragment2.class.getName()));
+       // fragments.add(Fragment.instantiate(this, ViewProfileFragment2.class.getName()));
         
         
         this.mPagerAdapter  = new PagerAdapter(super.getSupportFragmentManager(), fragments);

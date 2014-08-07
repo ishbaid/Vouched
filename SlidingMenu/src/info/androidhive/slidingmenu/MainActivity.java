@@ -9,6 +9,7 @@ import java.util.List;
 import org.brickred.socialauth.Contact;
 import org.brickred.socialauth.android.SocialAuthAdapter;
 import org.brickred.socialauth.android.SocialAuthAdapter.Provider;
+import org.json.JSONArray;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -31,10 +32,19 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 import co.pipevine.android.R;
 import co.pipevine.core.ContactDataListener;
 import co.pipevine.core.Login;
 import co.pipevine.core.Login.ResponseListener;
+
+import com.parse.FindCallback;
+import com.parse.Parse;
+import com.parse.ParseAnalytics;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 
 public class MainActivity extends Activity {
@@ -56,51 +66,57 @@ public class MainActivity extends Activity {
 	private NavDrawerListAdapter adapter;
 
 
-	
+
 	static String fn;
 	static String ln;
 	static String email;
 	static String location;
 	static String URL;
-	
+	static String ID;
+
 	//keeps track of contacts
 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		
+
+		//initialize parse
+		Parse.initialize(this, "TQLt2PWNmJp6JBLYF95jnIDnxcoXdA2322CGoWdj", "aNTQtT0FzERvfFsQs3BknbxqQm49IB7dqE313WrF");
+
+
 		SharedPreferences prefs = getSharedPreferences("co.pipevine.core", Context.MODE_PRIVATE);
 		boolean firstLaunch = prefs.getBoolean("launch", true);
-		
+
 		//handles login
 		if(savedInstanceState == null){
-			
-			
+
+
 
 			boolean loggedIn = prefs.getBoolean("LoggedIn", false);
-			
+
 			if(!loggedIn || firstLaunch){
-				
+
+				Log.d("Baid", "Requesting login");
 				Intent launch = new Intent(MainActivity.this, Login.class);
 				startActivityForResult(launch, 1);
 			}
 
-	
 
-			
+
+
 		}
-			
+
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		SharedPreferences sp = this.getSharedPreferences("co.pipevine.core", Context.MODE_PRIVATE);
 		SharedPreferences.Editor edit = sp.edit();
 		//next time will not be first launch
 		edit.putBoolean("launch", false);
-		
+
 		//connections is null to begin with
-		
+
 
 		mTitle = mDrawerTitle = getTitle();
 
@@ -129,7 +145,7 @@ public class MainActivity extends Activity {
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
 		// What's hot, We  will add a counter here
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1), true, "50+"));
-		
+
 
 		// Recycle the typed array
 		navMenuIcons.recycle();
@@ -149,7 +165,7 @@ public class MainActivity extends Activity {
 				R.drawable.ic_drawer, //nav menu toggle icon
 				R.string.app_name, // nav drawer open - description for accessibility
 				R.string.app_name // nav drawer close - description for accessibility
-		) {
+				) {
 			public void onDrawerClosed(View view) {
 				getActionBar().setTitle(mTitle);
 				// calling onPrepareOptionsMenu() to show action bar icons
@@ -169,70 +185,233 @@ public class MainActivity extends Activity {
 			displayView(0);
 		}
 		//loads connections
+
+	}
+	
+	public static String getUserID(){
 		
+		return ID;
 	}
 
 
-	
+
 	//handles post login
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
-		
+
 		SharedPreferences settings = MainActivity.this.getSharedPreferences("co.pipevine.core", Context.MODE_PRIVATE);
 		SharedPreferences.Editor edit = settings.edit();
-		
-	    if (requestCode == 1) {
-	    	
-	    	//successfully retrieved profile data
-	        if(resultCode == RESULT_OK){
-	            
-	        	
-	        	
-	        	fn = data.getStringExtra("First Name");
-	        	ln = data.getStringExtra("Last Name");
-	        	email = data.getStringExtra("Email");
-	        	location = data.getStringExtra("Location");
-	        	URL = data.getStringExtra("Url");
-	        	
-	        	//If we have loggedIn, then we can load connections
-	        	Login.adapter.getContactListAsync(new ContactDataListener());
 
-	        	
-	        	
-	        	//we successfully logged in
+		if (requestCode == 1) {
+
+			//successfully retrieved profile data
+			if(resultCode == RESULT_OK){
+
+
+
+				fn = data.getStringExtra("First Name");
+				ln = data.getStringExtra("Last Name");
+				email = data.getStringExtra("Email");
+				location = data.getStringExtra("Location");
+				URL = data.getStringExtra("Url");
+				ID = data.getStringExtra("ID");
+				uploadToDatabase();
+
+				//If we have loggedIn, then we can load connections
+				Login.adapter.getContactListAsync(new ContactDataListener());
+
+
+
+				//we successfully logged in
 				edit.putBoolean("LoggedIn", true);
-	
-				
-	        }
-	        if (resultCode == RESULT_CANCELED) {
-	            //Write your code if there's no result
-	        	
-	        	//we did not log in 
-	        	edit.putBoolean("LoggedIn", false);
-	        	
-	        	//error
-	        	AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();  
+
+
+			}
+			if (resultCode == RESULT_CANCELED) {
+				//Write your code if there's no result
+
+				//we did not log in 
+				edit.putBoolean("LoggedIn", false);
+
+				//error
+				AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();  
 				alertDialog.setTitle("Error ");  
 				alertDialog.setMessage("Problem signing in wiht LinkedIn");
 				alertDialog.setCanceledOnTouchOutside(true);
 				alertDialog.show(); 
-				
+
 				//try sign in again
 				Intent launch = new Intent(MainActivity.this, Login.class);
 				startActivityForResult(launch, 1);
-	        	
-	        }
-	        edit.commit();
-	    }
+
+			}
+			edit.commit();
+		}
 	}
+
+	//upload data to database
+	private void uploadToDatabase(){
+
+		Log.d("Baid", "uploadToDatabase in MainActivity running");
+
+
+
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Person");
+		query.whereEqualTo("linkedinID", ID);
+		query.findInBackground(new FindCallback<ParseObject>() {
+			public void done(List<ParseObject> list, ParseException e) {
+				if (e == null) {
+
+					//success
+					Log.d("score", "Retrieved " + list.size() + " scores");
+					if(list.size() == 0){
+						//account does not exist
+
+						ParseObject person = new ParseObject("Person");
+						person.put("firstName", fn);
+						person.put("lastName", ln);
+						person.put("linkedinID", ID);
+						person.put("email", email);
+						person.put("headline", "");
+						person.put("location", location);
+						person.put("profilePhotoURL", URL);
+
+
+
+						int[]nvgZero = {0, 0, 0, 0, 0};
+						ArrayList<Integer>nvgData = new ArrayList<Integer>();
+						for(int i = 0; i < nvgZero.length; i ++){
+
+							nvgData.add(nvgZero[i]);
+						}
+						JSONArray nvg = new JSONArray(nvgData);
+
+
+						//size 9-- 8 traits, and total
+						int[]nvrZero = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+						int[]svrZero = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+						ArrayList<Integer>nvrData = new ArrayList<Integer>();
+						ArrayList<Integer>svrData = new ArrayList<Integer>();
+						for(int i = 0; i < nvrZero.length; i ++){
+
+							nvrData.add(nvrZero[i]);
+							svrData.add(svrZero[i]);
+						}
+						JSONArray nvr = new JSONArray(nvrData);
+						JSONArray svr = new JSONArray(svrData);
+
+						person.put("numberVouchesGiven", nvg);
+						person.put("numberVouchesReceived",nvr);
+						person.put("scoreVouchesReceived", svr);
+
+						//keeps track of social shares
+						boolean[] socialZero = {false, false, false, false, false};
+						ArrayList<Boolean> socialData = new ArrayList<Boolean>();
+						for(int i = 0; i < socialZero.length; i ++){
+
+							socialData.add(socialZero[i]);
+						}
+						JSONArray social = new JSONArray(socialData);
+
+						person.put("socialShares", social);
+						//inital vouch score is 0
+						person.put("totalVouchScore", 0);
+
+						person.saveInBackground(new SaveCallback(){
+
+							//when information has been saved
+							@Override
+							public void done(ParseException e) {
+								// TODO Auto-generated method stub
+								//indicates when user has successfully created an account
+								Toast.makeText(MainActivity.this, "Account Created!", Toast.LENGTH_SHORT).show();
+							}
+
+
+
+						});
+					}
+					//account exits, we can load information
+					else if(list.size() == 1){
+
+						Log.d("Baid", "Loading data");
+						int vouchScore = 0;
+						int vouchesGiven = 0;						
+						int vouchesReceived = 0;
+
+						//there is only one person with the linkedin ID that was specified
+						ParseObject person = list.get(0);
+						//get vouches score
+						vouchScore = person.getInt("totalVouchScore");
+
+						//get vouches received
+						List<Integer>nvg = new ArrayList<Integer>();
+						nvg = person.getList("numberVouchesGiven");
+						if(nvg != null){
+							
+							//nvg should have a size of 5
+							assert(nvg.size() == 5);
+							for(int i = 1; i < nvg.size(); i ++){
+
+								//be ware of a classcast exception
+								vouchesGiven += nvg.get(i);
+
+							}
+						}
+
+
+						//get vouches received
+						List<Integer>nvr = new ArrayList<Integer>();
+						nvr = person.getList("numberVouchesReceived");
+						if(nvr != null){
+							
+							//should be of size 9
+							assert(nvr.size() == 9);
+							//the very last index keeps track of total
+							vouchesReceived = nvr.get(nvr.size() - 1);
+						}
+
+
+						//display
+						HomeFragment.setConnectionNumber(vouchScore, vouchesGiven, vouchesReceived);
+
+					}
+					//there should never be multiple objects with same linkedin ID
+					else{
+
+						AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();  
+						alertDialog.setTitle("Uh oh!");  
+						alertDialog.setMessage("Multiple ID's may exits\n" + ID);
+						alertDialog.setCanceledOnTouchOutside(true);
+						alertDialog.show(); 
+						return;
+					}
+
+
+				}
+				//error
+				else {
+					Log.d("score", "Error: " + e.getMessage());
+					AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();  
+					alertDialog.setTitle("Uh oh!");  
+					alertDialog.setMessage("Something went wrong trying to retrive information.");
+					alertDialog.setCanceledOnTouchOutside(true);
+					alertDialog.show(); 
+					return;
+				}
+			}
+		});
+
+	}
+
 
 	/**
 	 * Slide menu item click listener
 	 * */
 	private class SlideMenuClickListener implements
-			ListView.OnItemClickListener {
+	ListView.OnItemClickListener {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
@@ -244,12 +423,12 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
-	    SearchManager searchManager =
-	            (SearchManager) getSystemService(MainActivity.SEARCH_SERVICE);
-	     SearchView searchView =
-	             (SearchView) menu.findItem(R.id.search).getActionView();
-	     searchView.setSearchableInfo(
-	             searchManager.getSearchableInfo(getComponentName()));
+		SearchManager searchManager =
+				(SearchManager) getSystemService(MainActivity.SEARCH_SERVICE);
+		SearchView searchView =
+				(SearchView) menu.findItem(R.id.search).getActionView();
+		searchView.setSearchableInfo(
+				searchManager.getSearchableInfo(getComponentName()));
 		return true;
 	}
 
@@ -315,7 +494,7 @@ public class MainActivity extends Activity {
 		if (fragment != null) {
 			FragmentManager fragmentManager = getFragmentManager();
 			fragmentManager.beginTransaction()
-					.replace(R.id.frame_container, fragment).commit();
+			.replace(R.id.frame_container, fragment).commit();
 
 			// update selected item and title, then close the drawer
 			mDrawerList.setItemChecked(position, true);
@@ -352,9 +531,9 @@ public class MainActivity extends Activity {
 		// Pass any configuration change to the drawer toggls
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
-	
-	
 
-	
+
+
+
 
 }
