@@ -82,6 +82,10 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 	//scoreVouchesReceived
 	int [] svr;
+	//keeps track of number of vouches given
+	int [] nvg;
+	//keeps track of score earned in current vouching session
+	int earnedScore;
 
 	public PhotosFragment(){}
 
@@ -153,6 +157,8 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 			svr[i] = 0;
 		}
+		
+
 
 
 		cName =(TextView) rootView.findViewById(R.id.cName);
@@ -297,6 +303,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 								// TODO Auto-generated method stub
 								if(e == null){
 									
+									updateUserData();
 									vouchContact();
 									setConnection();
 									resetButtons();
@@ -307,7 +314,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 							
 						});
 
-
+							
 					}
 					else if(objects.size() == 0){
 						
@@ -375,6 +382,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 									Log.d("Baid", "Partial account created for " + currentConnection.getFirstName());
 									
 									//only after we've created the account, can we move on
+									updateUserData();
 									vouchContact();
 									setConnection();
 									resetButtons();
@@ -418,6 +426,50 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 		//send push notification/messages if possible to recepient of vouch
 
 	}
+	
+	//updates user 
+	private void updateUserData(){
+		
+		int traitsVouched = curRank - 1;
+		if(traitsVouched >= 0 && traitsVouched < 5){
+			
+			//increment by one
+			nvg[traitsVouched] ++;
+		}
+		else{
+			
+			Log.d("Baid", "Error 5");
+		}
+		
+		switch(traitsVouched){
+		
+		case(1):
+			
+			earnedScore += 4;
+			break;
+		case(2):
+			
+			earnedScore += 7;
+			break;
+		
+		case(3):
+			
+			earnedScore += 9;
+			break;
+		case(4):
+			
+			earnedScore += 10;
+			break;
+		default:
+			
+			Log.d("Baid", "unrecognized traits vouched--Error 5");
+			break;
+		
+		}
+		
+		Log.d("Baid", "User now has earned " + earnedScore + " points");
+		
+	}
 
 	//transfer contact from toVouch has table to vouchedFor hashtable
 	private void vouchContact(){
@@ -444,6 +496,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 	public void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
+
 
 		//eventually I want to be able to combine code from uploadtodatabase, onResume,
 		//and this function so I only have to make one API call in order to
@@ -486,6 +539,46 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 					person.put("toVouch", tv);
 					person.put("vouchedFor", vf);
+					
+					//gets number of vouches receieved
+					List<Integer> nvrDatabase = new ArrayList<Integer>();
+					nvrDatabase = person.getList("numberVouchesReceived");
+					assert(nvrDatabase.size() == 9);
+					int numReceived = nvrDatabase.get(8);
+					
+					//get numberVouchesGiven
+					List<Integer> nvgDatabase = new ArrayList<Integer>();
+					nvgDatabase = person.getList("numberVouchesGiven");
+					assert(nvgDatabase.size() == 5);
+					
+					JSONArray nvgToUpload = new JSONArray();
+					//place holder for skips
+					nvgToUpload.put(0);
+					
+					//counts all given vouches
+					int counter = 0;
+					//I'm starting at one, because I don't want to count skips
+					for(int i = 1; i < nvgDatabase.size(); i ++){
+						
+						
+						
+						int value = nvgDatabase.get(i);
+						int curValue = nvg[i];
+						nvgToUpload.put(curValue + value);
+						counter += curValue + value;
+						
+					}
+					
+					person.put("numberVouchesGiven", nvgToUpload);
+					
+					int tvs = person.getInt("totalVouchScore");
+					tvs += earnedScore;
+					person.put("totalVouchScore", tvs);
+					Log.d("Baid", "User's new total vouch score is " + tvs);
+					
+					//updates home screen data			
+					HomeFragment.setConnectionNumber(tvs, counter, numReceived);
+					
 					person.saveInBackground(new SaveCallback(){
 
 						@Override
@@ -694,6 +787,15 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		
+		//reset numberVouchesGiven to 0
+		nvg = new int[5];
+		for(int i = 0; i < nvg.length; i ++){
+			
+			nvg[i] = 0;
+		}
+		earnedScore = 0;
+		
 		//retrieve toVouch and vouchedFor
 		IDs = new ArrayList<String>();
 		curIndex = -1;

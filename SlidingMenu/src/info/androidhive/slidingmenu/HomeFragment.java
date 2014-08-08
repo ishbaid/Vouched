@@ -103,6 +103,8 @@ public class HomeFragment extends Fragment {
 	//updates stats
 	public static void setConnectionNumber(int vScore, int given, int received){
 		
+		if(score == null || numGiven == null || numReceived == null)
+			return;
 		score.setText(vScore  + "");
 		numGiven.setText(given  + "");
 		numReceived.setText(received + "");
