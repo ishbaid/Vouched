@@ -66,8 +66,7 @@ public class MainActivity extends Activity {
 	private ArrayList<NavDrawerItem> navDrawerItems;
 	private NavDrawerListAdapter adapter;
 
-	//shows loading
-	public static ProgressDialog mDialog;
+
 
 
 	static String fn;
@@ -196,11 +195,6 @@ public class MainActivity extends Activity {
 		return ID;
 	}
 
-	public static void dismissProgress(){
-		
-		if(mDialog != null)
-			mDialog.dismiss();
-	}
 
 
 	//handles post login
@@ -227,15 +221,11 @@ public class MainActivity extends Activity {
 				ID = data.getStringExtra("ID");
 				uploadToDatabase();
 
-				//loading
-				/*ProgressDialog mDialog = new ProgressDialog(getApplicationContext());
-				mDialog.setMessage("Loading...");
-				mDialog.setCancelable(false);
-				mDialog.show();*/
+				
 
 				//If we have loggedIn, then we can load connections
 				Login.adapter.getContactListAsync(new ContactDataListener());
-
+				
 
 
 				//we successfully logged in
@@ -340,7 +330,8 @@ public class MainActivity extends Activity {
 							public void done(ParseException e) {
 								// TODO Auto-generated method stub
 								//indicates when user has successfully created an account
-								Toast.makeText(MainActivity.this, "Account Created!", Toast.LENGTH_SHORT).show();
+								if(e == null)
+									Toast.makeText(MainActivity.this, "Account Created!", Toast.LENGTH_SHORT).show();
 							}
 
 
@@ -357,6 +348,41 @@ public class MainActivity extends Activity {
 
 						//there is only one person with the linkedin ID that was specified
 						ParseObject person = list.get(0);
+						
+						//get person's email
+						String personEmail = person.getString("email");
+						//if the account exists, but we don't have email, this must be 
+						//a connection's account
+						if(personEmail == null){
+						
+							person.put("email", email);
+							person.put("headline", "HEADLINE");
+							person.put("location", location);
+							JSONArray social = new JSONArray();
+							JSONArray nvg =  new JSONArray();
+							for(int i = 0; i < 5; i ++){
+								social.put(false);
+								nvg.put(0);
+							}
+							person.put("socialShares", social);
+							person.put("numberVouchesGiven", nvg);
+							person.saveInBackground(new SaveCallback(){
+
+								@Override
+								public void done(ParseException e) {
+									// TODO Auto-generated method stub
+									if(e == null){
+										
+										Log.d("Baid", "Information updated! Account created!");
+									}
+								}
+								
+								
+							});
+							
+							
+						}
+						
 						//get vouches score
 						vouchScore = person.getInt("totalVouchScore");
 

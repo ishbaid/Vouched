@@ -19,7 +19,9 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import android.app.ProgressDialog;
 import android.util.Log;
+import android.widget.Toast;
 
 // To receive the contacts response after authentication
 public final class ContactDataListener implements SocialAuthListener<List<Contact>> {
@@ -106,6 +108,7 @@ public final class ContactDataListener implements SocialAuthListener<List<Contac
 		// TODO Auto-generated method stub
 		//get toLoad and vouchedFor from database
 		Log.d("Custom-UI", "Receiving Data");
+
 
 		//I created this, so we can use this list within the done function
 		final List<Contact> list = t;
@@ -195,8 +198,7 @@ public final class ContactDataListener implements SocialAuthListener<List<Contac
 			
 			Collections.sort(names);
 
-			//get rid of loading 
-			//MainActivity.dismissProgress();
+			Log.d("Baid", "Connection have been loaded");
 
 		}
 

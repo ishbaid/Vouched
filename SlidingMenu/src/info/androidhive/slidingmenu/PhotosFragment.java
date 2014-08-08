@@ -47,10 +47,10 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 	static //keeps track of IDs of connections that need to be vouched for
 	ArrayList<String> IDs;
-	
+
 	static //keeps track of current index
 	int curIndex = -1;
-	
+
 	static //keeps track of current connection
 	Contact currentConnection;
 
@@ -178,9 +178,6 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 				//save changes
 				uploadToDatabase();
 
-				vouchContact();
-				setConnection();
-				resetButtons();
 
 				Toast.makeText(getActivity(), "Vouched!", Toast.LENGTH_SHORT).show();
 
@@ -204,7 +201,6 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 		Contact connection = currentConnection;
 		if(connection == null){
 
-			Toast.makeText(getActivity(), "No more connections at this time.", Toast.LENGTH_SHORT).show();
 			return;
 		}
 
@@ -217,6 +213,185 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 		message += firstName +"\n";
 		message += lastName +"\n";
 		message += id +"\n";
+
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Person");
+		query.whereEqualTo("linkedinID", id);
+		query.findInBackground(new FindCallback<ParseObject>(){
+
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				// TODO Auto-generated method stub
+
+				if(e == null){
+
+					if(objects.size() == 1){
+
+						Log.d("Baid", "Person already exists. Let's update their information.");
+						ParseObject person = objects.get(0);
+						
+						//get numberVouchesReceieved
+						List<Integer> nvrDatabase = new ArrayList<Integer>();
+						nvrDatabase = person.getList("numberVouchesReceived");
+						//should be of size 9
+						assert(nvrDatabase.size() == 9);
+						
+						//get scoreVouchesReceived
+						List<Integer> svrDatabase = new ArrayList<Integer>();
+						svrDatabase = person.getList("scoreVouchesReceived");
+						//should be of size 9
+						assert(svrDatabase.size() == 9);
+						
+						//get total score
+						int score = person.getInt("totalVouchScore");
+						
+						
+						JSONArray nvrToUpload = new JSONArray();
+						
+						//increment nvrValues
+						for(int i = 0; i < allButtons.length; i ++){
+							
+							if(allButtons[i].isChecked()){
+								
+								//increment this value
+								int currentValue = nvrDatabase.get(i);
+								nvrDatabase.set(i, currentValue + 1);
+								nvrToUpload.put(currentValue + 1);
+								
+								//increment tota
+								int currentTotal = nvrDatabase.get(nvrDatabase.size() - 1);
+								nvrDatabase.set(nvrDatabase.size() - 1, currentTotal + 1);
+								
+							}
+						}
+						//put total into JSONArray
+						nvrToUpload.put(nvrDatabase.get(nvrDatabase.size() - 1));
+						//insert
+						person.put("numberVouchesReceived", nvrToUpload);
+						
+						
+						JSONArray svrToUpload =  new JSONArray();
+						
+						//update svr values
+						int counter = 0;
+						for(int i = 0; i < svr.length - 1; i ++){
+							
+							svrToUpload.put(svr[i] + svrDatabase.get(i));
+							counter += svr[i];
+							
+						}
+						svr[8] = counter;
+						int total = svrDatabase.get(svrDatabase.size() - 1);
+						int totalScore = counter + total;
+						svrToUpload.put(totalScore);
+						Log.d("Baid", "New vouch score for " + currentConnection.getFirstName() + " is " + (totalScore + score));
+						
+						
+						//insert
+						person.put("scoreVouchesReceived", svrToUpload);
+						person.put("totalVouchScore", totalScore + score);
+						
+						person.saveInBackground(new SaveCallback(){
+
+							@Override
+							public void done(ParseException e) {
+								// TODO Auto-generated method stub
+								if(e == null){
+									
+									vouchContact();
+									setConnection();
+									resetButtons();
+									
+								}
+							}
+							
+							
+						});
+
+
+					}
+					else if(objects.size() == 0){
+						
+						
+						Log.d("Baid", "Person doesn't exist yet");
+						
+						Contact contact = currentConnection;
+						if(contact == null){
+							
+							Log.d("Baid", "*No connection.");
+							return;
+						}
+						
+						ParseObject person = new ParseObject("Person");
+						person.put("linkedinID", contact.getId());
+						person.put("firstName", contact.getFirstName());
+						person.put("lastName", contact.getLastName());
+						if(contact.getProfileImageURL() != null)
+							person.put("profilePhotoURL", contact.getProfileImageURL());
+						
+						//insert scores given
+						JSONArray nvrData = new JSONArray();
+						
+						//adds up all vouches
+						int counter = 0;
+						for(int i = 0; i < allButtons.length; i ++){
+							
+							
+							if(allButtons[i].isChecked()){
+								nvrData.put(1);
+								Log.d("Baid", 1 + "");
+								counter += 1;
+							}
+							
+							else{
+								nvrData.put(0);
+								Log.d("Baid", 0 +"");
+							}
+						}
+						nvrData.put(counter);
+						person.put("numberVouchesReceived", nvrData);
+						
+						JSONArray svrData = new JSONArray();
+						//goes through and totals up score for this particular vouch
+						counter = 0;
+						for(int i = 0; i < svr.length - 1; i ++){
+							
+							int value = svr[i];
+							svrData.put(value);
+							counter += value;
+						}
+						svr[8] = counter;
+						svrData.put(counter);
+						
+						person.put("scoreVouchesReceived", svrData);
+						person.put("totalVouchScore", counter);
+						
+						person.saveInBackground(new SaveCallback(){
+
+							@Override
+							public void done(ParseException e) {
+								// TODO Auto-generated method stub
+								if(e == null){
+									
+									Log.d("Baid", "Partial account created for " + currentConnection.getFirstName());
+									
+									//only after we've created the account, can we move on
+									vouchContact();
+									setConnection();
+									resetButtons();
+								}
+							}
+							
+							
+						});
+				
+					}
+
+				}
+
+			}
+
+
+		});
 
 		//verify that this is indeed number traits vouched for
 		//numberVouchesGiven[curRank] ++
@@ -232,20 +407,10 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 				//nvr[8] ++ 
 			}
 		}
-		//updates scoreVouchesReceived
-		int counter = 0;
-		//don't add to total. Go to length - 1
-		for(int i = 0; i < svr.length - 1; i ++){
 
-			if(svr[i] > 0){
-				message += i + ")" + svr[i] +"\n";
-			}
-			counter += svr[i];
-			//scoreVouchesReceived[i] += svr[i]
 
-		}
-		svr[8] = counter;
-		message += counter +"\n";
+
+
 		//error is counter is less than 0 or more than 10
 
 		//update both user and connection's total vouch score
@@ -262,12 +427,12 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 		String id = currentConnection.getId();
 		Contact contact = toVouch.get(id);
 		if(contact != null){
-			
+
 			vouchedFor.put(id, contact);
 			toVouch.remove(id);
 		}
 		else if(contact == null){
-			
+
 			Log.d("Baid", "Error 2");
 		}
 
@@ -306,16 +471,16 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 					//adds all elements from toVouch to IDs
 					for(Map.Entry<String,Contact> map : toVouch.entrySet()){
 
-					     tv.put(map.getKey());
+						tv.put(map.getKey());
 
 					}
-					
+
 					for(Map.Entry<String,Contact> map : vouchedFor.entrySet()){
 
-					     vf.put(map.getKey());
+						vf.put(map.getKey());
 
 					}
-					
+
 
 					//upload to database
 
@@ -464,11 +629,11 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 	//displays current connection information
 	public static void setConnection(){
 
-		Log.d("Baid", "CurIndex at sc is " + curIndex);
+		
 		//if we have a null connection, we have finished all connections
 		Contact connection = nextConnection();
 		if(connection == null){
-			
+
 			Log.d("Baid", "No connections left");
 			return;
 		}
@@ -503,14 +668,14 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 	private static Contact nextConnection(){
 
 		curIndex ++;
-		Log.d("Baid", "CurIndex at nc is " + curIndex);
+		
 		if(curIndex < IDs.size()){
 
 			String id = IDs.get(curIndex);
 			Contact contact = toVouch.get(id);
 			currentConnection = contact;
 			if(contact == null){
-				
+
 				Log.d("Baid", "Error 3");
 			}
 			return contact;
@@ -532,7 +697,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 		//retrieve toVouch and vouchedFor
 		IDs = new ArrayList<String>();
 		curIndex = -1;
-		
+
 		toVouch = new HashMap<String, Contact>();
 		vouchedFor = new HashMap<String, Contact>();
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Person");
@@ -589,10 +754,10 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 		for(int i = 0; i < tv.size(); i ++){
 
 			String id = tv.get(i);
-			
+
 			//add to IDs
 			IDs.add(id);
-			
+
 			Contact a = oldToVouch.get(id);
 			Contact b = oldVouchedFor.get(id);
 			if(a != null && b == null){
@@ -619,8 +784,8 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 		for(int i = 0; i < vf.size(); i ++){
 
 			String id = vf.get(i);
-			
-			
+
+
 			Contact a = oldToVouch.get(id);
 			Contact b = oldVouchedFor.get(id);
 			if(a != null && b == null){
@@ -636,7 +801,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 		}
 
-		
+
 
 	}
 
@@ -645,16 +810,18 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 		toVouch = ContactDataListener.getToVouch();
 		vouchedFor = ContactDataListener.getVouchedFor();
-		
+
 		//adds all elements from toVouch to IDs
 		for(Map.Entry<String,Contact> map : toVouch.entrySet()){
 
-		     IDs.add(map.getKey());
+			IDs.add(map.getKey());
 
 		}
 
-		
+
 	}
+
+
 
 
 
