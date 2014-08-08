@@ -16,6 +16,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -65,6 +66,8 @@ public class MainActivity extends Activity {
 	private ArrayList<NavDrawerItem> navDrawerItems;
 	private NavDrawerListAdapter adapter;
 
+	//shows loading
+	public static ProgressDialog mDialog;
 
 
 	static String fn;
@@ -187,12 +190,17 @@ public class MainActivity extends Activity {
 		//loads connections
 
 	}
-	
+
 	public static String getUserID(){
-		
+
 		return ID;
 	}
 
+	public static void dismissProgress(){
+		
+		if(mDialog != null)
+			mDialog.dismiss();
+	}
 
 
 	//handles post login
@@ -218,6 +226,12 @@ public class MainActivity extends Activity {
 				URL = data.getStringExtra("Url");
 				ID = data.getStringExtra("ID");
 				uploadToDatabase();
+
+				//loading
+				/*ProgressDialog mDialog = new ProgressDialog(getApplicationContext());
+				mDialog.setMessage("Loading...");
+				mDialog.setCancelable(false);
+				mDialog.show();*/
 
 				//If we have loggedIn, then we can load connections
 				Login.adapter.getContactListAsync(new ContactDataListener());
@@ -350,7 +364,7 @@ public class MainActivity extends Activity {
 						List<Integer>nvg = new ArrayList<Integer>();
 						nvg = person.getList("numberVouchesGiven");
 						if(nvg != null){
-							
+
 							//nvg should have a size of 5
 							assert(nvg.size() == 5);
 							for(int i = 1; i < nvg.size(); i ++){
@@ -366,7 +380,7 @@ public class MainActivity extends Activity {
 						List<Integer>nvr = new ArrayList<Integer>();
 						nvr = person.getList("numberVouchesReceived");
 						if(nvr != null){
-							
+
 							//should be of size 9
 							assert(nvr.size() == 9);
 							//the very last index keeps track of total

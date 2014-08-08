@@ -1,5 +1,6 @@
 package info.androidhive.slidingmenu;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -43,10 +44,20 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 	static TextView cInfo;
 	//connection picture
 	static ImageView cPic;
-	//keeps track of all connections
-	public static List<Contact> contactsList;
-	//keeps track of which connection we are in the list
-	static int curIndex;
+
+	static //keeps track of IDs of connections that need to be vouched for
+	ArrayList<String> IDs;
+	
+	static //keeps track of current index
+	int curIndex = -1;
+	
+	static //keeps track of current connection
+	Contact currentConnection;
+
+
+
+
+
 	//shows message on swipe
 	Toast action;
 
@@ -124,6 +135,8 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 		}
 		numChecked = 0;
 
+		currentConnection = null;
+
 		/*Array[0] = Professionalism
 		Array[1] = Productivity
 		Array[2] = Integrity
@@ -134,7 +147,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 		Array[7] = Teamwork
 		Array[8] = Total*/
 		//initialize score vouches array to 0's
-		
+
 		svr = new int[9];
 		for(int i = 0; i < svr.length; i ++ ){
 
@@ -142,7 +155,6 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 		}
 
 
-		curIndex = 0;
 		cName =(TextView) rootView.findViewById(R.id.cName);
 		cInfo = (TextView) rootView.findViewById(R.id.cInfo);
 		cPic = (ImageView) rootView.findViewById(R.id.cPic);
@@ -153,7 +165,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 			public void onSwipeLeft() {
 				// TODO Auto-generated method stub
 				super.onSwipeLeft();
-				nextConnection();
+				setConnection();
 				resetButtons();
 				Toast.makeText(getActivity(), "Dismissed", Toast.LENGTH_SHORT).show();
 
@@ -165,9 +177,9 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 				super.onSwipeRight();
 				//save changes
 				uploadToDatabase();
-				
+
 				vouchContact();
-				nextConnection();
+				setConnection();
 				resetButtons();
 
 				Toast.makeText(getActivity(), "Vouched!", Toast.LENGTH_SHORT).show();
@@ -185,17 +197,23 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 		String message = "";
 		//check if account exists
 		//if null: create, else:update
-		
-		
+
+
 		//users vouch score increases depending on the number of traits they vouched for
 		//connection's vouch score will increase depending on number of vouched traits
-		Contact connection = contactsList.get(curIndex);
+		Contact connection = currentConnection;
+		if(connection == null){
+
+			Toast.makeText(getActivity(), "No more connections at this time.", Toast.LENGTH_SHORT).show();
+			return;
+		}
+
 		String firstName = connection.getFirstName();
 		String lastName = connection.getLastName();
 		String id = connection.getId();
-		
-		
-		
+
+
+
 		message += firstName +"\n";
 		message += lastName +"\n";
 		message += id +"\n";
@@ -207,7 +225,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 		message += traitsVouched +"\n";
 		//updates numberVouchesReceived
 		for(int i = 0; i < allButtons.length; i ++){
-			
+
 			if(allButtons[i].isChecked()){
 				//nvr[i] ++
 				//total needs to be updated for each trait
@@ -218,13 +236,13 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 		int counter = 0;
 		//don't add to total. Go to length - 1
 		for(int i = 0; i < svr.length - 1; i ++){
-			
+
 			if(svr[i] > 0){
 				message += i + ")" + svr[i] +"\n";
 			}
 			counter += svr[i];
 			//scoreVouchesReceived[i] += svr[i]
-			
+
 		}
 		svr[8] = counter;
 		message += counter +"\n";
@@ -235,39 +253,37 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 		//send push notification/messages if possible to recepient of vouch
 
 	}
-	
+
 	//transfer contact from toVouch has table to vouchedFor hashtable
 	private void vouchContact(){
-		
-		Contact contact = contactsList.get(curIndex);
-		String id = contact.getId();
-		//it shouldn't be null
-		Contact transfer = toVouch.get(id);
-		if(transfer != null){
+
+		if(currentConnection == null)
+			return;
+		String id = currentConnection.getId();
+		Contact contact = toVouch.get(id);
+		if(contact != null){
 			
-			vouchedFor.put(id, transfer);
+			vouchedFor.put(id, contact);
 			toVouch.remove(id);
-			Log.d("Baid", "PhotoFragment-- toVouch size: " + toVouch.size() + " vf size: " + vouchedFor.size());
-			
 		}
-		//error
-		else{
+		else if(contact == null){
 			
-			Log.d("Baid", "Houston, we have a problem.");
+			Log.d("Baid", "Error 2");
 		}
+
 	}
-	
+
 	//lets upload to database what connections we've vouche for and which connections, we still need
 	//to vouch for
 	@Override
 	public void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-		
-		//eventually I want to be able to combine code from uploadtodatabase
+
+		//eventually I want to be able to combine code from uploadtodatabase, onResume,
 		//and this function so I only have to make one API call in order to
 		//retrieve user
-		
+
 		//retrieves user 
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Person");
 		query.whereEqualTo("linkedinID", MainActivity.getUserID());
@@ -276,35 +292,33 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 			@Override
 			public void done(List<ParseObject> objects, ParseException e) {
 				// TODO Auto-generated method stub
-				
-				
+
+
 				//there should only be one user with this user id
 				if(objects.size() == 1 && e == null){
-					
+
 					ParseObject person = objects.get(0);
-					
+
 					//insert all linkedin id's to appropriate jsonarray
 					JSONArray tv = new JSONArray();
 					JSONArray vf = new JSONArray();
-					
-					Iterator i = toVouch.entrySet().iterator();
-					while(i.hasNext()){
-						
-						Map.Entry<String, Contact> pairs = (Map.Entry)i.next();
-						tv.put(pairs.getKey());
-						//prevents concurrentModificationException
-						i.remove();
-					}
-					Iterator j = vouchedFor.entrySet().iterator();
-					while(j.hasNext()){
-						
-						Map.Entry<String, Contact> pairs = (Map.Entry)j.next();
-						vf.put(pairs.getKey());
-						j.remove();
+
+					//adds all elements from toVouch to IDs
+					for(Map.Entry<String,Contact> map : toVouch.entrySet()){
+
+					     tv.put(map.getKey());
+
 					}
 					
+					for(Map.Entry<String,Contact> map : vouchedFor.entrySet()){
+
+					     vf.put(map.getKey());
+
+					}
+					
+
 					//upload to database
-					
+
 					person.put("toVouch", tv);
 					person.put("vouchedFor", vf);
 					person.saveInBackground(new SaveCallback(){
@@ -314,20 +328,20 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 							// TODO Auto-generated method stub
 							//data was successfully saved
 							if(e == null){
-								
+
 								Log.d("Baid", "Data Saved");
 								//Toast.makeText(getActivity(), "Data Saved!", Toast.LENGTH_SHORT).show();
 								//Toast.makeText(getActivity(), "Data Saved!", Toast.LENGTH_SHORT).show();
 							}
 						}
-						
-						
+
+
 					});
 				}
-				
+
 			}
-			
-			
+
+
 		});
 	}
 
@@ -346,10 +360,10 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 		}
 		//resets svr
 		for(int i = 0; i < svr.length; i ++){
-			
+
 			svr[i] = 0;
 		}
-		
+
 		curRank = 1;
 	}
 
@@ -410,7 +424,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 					//inputs score for individual trait
 					svr[i] = 5 - curRank;
 					//increment numb
-					
+
 					//previous button becomes null
 					if(prev != null)
 						prev.setEnabled(false);
@@ -423,7 +437,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 					//svr for trait is now 0
 					svr[i] = 0;
-	
+
 					curRank --;
 					//returns button to unpressed state
 					TypedArray ar = allArrays[0];
@@ -450,17 +464,26 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 	//displays current connection information
 	public static void setConnection(){
 
-		Contact connection = contactsList.get(curIndex);
+		Log.d("Baid", "CurIndex at sc is " + curIndex);
+		//if we have a null connection, we have finished all connections
+		Contact connection = nextConnection();
+		if(connection == null){
+			
+			Log.d("Baid", "No connections left");
+			return;
+		}
 		String name = connection.getFirstName() + " " + connection.getLastName();
 
 		//skips private accounts and skips accounts that we have already vouched for
 		if(name.equals("private private") || vouchedFor.get(connection.getId()) != null){
 
-			nextConnection();
+			//we need to skip current connection
+			Log.d("Baid", "Private connection");
+			setConnection();
 			return;
 
 		}
-		
+
 
 
 		cName.setText(name);
@@ -476,18 +499,28 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 		//cPic.setLayoutParams(params);
 	}
 
-	//updates Connection
-	private static void nextConnection(){
+	//updates Connection, and returns current contact
+	private static Contact nextConnection(){
 
-		if(curIndex < contactsList.size() - 1){
+		curIndex ++;
+		Log.d("Baid", "CurIndex at nc is " + curIndex);
+		if(curIndex < IDs.size()){
 
-			curIndex ++;
-			setConnection();
+			String id = IDs.get(curIndex);
+			Contact contact = toVouch.get(id);
+			currentConnection = contact;
+			if(contact == null){
+				
+				Log.d("Baid", "Error 3");
+			}
+			return contact;
 		}
 		else{
 
 			cPic.setBackgroundResource(R.drawable.default_face);
 			cName.setText("No more connections.");
+			currentConnection = null;
+			return null;
 		}
 	}
 
@@ -497,15 +530,130 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 		// TODO Auto-generated method stub
 		super.onResume();
 		//retrieve toVouch and vouchedFor
+		IDs = new ArrayList<String>();
+		curIndex = -1;
+		
 		toVouch = new HashMap<String, Contact>();
 		vouchedFor = new HashMap<String, Contact>();
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Person");
+		query.whereEqualTo("linkedinID", MainActivity.getUserID());
+		query.findInBackground(new FindCallback<ParseObject>(){
+
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				// TODO Auto-generated method stub
+				if(objects.size() == 1 && e == null){
+
+					ParseObject person = objects.get(0);
+
+
+					List<String> tvData = new ArrayList<String>();
+					List<String> vfData = new ArrayList<String>();
+					tvData = person.getList("toVouch");
+					vfData = person.getList("vouchedFor");
+					if(tvData != null && vfData != null){
+
+						Log.d("Baid", "Loaded " + tvData.size() + " connections that need to be vouched for.");
+						Log.d("Baid", vfData.size() + " connections have already been vouched for.");
+						Log.d("Baid", "Current index is " + curIndex);
+						createMaps(tvData, vfData);
+						setConnection();
+					}
+					else{
+
+						initalizeMaps();
+						setConnection();
+					}
+
+				}
+
+			}
+
+
+		});
+
+		//these hashtables are only accurate if this is first vouching session since contactDataListener was called
+
+
+
+
+
+	}
+
+	private void createMaps(List<String> tv, List<String> vf){
+
+		//ISH: TODO what if these are null
+		HashMap<String, Contact> oldToVouch= ContactDataListener.getToVouch();
+		HashMap<String, Contact> oldVouchedFor = ContactDataListener.getVouchedFor();
+		//creates TV hashmap
+		for(int i = 0; i < tv.size(); i ++){
+
+			String id = tv.get(i);
+			
+			//add to IDs
+			IDs.add(id);
+			
+			Contact a = oldToVouch.get(id);
+			Contact b = oldVouchedFor.get(id);
+			if(a != null && b == null){
+				toVouch.put(id, a);
+			}
+			else if(a == null && b != null){
+				toVouch.put(id, b);
+			}
+			else if(a == null && b == null){
+
+				Log.d("Baid", "Couldn't find conenction");
+			}
+			else if(a != null && b != null){
+
+				Log.d("Baid", "Duplicate Connection.");
+			}
+			else{
+
+				Log.d("Baid", "This statement should never execute");
+			}
+
+		}
+		//creates VF hashmap
+		for(int i = 0; i < vf.size(); i ++){
+
+			String id = vf.get(i);
+			
+			
+			Contact a = oldToVouch.get(id);
+			Contact b = oldVouchedFor.get(id);
+			if(a != null && b == null){
+				vouchedFor.put(id, a);
+			}
+			else if(a == null && b != null){
+				vouchedFor.put(id, b);
+			}
+			else{
+
+				Log.d("Baid", "Error 1");
+			}
+
+		}
+
 		
+
+	}
+
+	//if database doesn't have a record, we will use the information from contactdatalistener
+	private void initalizeMaps(){
+
 		toVouch = ContactDataListener.getToVouch();
 		vouchedFor = ContactDataListener.getVouchedFor();
 		
-		setConnection();
+		//adds all elements from toVouch to IDs
+		for(Map.Entry<String,Contact> map : toVouch.entrySet()){
 
+		     IDs.add(map.getKey());
 
+		}
+
+		
 	}
 
 

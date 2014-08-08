@@ -24,6 +24,7 @@ import android.util.Log;
 // To receive the contacts response after authentication
 public final class ContactDataListener implements SocialAuthListener<List<Contact>> {
 
+	
 	//list of all connections
 	static List<String>names;
 	//hashtable of all contacts
@@ -170,7 +171,7 @@ public final class ContactDataListener implements SocialAuthListener<List<Contac
 
 		
 
-		PhotosFragment.contactsList = t;
+		
 		names = new ArrayList<String>();
 
 		if (t != null && t.size() > 0) {
@@ -194,7 +195,8 @@ public final class ContactDataListener implements SocialAuthListener<List<Contac
 			
 			Collections.sort(names);
 
-		
+			//get rid of loading 
+			//MainActivity.dismissProgress();
 
 		}
 
