@@ -20,8 +20,7 @@
         android:layout_marginTop="10dp"
         android:text="Connection Name"
         android:textSize="24dp"
-        android:textStyle="bold"
-         />
+        android:textStyle="bold" />
 
     <ImageView
         android:id="@+id/cPic"
@@ -32,6 +31,7 @@
         android:src="@drawable/default_face" />
 
     <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView2"
@@ -59,102 +59,99 @@
                 android:layout_width="125dp"
                 android:layout_height="30dp"
                 android:layout_toRightOf="@+id/prof"
+                android:background="@drawable/prod0"
                 android:textOff=""
                 android:textOn=""
-                android:textSize="12dp"
-                android:background="@drawable/prod0" />
+                android:textSize="12dp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="5dp" >
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal" >
 
             <ToggleButton
                 android:id="@+id/integ"
                 android:layout_width="125dp"
                 android:layout_height="30dp"
                 android:layout_marginRight="10dp"
+                android:background="@drawable/integ0"
                 android:textOff=""
                 android:textOn=""
-                android:textSize="12dp"
-                android:background="@drawable/integ0" />
+                android:textSize="12dp" />
 
             <ToggleButton
                 android:id="@+id/adapt"
                 android:layout_width="125dp"
                 android:layout_height="30dp"
                 android:layout_alignBaseline="@+id/integ"
+                android:background="@drawable/adapt0"
                 android:textOff=""
                 android:textOn=""
-                android:textSize="12dp"
-                android:background="@drawable/adapt0" />
+                android:textSize="12dp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="5dp"
-             >
+            android:orientation="horizontal" >
 
             <ToggleButton
                 android:id="@+id/comm"
                 android:layout_width="125dp"
                 android:layout_height="30dp"
                 android:layout_marginRight="10dp"
+                android:background="@drawable/comm0"
                 android:textOff=""
                 android:textOn=""
-                android:textSize="12dp"
-                android:background="@drawable/comm0" />
+                android:textSize="12dp" />
 
             <ToggleButton
                 android:id="@+id/lead"
                 android:layout_width="125dp"
                 android:layout_height="30dp"
+                android:background="@drawable/lead0"
                 android:textOff=""
                 android:textOn=""
-                android:textSize="12dp"
-                android:background="@drawable/lead0" />
+                android:textSize="12dp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="5dp" >
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal" >
 
             <ToggleButton
                 android:id="@+id/innovation"
                 android:layout_width="125dp"
                 android:layout_height="30dp"
                 android:layout_marginRight="10dp"
+                android:background="@drawable/innovation0"
                 android:textOff=""
                 android:textOn=""
-                android:textSize="12dp"
-                android:background="@drawable/innovation0" />
+                android:textSize="12dp" />
 
             <ToggleButton
                 android:id="@+id/team"
                 android:layout_width="125dp"
                 android:layout_height="30dp"
+                android:background="@drawable/team0"
                 android:textOff=""
                 android:textOn=""
-                android:textSize="12dp"
-                android:background="@drawable/team0" />
+                android:textSize="12dp" />
         </LinearLayout>
     </LinearLayout>
-
-
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/cPic"
-        android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
         android:text="WHAT ARE THEIR TOP TRAITS?"
         android:textSize="16dp" />
 
@@ -164,7 +161,29 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView1"
         android:layout_centerHorizontal="true"
-        android:text="SELECT UP TO (4)" 
-        android:textSize="12dp"/>
+        android:text="SELECT UP TO (4)"
+        android:textSize="12dp" />
+        
+"
+
+    
+
+    <Button
+        android:id="@+id/skip"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/linearLayout1"
+        android:layout_marginTop="29dp"
+        android:background="#E91A1A" />
+
+    <Button
+        android:id="@+id/next"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_alignBaseline="@+id/skip"
+        android:layout_alignBottom="@+id/skip"
+        android:layout_alignParentRight="true" 
+        android:background="#669900"/>
 
 </RelativeLayout>

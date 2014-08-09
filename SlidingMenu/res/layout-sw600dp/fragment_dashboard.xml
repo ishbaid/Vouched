@@ -14,7 +14,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/name"
             android:layout_centerHorizontal="true"
-            android:text="Additional Information" />
+            android:text="Additional Information"
+            android:textSize="28dp" />
 
         <ImageView
             android:id="@+id/proPic"
@@ -34,7 +35,7 @@
             android:layout_alignTop="@+id/proPic"
             android:text="Name"
             android:textColor="#669900"
-            android:textSize="24dp" />
+            android:textSize="48dp" />
 
         <LinearLayout
             android:id="@+id/linearLayout1"
@@ -52,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/proPic"
             android:layout_below="@+id/linearLayout1"
-            android:layout_marginTop="162dp"
+            android:layout_marginTop="200dp"
             android:orientation="vertical" >
 
             <TextView
@@ -62,7 +63,8 @@
                 android:layout_marginLeft="10dp"
                 android:text="VOUCHED REPUTATION\t\t\t\t\t\t\t SCORE"
                 android:textColor="#669900"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textSize="28dp" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -70,7 +72,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:text="Professionalism" />
+                android:text="Professionalism" 
+                android:textSize="28dp"/>
 
             <TextView
                 android:id="@+id/textView3"
@@ -78,7 +81,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:text="Integrity" />
+                android:text="Integrity"
+                android:textSize="28dp"
+                 />
 
             <TextView
                 android:id="@+id/textView4"
@@ -86,7 +91,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:text="Communication" />
+                android:text="Communication" 
+                android:textSize="28dp"/>
 
             <TextView
                 android:id="@+id/textView5"
@@ -94,7 +100,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:text="Innovation" />
+                android:text="Innovation"
+                android:textSize="28dp" />
 
             <TextView
                 android:id="@+id/textView6"
@@ -102,7 +109,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:text="Productivity" />
+                android:text="Productivity" 
+                android:textSize="28dp"/>
 
             <TextView
                 android:id="@+id/textView7"
@@ -110,7 +118,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:text="Adaptability" />
+                android:text="Adaptability"
+                android:textSize="28dp" />
 
             <TextView
                 android:id="@+id/textView8"
@@ -118,7 +127,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:text="Leadership" />
+                android:text="Leadership"
+                android:textSize="28dp" />
 
             <TextView
                 android:id="@+id/textView9"
@@ -126,7 +136,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:text="Teamwork" />
+                android:text="Teamwork"
+                android:textSize="28dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -138,8 +149,8 @@
             android:orientation="horizontal" >
 
             <LinearLayout
-                android:layout_width="50dp"
-                android:layout_height="40dp"
+                android:layout_width="150dp"
+                android:layout_height="120dp"
                 android:background="#ddd7d7"
                 android:orientation="vertical" >
 
@@ -149,7 +160,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp"
                     android:text="VouchScore"
-                    android:textSize="8dp" />
+                    android:textSize="24dp" />
 
                 <TextView
                     android:id="@+id/vouch_score"
@@ -158,12 +169,12 @@
                     android:layout_gravity="center"
                     android:text="0"
                     android:textColor="#669900"
-                    android:textSize="16dp" />
+                    android:textSize="56dp" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="50dp"
-                android:layout_height="40dp"
+                android:layout_width="150dp"
+                android:layout_height="120dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:background="#ddd7d7"
@@ -174,22 +185,22 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp"
-                    android:text="Connections"
-                    android:textSize="8dp" />
+                    android:text="Given"
+                    android:textSize="24dp" />
 
                 <TextView
-                    android:id="@+id/num_connections"
+                    android:id="@+id/num_given"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="0"
                     android:textColor="#669900"
-                    android:textSize="16dp" />
+                    android:textSize="56dp" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="50dp"
-                android:layout_height="40dp"
+                android:layout_width="150dp"
+                android:layout_height="120dp"
                 android:layout_marginRight="20dp"
                 android:background="#ddd7d7"
                 android:orientation="vertical" >
@@ -199,19 +210,22 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp"
-                    android:text="Vouched For"
-                    android:textSize="8dp" />
+                    android:text="Received"
+                    android:textSize="24dp" />
 
                 <TextView
-                    android:id="@+id/num_vouched"
+                    android:id="@+id/num_received"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="0"
                     android:textColor="#669900"
-                    android:textSize="16dp" />
+                    android:textSize="56dp" />
             </LinearLayout>
         </LinearLayout>
+
+       
+
     </RelativeLayout>
 
 </FrameLayout>

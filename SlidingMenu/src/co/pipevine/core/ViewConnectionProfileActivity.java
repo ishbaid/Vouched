@@ -37,7 +37,7 @@ public class ViewConnectionProfileActivity extends FragmentActivity {
 		if(reverseName != null){
 			
 			connection = ContactDataListener.getOrdererdContacts().get(reverseName);
-
+			
 		}
 		
 	}
@@ -55,6 +55,12 @@ public class ViewConnectionProfileActivity extends FragmentActivity {
         //
         ViewPager pager = (ViewPager)super.findViewById(R.id.viewpager);
         pager.setAdapter(this.mPagerAdapter);
+    }
+    
+    public static String getConnectionID(){
+    	
+    	
+    	return connection.getId();
     }
 
 }

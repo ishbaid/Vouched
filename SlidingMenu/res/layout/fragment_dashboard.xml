@@ -34,88 +34,88 @@
             android:layout_alignTop="@+id/proPic"
             android:text="Name"
             android:textColor="#669900"
-            android:textSize="24dp" />
-        
+            android:textSize="28dp" />
+
         <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/info"
-        android:layout_marginTop="100dp"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="VOUCHED REPUTATION\t\t\t\t\t\t\t SCORE"
-            android:textColor="#669900"
-            android:textStyle="bold" />
+            android:layout_below="@+id/info"
+            android:layout_marginTop="125dp"
+            android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:text="Professionalism" />
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="VOUCHED REPUTATION\t\t\t\t\t\t\t SCORE"
+                android:textColor="#669900"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:text="Integrity" />
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Professionalism" />
 
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:text="Communication" />
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Integrity" />
 
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:text="Innovation" />
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Communication" />
 
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:text="Productivity" />
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Innovation" />
 
-        <TextView
-            android:id="@+id/textView7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:text="Adaptability" />
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Productivity" />
 
-        <TextView
-            android:id="@+id/textView8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:text="Leadership" />
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Adaptability" />
 
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:text="Teamwork" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Leadership" />
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Teamwork" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -128,13 +128,14 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal" >
 
                 <LinearLayout
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
+                    android:id="@+id/about_vs"
+                    android:layout_width="75dp"
+                    android:layout_height="60dp"
                     android:background="#ddd7d7"
                     android:orientation="vertical" >
 
@@ -144,7 +145,7 @@
                         android:layout_gravity="center"
                         android:layout_marginTop="5dp"
                         android:text="VouchScore"
-                        android:textSize="8dp" />
+                        android:textSize="12dp" />
 
                     <TextView
                         android:id="@+id/vouch_score"
@@ -153,12 +154,20 @@
                         android:layout_gravity="center"
                         android:text="0"
                         android:textColor="#669900"
-                        android:textSize="16dp" />
+                        android:textSize="24dp" />
+
+                    <ImageView
+                        
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="right"
+                        android:background="@drawable/ic_about" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
+                    android:id = "@+id/about_given"
+                    android:layout_width="75dp"
+                    android:layout_height="60dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:background="#ddd7d7"
@@ -170,7 +179,7 @@
                         android:layout_gravity="center"
                         android:layout_marginTop="5dp"
                         android:text="Given"
-                        android:textSize="8dp" />
+                        android:textSize="12dp" />
 
                     <TextView
                         android:id="@+id/num_given"
@@ -179,15 +188,23 @@
                         android:layout_gravity="center"
                         android:text="0"
                         android:textColor="#669900"
-                        android:textSize="16dp" />
+                        android:textSize="24dp" />
+
+                    <ImageView
+                        
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="right"
+                        android:background="@drawable/ic_about" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
+                    android:layout_width="75dp"
+                    android:layout_height="60dp"
                     android:layout_marginRight="20dp"
                     android:background="#ddd7d7"
-                    android:orientation="vertical" >
+                    android:orientation="vertical" 
+                    android:id = "@+id/about_received">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -195,7 +212,7 @@
                         android:layout_gravity="center"
                         android:layout_marginTop="5dp"
                         android:text="Received"
-                        android:textSize="8dp" />
+                        android:textSize="12dp" />
 
                     <TextView
                         android:id="@+id/num_received"
@@ -204,11 +221,17 @@
                         android:layout_gravity="center"
                         android:text="0"
                         android:textColor="#669900"
-                        android:textSize="16dp" />
+                        android:textSize="24dp" />
+
+                    <ImageView
+                        
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="right"
+                        android:background="@drawable/ic_about" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-
     </RelativeLayout>
 
 </FrameLayout>

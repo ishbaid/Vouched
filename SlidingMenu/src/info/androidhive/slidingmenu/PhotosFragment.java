@@ -2,22 +2,28 @@ package info.androidhive.slidingmenu;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.brickred.socialauth.Contact;
 import org.json.JSONArray;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.res.TypedArray;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
@@ -36,7 +42,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
-public class PhotosFragment extends Fragment implements View.OnClickListener, OnCheckedChangeListener {
+public class PhotosFragment extends Fragment implements View.OnClickListener, OnCheckedChangeListener{
 
 	RelativeLayout background;
 	//connection name
@@ -44,6 +50,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 	static TextView cInfo;
 	//connection picture
 	static ImageView cPic;
+
 
 	static //keeps track of IDs of connections that need to be vouched for
 	ArrayList<String> IDs;
@@ -55,11 +62,10 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 	Contact currentConnection;
 
 
-
-
-
 	//shows message on swipe
 	Toast action;
+
+	Button skip, vouch;
 
 	ToggleButton prof, prod, integ, adapt, comm, lead, innovation, team;
 	ToggleButton [] allButtons;
@@ -95,6 +101,16 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 		View rootView = inflater.inflate(R.layout.fragment_photos, container, false);
 
+
+		//setup accelerometer
+		   /* do this in onCreate */
+	    mSensorManager = (SensorManager) getActivity().getSystemService(getActivity().SENSOR_SERVICE);
+	    mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+	    mAccel = 0.00f;
+	    mAccelCurrent = SensorManager.GRAVITY_EARTH;
+	    mAccelLast = SensorManager.GRAVITY_EARTH;
+
+
 		prof = (ToggleButton) rootView.findViewById(R.id.prof);
 		prod = (ToggleButton) rootView.findViewById(R.id.prod);
 		integ = (ToggleButton) rootView.findViewById(R.id.integ);
@@ -103,6 +119,12 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 		lead = (ToggleButton) rootView.findViewById(R.id.lead);
 		innovation = (ToggleButton) rootView.findViewById(R.id.innovation);
 		team = (ToggleButton) rootView.findViewById(R.id.team);
+
+		skip = (Button) rootView.findViewById(R.id.skip);
+		vouch = (Button) rootView.findViewById(R.id.next);
+
+		skip.setOnClickListener(this);
+		vouch.setOnClickListener(this);
 
 		//keeps track of all array
 		allArrays = new TypedArray[5];
@@ -157,7 +179,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 			svr[i] = 0;
 		}
-		
+
 
 
 
@@ -171,10 +193,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 			public void onSwipeLeft() {
 				// TODO Auto-generated method stub
 				super.onSwipeLeft();
-				setConnection();
-				resetButtons();
-				Toast.makeText(getActivity(), "Dismissed", Toast.LENGTH_SHORT).show();
-
+				skip();
 			}
 
 			@Override
@@ -182,11 +201,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 				// TODO Auto-generated method stub
 				super.onSwipeRight();
 				//save changes
-				uploadToDatabase();
-
-
-				Toast.makeText(getActivity(), "Vouched!", Toast.LENGTH_SHORT).show();
-
+				vouch();
 			}
 
 
@@ -234,121 +249,121 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 						Log.d("Baid", "Person already exists. Let's update their information.");
 						ParseObject person = objects.get(0);
-						
+
 						//get numberVouchesReceieved
 						List<Integer> nvrDatabase = new ArrayList<Integer>();
 						nvrDatabase = person.getList("numberVouchesReceived");
 						//should be of size 9
 						assert(nvrDatabase.size() == 9);
-						
+
 						//get scoreVouchesReceived
 						List<Integer> svrDatabase = new ArrayList<Integer>();
 						svrDatabase = person.getList("scoreVouchesReceived");
 						//should be of size 9
 						assert(svrDatabase.size() == 9);
-						
+
 						//get total score
 						int score = person.getInt("totalVouchScore");
-						
-						
+
+
 						JSONArray nvrToUpload = new JSONArray();
-						
+
 						//increment nvrValues
 						for(int i = 0; i < allButtons.length; i ++){
-							
+
 							if(allButtons[i].isChecked()){
-								
+
 								//increment this value
 								int currentValue = nvrDatabase.get(i);
 								nvrDatabase.set(i, currentValue + 1);
 								nvrToUpload.put(currentValue + 1);
-								
+
 								//increment tota
 								int currentTotal = nvrDatabase.get(nvrDatabase.size() - 1);
 								nvrDatabase.set(nvrDatabase.size() - 1, currentTotal + 1);
-								
+
 							}
 						}
 						//put total into JSONArray
 						nvrToUpload.put(nvrDatabase.get(nvrDatabase.size() - 1));
 						//insert
 						person.put("numberVouchesReceived", nvrToUpload);
-						
-						
+
+
 						JSONArray svrToUpload =  new JSONArray();
-						
+
 						//update svr values
 						int counter = 0;
 						for(int i = 0; i < svr.length - 1; i ++){
-							
+
 							svrToUpload.put(svr[i] + svrDatabase.get(i));
 							counter += svr[i];
-							
+
 						}
 						svr[8] = counter;
 						int total = svrDatabase.get(svrDatabase.size() - 1);
 						int totalScore = counter + total;
 						svrToUpload.put(totalScore);
 						Log.d("Baid", "New vouch score for " + currentConnection.getFirstName() + " is " + (totalScore + score));
-						
-						
+
+
 						//insert
 						person.put("scoreVouchesReceived", svrToUpload);
 						person.put("totalVouchScore", totalScore + score);
-						
+
 						person.saveInBackground(new SaveCallback(){
 
 							@Override
 							public void done(ParseException e) {
 								// TODO Auto-generated method stub
 								if(e == null){
-									
+
 									updateUserData();
 									vouchContact();
 									setConnection();
 									resetButtons();
-									
+
 								}
 							}
-							
-							
+
+
 						});
 
-							
+
 					}
 					else if(objects.size() == 0){
-						
-						
+
+
 						Log.d("Baid", "Person doesn't exist yet");
-						
+
 						Contact contact = currentConnection;
 						if(contact == null){
-							
+
 							Log.d("Baid", "*No connection.");
 							return;
 						}
-						
+
 						ParseObject person = new ParseObject("Person");
 						person.put("linkedinID", contact.getId());
 						person.put("firstName", contact.getFirstName());
 						person.put("lastName", contact.getLastName());
 						if(contact.getProfileImageURL() != null)
 							person.put("profilePhotoURL", contact.getProfileImageURL());
-						
+
 						//insert scores given
 						JSONArray nvrData = new JSONArray();
-						
+
 						//adds up all vouches
 						int counter = 0;
 						for(int i = 0; i < allButtons.length; i ++){
-							
-							
+
+
 							if(allButtons[i].isChecked()){
 								nvrData.put(1);
 								Log.d("Baid", 1 + "");
 								counter += 1;
 							}
-							
+
 							else{
 								nvrData.put(0);
 								Log.d("Baid", 0 +"");
@@ -356,31 +371,31 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 						}
 						nvrData.put(counter);
 						person.put("numberVouchesReceived", nvrData);
-						
+
 						JSONArray svrData = new JSONArray();
 						//goes through and totals up score for this particular vouch
 						counter = 0;
 						for(int i = 0; i < svr.length - 1; i ++){
-							
+
 							int value = svr[i];
 							svrData.put(value);
 							counter += value;
 						}
 						svr[8] = counter;
 						svrData.put(counter);
-						
+
 						person.put("scoreVouchesReceived", svrData);
 						person.put("totalVouchScore", counter);
-						
+
 						person.saveInBackground(new SaveCallback(){
 
 							@Override
 							public void done(ParseException e) {
 								// TODO Auto-generated method stub
 								if(e == null){
-									
+
 									Log.d("Baid", "Partial account created for " + currentConnection.getFirstName());
-									
+
 									//only after we've created the account, can we move on
 									updateUserData();
 									vouchContact();
@@ -388,10 +403,10 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 									resetButtons();
 								}
 							}
-							
-							
+
+
 						});
-				
+
 					}
 
 				}
@@ -426,49 +441,67 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 		//send push notification/messages if possible to recepient of vouch
 
 	}
-	
+
+	private void skip(){
+
+		setConnection();
+		resetButtons();
+		Toast.makeText(getActivity(), "Dismissed", Toast.LENGTH_SHORT).show();
+
+
+	}
+
+	private void vouch(){
+
+		uploadToDatabase();
+		Toast.makeText(getActivity(), "Vouched!", Toast.LENGTH_SHORT).show();
+
+	}
+
+
+
 	//updates user 
 	private void updateUserData(){
-		
+
 		int traitsVouched = curRank - 1;
 		if(traitsVouched >= 0 && traitsVouched < 5){
-			
+
 			//increment by one
 			nvg[traitsVouched] ++;
 		}
 		else{
-			
+
 			Log.d("Baid", "Error 5");
 		}
-		
+
 		switch(traitsVouched){
-		
+
 		case(1):
-			
+
 			earnedScore += 4;
-			break;
+		break;
 		case(2):
-			
+
 			earnedScore += 7;
-			break;
-		
+		break;
+
 		case(3):
-			
+
 			earnedScore += 9;
-			break;
+		break;
 		case(4):
-			
+
 			earnedScore += 10;
-			break;
+		break;
 		default:
-			
+
 			Log.d("Baid", "unrecognized traits vouched--Error 5");
 			break;
-		
+
 		}
-		
+
 		Log.d("Baid", "User now has earned " + earnedScore + " points");
-		
+
 	}
 
 	//transfer contact from toVouch has table to vouchedFor hashtable
@@ -495,6 +528,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 	@Override
 	public void onPause() {
 		// TODO Auto-generated method stub
+		 mSensorManager.unregisterListener(mSensorListener);
 		super.onPause();
 
 
@@ -539,46 +573,44 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 					person.put("toVouch", tv);
 					person.put("vouchedFor", vf);
-					
+
 					//gets number of vouches receieved
 					List<Integer> nvrDatabase = new ArrayList<Integer>();
 					nvrDatabase = person.getList("numberVouchesReceived");
 					assert(nvrDatabase.size() == 9);
 					int numReceived = nvrDatabase.get(8);
-					
+
 					//get numberVouchesGiven
 					List<Integer> nvgDatabase = new ArrayList<Integer>();
 					nvgDatabase = person.getList("numberVouchesGiven");
 					assert(nvgDatabase.size() == 5);
-					
+
 					JSONArray nvgToUpload = new JSONArray();
 					//place holder for skips
 					nvgToUpload.put(0);
-					
+
 					//counts all given vouches
 					int counter = 0;
 					//I'm starting at one, because I don't want to count skips
 					for(int i = 1; i < nvgDatabase.size(); i ++){
-						
-						
-						
+
+
+
 						int value = nvgDatabase.get(i);
 						int curValue = nvg[i];
 						nvgToUpload.put(curValue + value);
 						counter += curValue + value;
-						
+
 					}
-					
+
 					person.put("numberVouchesGiven", nvgToUpload);
-					
+
 					int tvs = person.getInt("totalVouchScore");
 					tvs += earnedScore;
 					person.put("totalVouchScore", tvs);
 					Log.d("Baid", "User's new total vouch score is " + tvs);
-					
-					//updates home screen data			
-					HomeFragment.setConnectionNumber(tvs, counter, numReceived);
-					
+
+
 					person.saveInBackground(new SaveCallback(){
 
 						@Override
@@ -714,7 +746,15 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 
+		int id = v.getId();
+		if(id == skip.getId()){
 
+			skip();
+		}
+		else if(id == vouch.getId()){
+
+			vouch();
+		}
 
 
 	}
@@ -722,7 +762,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 	//displays current connection information
 	public static void setConnection(){
 
-		
+
 		//if we have a null connection, we have finished all connections
 		Contact connection = nextConnection();
 		if(connection == null){
@@ -761,7 +801,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 	private static Contact nextConnection(){
 
 		curIndex ++;
-		
+
 		if(curIndex < IDs.size()){
 
 			String id = IDs.get(curIndex);
@@ -787,15 +827,17 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		
+		mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+		  
+
 		//reset numberVouchesGiven to 0
 		nvg = new int[5];
 		for(int i = 0; i < nvg.length; i ++){
-			
+
 			nvg[i] = 0;
 		}
 		earnedScore = 0;
-		
+
 		//retrieve toVouch and vouchedFor
 		IDs = new ArrayList<String>();
 		curIndex = -1;
@@ -923,6 +965,36 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 	}
 
+
+	//handles shake
+	private SensorManager mSensorManager;
+	private float mAccel; // acceleration apart from gravity
+	private float mAccelCurrent; // current acceleration including gravity
+	private float mAccelLast; // last acceleration including gravity
+
+
+	//
+	private final SensorEventListener mSensorListener = new SensorEventListener() {
+
+		public void onSensorChanged(SensorEvent se) {
+			float x = se.values[0];
+			float y = se.values[1];
+			float z = se.values[2];
+			mAccelLast = mAccelCurrent;
+			mAccelCurrent = (float) Math.sqrt((double) (x*x + y*y + z*z));
+			float delta = mAccelCurrent - mAccelLast;
+			mAccel = mAccel * 0.9f + delta; // perform low-cut filter
+			
+			if (mAccel > 10) {
+			    Toast toast = Toast.makeText(getActivity(), "Reset.", Toast.LENGTH_LONG);
+			    toast.show();
+			    resetButtons();
+			}
+		}
+
+		public void onAccuracyChanged(Sensor sensor, int accuracy) {
+		}
+	};
 
 
 

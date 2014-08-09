@@ -81,11 +81,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
-                android:text="Connections"
+                android:text="Given"
                 android:textSize="8dp" />
 
             <TextView
-                android:id="@+id/num_connections"
+                android:id="@+id/num_given"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -106,11 +106,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
-                android:text="Vouched For"
+                android:text="Received"
                 android:textSize="8dp" />
 
             <TextView
-                android:id="@+id/num_vouched"
+                android:id="@+id/num_received"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

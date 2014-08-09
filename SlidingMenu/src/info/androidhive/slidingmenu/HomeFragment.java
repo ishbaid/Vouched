@@ -1,6 +1,12 @@
 package info.androidhive.slidingmenu;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -19,9 +25,10 @@ import co.pipevine.android.R;
 import co.pipevine.core.ContactDataListener;
 import co.pipevine.core.DownloadImagesTask;
 import co.pipevine.core.OnSwipeTouchListener;
+import co.pipevine.core.ViewConnectionProfileActivity;
 
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment  {
 
 	FrameLayout homeBackground;
 	TextView name, info;
@@ -99,6 +106,70 @@ public class HomeFragment extends Fragment {
 			params.height = 150;
 			proPic.setLayoutParams(params);
 		}
+		
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Person");
+		query.whereEqualTo("linkedinID", MainActivity.getUserID());
+		query.findInBackground(new FindCallback<ParseObject>(){
+
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				// TODO Auto-generated method stub
+
+				if(e == null && objects.size() == 1){
+
+					ParseObject person = objects.get(0);
+
+					int vs = person.getInt("totalVouchScore");
+					int givenValue = 0;
+					int receiveValue = 0;
+					
+					List<Integer> nvg = new ArrayList<Integer>();
+					nvg = person.getList("numberVouchesGiven");
+
+					List<Integer> nvr = new ArrayList<Integer>();
+					nvr = person.getList("numberVouchesReceieved");
+
+					if(nvg != null){
+						
+						//size should be 5
+						if(nvg.size() != 5){
+							
+							Log.d("Baid", "Error 6");
+						}
+
+						
+						for(int i = 1; i < nvg.size(); i ++){
+
+							givenValue += nvg.get(i);
+						}
+						
+
+					}
+					
+					if(nvr != null){
+						
+						//size should be 9
+						if(nvr.size() == 9){
+							
+							receiveValue = nvr.get(nvr.size() - 1);
+							
+							
+						}else{
+							
+							Log.d("Baid", "Error 6");
+						}
+						
+					}
+					
+					
+					setConnectionNumber(vs, givenValue, receiveValue);
+
+				}
+			}
+
+
+		});
+		
 	}
 	//updates stats
 	public static void setConnectionNumber(int vScore, int given, int received){
