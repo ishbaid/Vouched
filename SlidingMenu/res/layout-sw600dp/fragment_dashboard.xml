@@ -63,8 +63,8 @@
                 android:layout_marginLeft="10dp"
                 android:text="VOUCHED REPUTATION\t\t\t\t\t\t\t SCORE"
                 android:textColor="#669900"
-                android:textStyle="bold"
-                android:textSize="28dp" />
+                android:textSize="28dp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -72,8 +72,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:text="Professionalism" 
-                android:textSize="28dp"/>
+                android:text="Professionalism"
+                android:textSize="28dp" />
 
             <TextView
                 android:id="@+id/textView3"
@@ -82,8 +82,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:text="Integrity"
-                android:textSize="28dp"
-                 />
+                android:textSize="28dp" />
 
             <TextView
                 android:id="@+id/textView4"
@@ -91,8 +90,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:text="Communication" 
-                android:textSize="28dp"/>
+                android:text="Communication"
+                android:textSize="28dp" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -109,8 +108,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:text="Productivity" 
-                android:textSize="28dp"/>
+                android:text="Productivity"
+                android:textSize="28dp" />
 
             <TextView
                 android:id="@+id/textView7"
@@ -149,6 +148,7 @@
             android:orientation="horizontal" >
 
             <LinearLayout
+                android:id="@+id/about_vs"
                 android:layout_width="150dp"
                 android:layout_height="120dp"
                 android:background="#ddd7d7"
@@ -169,10 +169,17 @@
                     android:layout_gravity="center"
                     android:text="0"
                     android:textColor="#669900"
-                    android:textSize="56dp" />
+                    android:textSize="46dp" />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="right"
+                    android:background="@drawable/ic_about" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/about_given"
                 android:layout_width="150dp"
                 android:layout_height="120dp"
                 android:layout_marginLeft="10dp"
@@ -195,10 +202,17 @@
                     android:layout_gravity="center"
                     android:text="0"
                     android:textColor="#669900"
-                    android:textSize="56dp" />
+                    android:textSize="46dp" />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="right"
+                    android:background="@drawable/ic_about" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/about_received"
                 android:layout_width="150dp"
                 android:layout_height="120dp"
                 android:layout_marginRight="20dp"
@@ -220,12 +234,15 @@
                     android:layout_gravity="center"
                     android:text="0"
                     android:textColor="#669900"
-                    android:textSize="56dp" />
+                    android:textSize="46dp" />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="right"
+                    android:background="@drawable/ic_about" />
             </LinearLayout>
         </LinearLayout>
-
-       
-
     </RelativeLayout>
 
 </FrameLayout>
