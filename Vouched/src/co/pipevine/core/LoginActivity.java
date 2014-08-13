@@ -95,6 +95,7 @@ public class LoginActivity extends Activity {
 	public static ArrayList<String> getOrderedNames(){return orderedNames;}
 	public static HashMap<String, Person>getAlphaMap(){ return alphaMap;}
 
+	boolean loggedin;
 	LinearLayout background;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -104,8 +105,10 @@ public class LoginActivity extends Activity {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
-		background = (LinearLayout) findViewById(R.id.spash_background);
 		
+		loggedin = false;
+		background = (LinearLayout) findViewById(R.id.spash_background);
+
 		background.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -117,7 +120,7 @@ public class LoginActivity extends Activity {
 			}
 		});
 
-		
+
 		final SharedPreferences pref = getSharedPreferences(OAUTH_PREF,
 				MODE_PRIVATE);
 		final String token = pref.getString(PREF_TOKEN, null);
@@ -211,12 +214,12 @@ public class LoginActivity extends Activity {
 			protected void onPreExecute() {
 				// TODO Auto-generated method stub
 				super.onPreExecute();
-		          progDailog = new ProgressDialog(LoginActivity.this);
-		            progDailog.setMessage("Loading...");
-		            progDailog.setIndeterminate(false);
-		            progDailog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		            progDailog.setCancelable(true);
-		            progDailog.show();
+				progDailog = new ProgressDialog(LoginActivity.this);
+				progDailog.setMessage("Loading...");
+				progDailog.setIndeterminate(false);
+				progDailog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+				progDailog.setCancelable(true);
+				progDailog.show();
 			}
 
 			@Override
@@ -486,7 +489,7 @@ public class LoginActivity extends Activity {
 
 			@Override
 			protected void onPostExecute(Object result) {
-				
+
 				progDailog.dismiss();
 				if (result instanceof Exception) {
 					//result is an Exception :) 
@@ -502,7 +505,9 @@ public class LoginActivity extends Activity {
 				} else if (result instanceof Person) {
 					final Person p = (Person) result;
 					//tv.setText(getLast() + ", " + getFirst() + "\n" + getEmail() + "\n" + getHeadline() + "\n" + getLocation() + "\nID: " + getUserID() + "\n" + getPicture() + "\n");
-
+					loggedin = true;
+					Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+					startActivity(intent);
 				}
 			}
 		}.execute();
@@ -513,4 +518,15 @@ public class LoginActivity extends Activity {
 	protected void onNewIntent(Intent intent) {
 		finishAuthenticate(intent.getData());
 	}
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		if(loggedin){
+			
+			Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+			startActivity(intent);
+		}
+	}
+	
 }

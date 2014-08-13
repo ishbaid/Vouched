@@ -54,6 +54,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 	static //keeps track of IDs of connections that need to be vouched for
 	ArrayList<String> IDs;
+	ArrayList<String>skipped;
 
 	static //keeps track of current index
 	int curIndex = -1;
@@ -447,7 +448,9 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 	}
 
 	private void skip(){
-
+		
+		skipped.add(currentConnection.getId());
+		IDs.set(curIndex, null);
 		setConnection();
 		resetButtons();
 		Toast.makeText(getActivity(), "Dismissed", Toast.LENGTH_SHORT).show();
@@ -519,6 +522,8 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 			vouchedFor.put(id, contact);
 			toVouch.remove(id);
+			//this index has been vouchedFor
+			IDs.set(curIndex, null);
 		}
 		else if(contact == null){
 
@@ -560,10 +565,23 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 					JSONArray vf = new JSONArray();
 
 					//adds all elements from toVouch to IDs
-					for(Map.Entry<String,Person> map : toVouch.entrySet()){
+					/*for(Map.Entry<String,Person> map : toVouch.entrySet()){
 
 						tv.put(map.getKey());
 
+					}*/
+					for(int i = 0; i < IDs.size(); i ++){
+						
+						String vID = IDs.get(i);
+						if(vID != null)
+							tv.put(vID);
+					}
+					//puts skipped contacts at the end
+					for(int i = 0; i < skipped.size(); i ++){
+						
+						String cID = skipped.get(i);
+						if(cID != null)
+							tv.put(cID);
 					}
 
 					for(Map.Entry<String,Person> map : vouchedFor.entrySet()){
@@ -790,7 +808,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 		cName.setText(name);
 
-		cInfo.setText("");
+		cInfo.setText(connection.getHeadline());
 		String url = connection.getPictureUrl();
 		cPic.setTag(url);
 		new DownloadImagesTask().execute(cPic);
@@ -844,6 +862,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 		//retrieve toVouch and vouchedFor
 		IDs = new ArrayList<String>();
+		skipped = new ArrayList<String>();
 		curIndex = -1;
 
 		toVouch = new HashMap<String, Person>();
