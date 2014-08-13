@@ -87,11 +87,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 		info = (TextView) rootView.findViewById(R.id.info);
 		proPic = (ImageView) rootView.findViewById(R.id.proPic);
 
-		//I belive that I can get rid of this
-		if(LoginActivity.getFirst() != null){
-			name.setText(LoginActivity.getFirst() + " " + LoginActivity.getLast());
-			info.setText(LoginActivity.getEmail() + "\n" + LoginActivity.getLocation() + "\n");
-		}
+
 		return rootView;
 	}
 
@@ -101,7 +97,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 		super.onResume();
 		if(LoginActivity.getFirst() != null){
 			name.setText(LoginActivity.getFirst() + " " + LoginActivity.getLast());
-			info.setText(LoginActivity.getEmail() + "\n" + LoginActivity.getLocation() + "\n");
+			String headline = LoginActivity.getHeadline();
+			String loc = LoginActivity.getLocation();
+			info.setText("");
+			if(headline != null && headline.length() <= 45)
+				info.setText(headline + "\n");
+			if(loc != null)
+				info.setText(info.getText() + loc + "\n");
 		}
 
 

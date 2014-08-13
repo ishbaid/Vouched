@@ -961,10 +961,12 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 			float delta = mAccelCurrent - mAccelLast;
 			mAccel = mAccel * 0.9f + delta; // perform low-cut filter
 			
-			if (mAccel > 10) {
+			if (mAccel > 7) {
 			    Toast toast = Toast.makeText(getActivity(), "Reset.", Toast.LENGTH_LONG);
 			    toast.show();
 			    resetButtons();
+			   // mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+				
 			}
 		}
 

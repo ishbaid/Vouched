@@ -42,7 +42,10 @@ public class ViewProfileFragment extends Fragment{
 		if(connection != null){
 
 			viewName.setText(connection.getFirstName() + " "  + connection.getLastName());
-			viewInfo.setText("");
+			if(connection.getHeadline() != null)
+				viewInfo.setText(connection.getHeadline());
+			else
+				viewInfo.setText("");
 			viewPic.setTag(connection.getPictureUrl());
 			new DownloadImagesTask().execute(viewPic);
 			LayoutParams params = (LayoutParams) viewPic.getLayoutParams();

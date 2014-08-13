@@ -14,7 +14,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/name"
             android:layout_centerHorizontal="true"
-            android:text="Additional Information" />
+            android:text="Additional Information"
+            android:textSize="14dp" />
 
         <ImageView
             android:id="@+id/proPic"

@@ -234,7 +234,7 @@
             android:layout_below="@+id/name"
             android:layout_marginRight="22dp"
             android:text="Additional Information"
-            android:textSize="20dp" />
+            android:textSize="16dp" />
 
         <TextView
             android:id="@+id/name"

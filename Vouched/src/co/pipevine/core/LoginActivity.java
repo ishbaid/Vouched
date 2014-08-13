@@ -23,8 +23,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import co.pipevine.android.R;
 
 import com.google.code.linkedinapi.client.LinkedInApiClient;
 import com.google.code.linkedinapi.client.LinkedInApiClientException;
@@ -70,7 +72,6 @@ public class LoginActivity extends Activity {
 	static final String PREF_TOKENSECRET = "tokenSecret";
 	static final String PREF_REQTOKENSECRET = "requestTokenSecret";
 
-	TextView tv = null;
 	public static Person user;
 	public static String fn, ln, email, location, url, headline, id;
 
@@ -94,6 +95,7 @@ public class LoginActivity extends Activity {
 	public static ArrayList<String> getOrderedNames(){return orderedNames;}
 	public static HashMap<String, Person>getAlphaMap(){ return alphaMap;}
 
+	LinearLayout background;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -101,8 +103,10 @@ public class LoginActivity extends Activity {
 		Parse.initialize(this, "TQLt2PWNmJp6JBLYF95jnIDnxcoXdA2322CGoWdj", "aNTQtT0FzERvfFsQs3BknbxqQm49IB7dqE313WrF");
 
 		super.onCreate(savedInstanceState);
-		tv = new TextView(this);
-		tv.setOnClickListener(new View.OnClickListener() {
+		setContentView(R.layout.login);
+		background = (LinearLayout) findViewById(R.id.spash_background);
+		
+		background.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -113,7 +117,7 @@ public class LoginActivity extends Activity {
 			}
 		});
 
-		setContentView(tv);
+		
 		final SharedPreferences pref = getSharedPreferences(OAUTH_PREF,
 				MODE_PRIVATE);
 		final String token = pref.getString(PREF_TOKEN, null);
@@ -497,12 +501,8 @@ public class LoginActivity extends Activity {
 					finish();
 				} else if (result instanceof Person) {
 					final Person p = (Person) result;
-					tv.setText(getLast() + ", " + getFirst() + "\n" + getEmail() + "\n" + getHeadline() + "\n" + getLocation() + "\nID: " + getUserID() + "\n" + getPicture() + "\n");
-					
-					for(String name: orderedNames){
-						
-						tv.setText(tv.getText() + name + "\n");
-					}
+					//tv.setText(getLast() + ", " + getFirst() + "\n" + getEmail() + "\n" + getHeadline() + "\n" + getLocation() + "\nID: " + getUserID() + "\n" + getPicture() + "\n");
+
 				}
 			}
 		}.execute();
