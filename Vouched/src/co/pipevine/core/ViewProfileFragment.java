@@ -1,9 +1,23 @@
 package co.pipevine.core;
 
+import info.androidhive.slidingmenu.PhotosFragment;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.brickred.socialauth.Contact;
+import android.support.v4.app.Fragment;
+import android.app.FragmentManager;
+import android.os.Bundle;
+
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import co.pipevine.android.R;
 
 import com.google.code.linkedinapi.schema.Person;
 import com.parse.FindCallback;
@@ -11,21 +25,12 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-import co.pipevine.android.R;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.ImageView;
-import android.widget.TextView;
+public class ViewProfileFragment extends Fragment implements View.OnClickListener{
 
-public class ViewProfileFragment extends Fragment{
 
 	ImageView viewPic;
 	TextView viewName, viewInfo, vScore, given, received;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -37,6 +42,8 @@ public class ViewProfileFragment extends Fragment{
 		vScore = (TextView) rootView.findViewById(R.id.vouch_score);
 		given = (TextView) rootView.findViewById(R.id.num_given);
 		received = (TextView) rootView.findViewById(R.id.num_received);
+
+
 
 		Person connection = ViewConnectionProfileActivity.connection; 
 		if(connection != null){
@@ -75,7 +82,7 @@ public class ViewProfileFragment extends Fragment{
 
 					int vs = person.getInt("totalVouchScore");
 					vScore.setText(vs + "");
-					
+
 					List<Integer> nvg = new ArrayList<Integer>();
 					nvg = person.getList("numberVouchesGiven");
 
@@ -83,10 +90,10 @@ public class ViewProfileFragment extends Fragment{
 					nvr = person.getList("numberVouchesReceieved");
 
 					if(nvg != null){
-						
+
 						//size should be 5
 						if(nvg.size() != 5){
-							
+
 							Log.d("Baid", "Error 6");
 						}
 
@@ -98,20 +105,20 @@ public class ViewProfileFragment extends Fragment{
 						given.setText(givenCount + "");
 
 					}
-					
+
 					if(nvr != null){
-						
+
 						//size should be 9
 						if(nvr.size() == 9){
-							
+
 							received.setText(nvr.get(nvr.size() - 1) + "");
-							
-							
+
+
 						}else{
-							
+
 							Log.d("Baid", "Error 6");
 						}
-						
+
 					}
 
 
@@ -120,6 +127,12 @@ public class ViewProfileFragment extends Fragment{
 
 
 		});
+	}
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		int id = v.getId();
+		
 	}
 
 

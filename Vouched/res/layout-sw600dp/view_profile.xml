@@ -132,7 +132,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/viewPic"
-        android:layout_below="@+id/viewInfo"
+        android:layout_below="@+id/viewPic"
         android:layout_marginTop="50dp"
         android:orientation="horizontal" >
 
@@ -211,5 +211,7 @@
                 android:textSize="56dp" />
         </LinearLayout>
     </LinearLayout>
+
+    
 
 </RelativeLayout>
