@@ -449,8 +449,13 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 	private void skip(){
 		
-		skipped.add(currentConnection.getId());
-		IDs.set(curIndex, null);
+		if(currentConnection != null && curIndex < IDs.size()){
+			
+			skipped.add(currentConnection.getId());
+			IDs.set(curIndex, null);
+			
+		}
+
 		setConnection();
 		resetButtons();
 		Toast.makeText(getActivity(), "Dismissed", Toast.LENGTH_SHORT).show();

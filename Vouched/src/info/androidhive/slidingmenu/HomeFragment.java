@@ -16,6 +16,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import co.pipevine.android.R;
 import co.pipevine.core.DownloadImagesTask;
 import co.pipevine.core.LoginActivity;
@@ -157,6 +158,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 			proPic.setLayoutParams(params);
 		}
 
+		ParseObject score = LoginActivity.getParseScore();
+		if(score != null){
+			
+			int vs = score.getInt("totalVouchScore");
+			int received = score.getInt("totalVouchesReceived");
+			int given = score.getInt("totalVouchesGiven");
+			setConnectionNumber(vs, received, given);
+		}
+
+		
+		
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Person");
 		query.whereEqualTo("linkedinID", LoginActivity.getUserID());
 		query.findInBackground(new FindCallback<ParseObject>(){
@@ -211,7 +223,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 					}
 
 
-					setConnectionNumber(vs, givenValue, receiveValue);
+					//setConnectionNumber(vs, givenValue, receiveValue);
 
 				}
 			}
@@ -302,9 +314,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 		params = (LayoutParams) aTeam.getLayoutParams();
 		params.width = 100 - team;
 		aTeam.setLayoutParams(params);
-		
-		
-		
+
 		
 	}
 	
