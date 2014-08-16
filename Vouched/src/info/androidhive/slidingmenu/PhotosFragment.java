@@ -76,9 +76,34 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 	TypedArray traits0, traits1, traits2, traits3, traits4;
 	TypedArray []allArrays;
 
+	//keeps track of scoreData keys
+	String [] traitNumbers = {
+			"professionalismNumber",
+			"productivityNumber",
+			"integrityNumber",
+			"adaptabilityNumber",
+			"communicationNumber",
+			"leadershipNumber",
+			"innovationNumber",
+			"teamworkNumber",	
+
+	};
+	String [] traitScores = {
+
+			"professionalismScore",
+			"productivityScore",
+			"integrityScore",
+			"adaptabilityScore",
+			"communicationScore",
+			"leadershipScore",
+			"innovationScore",
+			"teamworkScore"
+
+	};
+
 	//keeps track of which connections have been vouched for and which haven't
 	static HashMap<String, Person> toVouch;
-	static HashMap<String, Person> vouchedFor;
+
 	//keeps track of current button rank
 	int curRank = 1;
 	//keeps track of previous button
@@ -104,12 +129,12 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 
 		//setup accelerometer
-		   /* do this in onCreate */
-	    mSensorManager = (SensorManager) getActivity().getSystemService(getActivity().SENSOR_SERVICE);
-	    mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
-	    mAccel = 0.00f;
-	    mAccelCurrent = SensorManager.GRAVITY_EARTH;
-	    mAccelLast = SensorManager.GRAVITY_EARTH;
+		/* do this in onCreate */
+		mSensorManager = (SensorManager) getActivity().getSystemService(getActivity().SENSOR_SERVICE);
+		mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+		mAccel = 0.00f;
+		mAccelCurrent = SensorManager.GRAVITY_EARTH;
+		mAccelLast = SensorManager.GRAVITY_EARTH;
 
 
 		prof = (ToggleButton) rootView.findViewById(R.id.prof);
@@ -213,247 +238,243 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 	private void uploadToDatabase(){
 
-		String message = "";
+
 		//check if account exists
 		//if null: create, else:update
 
 
 		//users vouch score increases depending on the number of traits they vouched for
 		//connection's vouch score will increase depending on number of vouched traits
-		Person connection = currentConnection;
+		final Person connection = currentConnection;
 		if(connection == null){
 
 			return;
 		}
 
-		String firstName = connection.getFirstName();
-		String lastName = connection.getLastName();
+
 		String id = connection.getId();
 
-
-
-		message += firstName +"\n";
-		message += lastName +"\n";
-		message += id +"\n";
-
-		ParseQuery<ParseObject> query = ParseQuery.getQuery("Person");
-		query.whereEqualTo("linkedinID", id);
-		query.findInBackground(new FindCallback<ParseObject>(){
+		//NEW DATABASE CODE
+		ParseQuery<ParseObject> search = ParseQuery.getQuery("User");
+		search.whereEqualTo("linkedinID", id);
+		search.findInBackground(new FindCallback<ParseObject>(){
 
 			@Override
 			public void done(List<ParseObject> objects, ParseException e) {
 				// TODO Auto-generated method stub
-
 				if(e == null){
 
+					//account already exits
 					if(objects.size() == 1){
 
-						Log.d("Baid", "Person already exists. Let's update their information.");
 						ParseObject person = objects.get(0);
+						updateScoreData(person);
 
-						//get numberVouchesReceieved
-						List<Integer> nvrDatabase = new ArrayList<Integer>();
-						nvrDatabase = person.getList("numberVouchesReceived");
-						//should be of size 9
-						assert(nvrDatabase.size() == 9);
-
-						//get scoreVouchesReceived
-						List<Integer> svrDatabase = new ArrayList<Integer>();
-						svrDatabase = person.getList("scoreVouchesReceived");
-						//should be of size 9
-						assert(svrDatabase.size() == 9);
-
-						//get total score
-						int score = person.getInt("totalVouchScore");
-
-
-						JSONArray nvrToUpload = new JSONArray();
-
-						//increment nvrValues
-						for(int i = 0; i < allButtons.length; i ++){
-
-							if(allButtons[i].isChecked()){
-
-								//increment this value
-								int currentValue = nvrDatabase.get(i);
-								nvrDatabase.set(i, currentValue + 1);
-								nvrToUpload.put(currentValue + 1);
-
-								//increment tota
-								
-								
-
-							}
-						}
-						//put total into JSONArray
-						//one additional person has vouched for connection, increment total by one
-						int currentTotal = nvrDatabase.get(nvrDatabase.size() - 1);
-						nvrDatabase.set(nvrDatabase.size() - 1, currentTotal + 1);
-						nvrToUpload.put(nvrDatabase.get(nvrDatabase.size() - 1));
-						//insert
-						person.put("numberVouchesReceived", nvrToUpload);
-
-
-						JSONArray svrToUpload =  new JSONArray();
-
-						//update svr values
-						int counter = 0;
-						for(int i = 0; i < svr.length - 1; i ++){
-
-							svrToUpload.put(svr[i] + svrDatabase.get(i));
-							counter += svr[i];
-
-						}
-						svr[8] = counter;
-						int total = svrDatabase.get(svrDatabase.size() - 1);
-						int totalScore = counter + total;
-						svrToUpload.put(totalScore);
-						Log.d("Baid", "New vouch score for " + currentConnection.getFirstName() + " is " + (totalScore + score));
-
-
-						//insert
-						person.put("scoreVouchesReceived", svrToUpload);
-						person.put("totalVouchScore", totalScore + score);
-
-						person.saveInBackground(new SaveCallback(){
-
-							@Override
-							public void done(ParseException e) {
-								// TODO Auto-generated method stub
-								if(e == null){
-
-									updateUserData();
-									vouchContact();
-									setConnection();
-									resetButtons();
-
-								}
-							}
-
-
-						});
-
-
-					}
+					}//objects.size == 1
+					//account does not exits
 					else if(objects.size() == 0){
 
+						final ParseObject person = new ParseObject("User");
 
-						Log.d("Baid", "Person doesn't exist yet");
+						person.put("linkedinID", connection.getId());
+						person.put("firstName", connection.getFirstName());
+						person.put("lastName", connection.getLastName());
 
-						Person contact = currentConnection;
-						if(contact == null){
-
-							Log.d("Baid", "*No connection.");
-							return;
-						}
-
-						ParseObject person = new ParseObject("Person");
-						person.put("linkedinID", contact.getId());
-						person.put("firstName", contact.getFirstName());
-						person.put("lastName", contact.getLastName());
-						if(contact.getPictureUrl() != null)
-							person.put("profilePhotoURL", contact.getPictureUrl());
-
-						//insert scores given
-						JSONArray nvrData = new JSONArray();
-
-
-						for(int i = 0; i < allButtons.length; i ++){
-
-
-							if(allButtons[i].isChecked()){
-								nvrData.put(1);
-								Log.d("Baid", 1 + "");
-								
-							}
-
-							else{
-								nvrData.put(0);
-								Log.d("Baid", 0 +"");
-							}
-						}
-						
-						//one person has vouched for connection
-						nvrData.put(1);
-						person.put("numberVouchesReceived", nvrData);
-
-						JSONArray svrData = new JSONArray();
-						//goes through and totals up score for this particular vouch
-						int counter = 0;
-						for(int i = 0; i < svr.length - 1; i ++){
-
-							int value = svr[i];
-							svrData.put(value);
-							counter += value;
-						}
-						svr[8] = counter;
-						svrData.put(counter);
-
-						person.put("scoreVouchesReceived", svrData);
-						person.put("totalVouchScore", counter);
+						//may need to check if null
+						if(connection.getHeadline() != null)
+							person.put("headline", connection.getHeadline());
+						if(connection.getPictureUrl() != null)
+							person.put("location", connection.getLocation().getName());
+						if(connection.getPictureUrl() != null)
+							person.put("profilePhotoURL", connection.getPictureUrl());
 
 						person.saveInBackground(new SaveCallback(){
 
 							@Override
 							public void done(ParseException e) {
 								// TODO Auto-generated method stub
+
 								if(e == null){
 
-									Log.d("Baid", "Partial account created for " + currentConnection.getFirstName());
-
-									//only after we've created the account, can we move on
-									updateUserData();
-									vouchContact();
-									setConnection();
-									resetButtons();
+									//create scoreData object for new user
+									createScoreData(person);
 								}
 							}
 
 
 						});
 
-					}
 
-				}
+
+
+					}//obects.size == 0
+				}//e== null
 
 			}
 
 
 		});
 
-		//verify that this is indeed number traits vouched for
-		//numberVouchesGiven[curRank] ++
-		//user has given a vouch with curRank traits vouched
-		int traitsVouched = curRank - 1;
-		message += traitsVouched +"\n";
-		//updates numberVouchesReceived
+
+
+	}
+
+
+
+	//if score data exits, we will update it for connection
+	private void updateScoreData(ParseObject person){
+
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("ScoreData");
+		query.whereEqualTo("scoreForUser", person);
+		query.findInBackground(new FindCallback<ParseObject>(){
+
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				// TODO Auto-generated method stub
+				if(e == null){
+
+					if(objects.size() == 1){
+
+						ParseObject score = objects.get(0);
+
+						int scoreToAdd = 0;
+						for(int i = 0; i < allButtons.length; i ++){
+
+							//we only care about buttons that are pressed
+							if(allButtons[i].isChecked()){
+
+								//retrieve scores associated with button
+								int traitNum = score.getInt(traitNumbers[i]);
+								int traitScore =score.getInt( traitScores[i]);
+
+								score.put(traitNumbers[i], traitNum + 1);
+								score.put(traitScores[i], svr[i] + traitScore);
+								scoreToAdd += svr[i];
+							}
+
+						}
+
+						//increment connection score
+						int tvs = score.getInt("totalVouchScore");
+						score.put("totalVouchScore", tvs + scoreToAdd);
+
+						//increment connection vouches received by one
+						int tvr = score.getInt("totalVouchesReceived");
+						score.put("totalVouchesReceived", tvr + 1);
+
+						score.saveInBackground(new SaveCallback(){
+
+							@Override
+							public void done(ParseException e) {
+								// TODO Auto-generated method stub
+
+								if(e == null){
+
+									Log.d("Baid", "Connection's score has been saved!");
+
+									updateUserData();
+									vouchContact();
+									setConnection();
+									resetButtons();
+								}
+
+							}
+
+
+						});
+
+
+
+
+					}//size == 1
+					else{
+
+						Log.d("Baid", "Error retieving connection scoreData");
+					}
+				}//e == null
+
+			}
+
+
+		});
+	}
+
+	private void createScoreData(ParseObject person){
+
+
+		final ParseObject score = new ParseObject("ScoreData");
+
+		int scoreToAdd = 0;
 		for(int i = 0; i < allButtons.length; i ++){
 
+
+			//we only care about buttons that are pressed
+
 			if(allButtons[i].isChecked()){
-				//nvr[i] ++
-				//total needs to be updated for each trait
-				//nvr[8] ++ 
+
+				score.put(traitNumbers[i], 1);
+				score.put(traitScores[i], svr[i]);
+				scoreToAdd += svr[i];
+			}
+			else{
+
+				score.put(traitNumbers[i], 0);
+				score.put(traitScores[i], 0);
 			}
 		}
 
 
 
+		score.put("totalVouchScore", scoreToAdd);
+		score.put("totalVouchesReceived", 1);
 
-		//error is counter is less than 0 or more than 10
 
-		//update both user and connection's total vouch score
-		//manage toVouch and vouchFor array
-		//send push notification/messages if possible to recepient of vouch
+		score.put("totalVouchesGiven", 0);
+		score.put("vouchOne", 0);
+		score.put("vouchTwo", 0);
+		score.put("vouchThree", 0);
+		score.put("vouchFour", 0);
+		score.put("skips", 0);
+		score.put("scoreForUser", person);
 
+		score.saveInBackground(new SaveCallback(){
+
+			@Override
+			public void done(ParseException e) {
+				// TODO Auto-generated method stub
+				if(e == null){
+
+					Log.d("Baid", "ScoreData saved for new connection");
+					updateUserData();
+					vouchContact();
+					setConnection();
+					resetButtons();
+				}
+
+			}
+
+
+		});
 	}
 
 	private void skip(){
-		
+
 		if(currentConnection != null && curIndex < IDs.size()){
-			
+
 			skipped.add(currentConnection.getId());
 			IDs.set(curIndex, null);
-			
+
+			ParseObject score = LoginActivity.getParseScore();
+			if(score != null){
+
+				int v0 = score.getInt("skips");
+				score.put("skips", v0 + 1);
+			}
+			else{
+
+				Log.d("Baid", "Error: User scoredata is null!");
+			}
+
 		}
 
 		setConnection();
@@ -476,34 +497,55 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 	private void updateUserData(){
 
 		int traitsVouched = curRank - 1;
+		ParseObject score = LoginActivity.getParseScore();
+		if(score == null){
+
+			Log.d("Baid", "Error: scoredata for user is null!");
+			return;
+		}
+
+		//increment tvg by 1
+		int tvg = score.getInt("totalVouchesGiven");
+
+		int tvs = score.getInt("totalVouchScore");
+
+
+		int v1 = score.getInt("vouchOne");
+		int v2 = score.getInt("vouchTwo");
+		int v3 = score.getInt("vouchThree");
+		int v4 = score.getInt("vouchFour");
 		if(traitsVouched >= 0 && traitsVouched < 5){
 
-			//increment by one
-			nvg[traitsVouched] ++;
+			score.put("totalVouchesGiven", tvg + 1);
 		}
 		else{
 
 			Log.d("Baid", "Error 5");
 		}
 
+		int scoreToAdd = 0;
 		switch(traitsVouched){
 
 		case(1):
 
-			earnedScore += 4;
+			scoreToAdd += 4;
+		score.put("vouchOne", v1 + 1);
 		break;
 		case(2):
 
-			earnedScore += 7;
+			scoreToAdd += 7;
+		score.put("vouchTwo", v2 + 1);
 		break;
 
 		case(3):
 
-			earnedScore += 9;
+			scoreToAdd += 9;
+		score.put("vouchThree", v3 + 1);
 		break;
 		case(4):
 
-			earnedScore += 10;
+			scoreToAdd += 10;
+		score.put("vouchFour", v4 + 1);
 		break;
 		default:
 
@@ -512,7 +554,12 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 		}
 
-		Log.d("Baid", "User now has earned " + earnedScore + " points");
+		//update totalScore
+		score.put("totalVouchScore", tvs + scoreToAdd);
+
+
+
+		Log.d("Baid", "User now has earned " + (tvs + scoreToAdd) + " points");
 
 	}
 
@@ -525,7 +572,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 		Person contact = toVouch.get(id);
 		if(contact != null){
 
-			vouchedFor.put(id, contact);
+
 			toVouch.remove(id);
 			//this index has been vouchedFor
 			IDs.set(curIndex, null);
@@ -542,124 +589,61 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 	@Override
 	public void onPause() {
 		// TODO Auto-generated method stub
-		 mSensorManager.unregisterListener(mSensorListener);
+		mSensorManager.unregisterListener(mSensorListener);
 		super.onPause();
 
 
-		//eventually I want to be able to combine code from uploadtodatabase, onResume,
-		//and this function so I only have to make one API call in order to
-		//retrieve user
+		//update toVouch array
+		ParseObject person = LoginActivity.getParseUser();
+		if(person != null){
 
-		//retrieves user 
-		ParseQuery<ParseObject> query = ParseQuery.getQuery("Person");
-		query.whereEqualTo("linkedinID", LoginActivity.getUserID());
-		query.findInBackground(new FindCallback<ParseObject>(){
+			JSONArray tv = new JSONArray();
+			for(int i = 0; i < IDs.size(); i ++){
 
-			@Override
-			public void done(List<ParseObject> objects, ParseException e) {
-				// TODO Auto-generated method stub
+				String vID = IDs.get(i);
+				if(vID != null)
+					tv.put(vID);
+			}
+			//puts skipped contacts at the end
+			for(int i = 0; i < skipped.size(); i ++){
 
+				String cID = skipped.get(i);
+				if(cID != null)
+					tv.put(cID);
+			}
+			person.put("toVouch", tv);
 
-				//there should only be one user with this user id
-				if(objects.size() == 1 && e == null){
+			person.saveInBackground(new SaveCallback(){
 
-					ParseObject person = objects.get(0);
+				@Override
+				public void done(ParseException e) {
+					// TODO Auto-generated method stub
+					if(e == null){
 
-					//insert all linkedin id's to appropriate jsonarray
-					JSONArray tv = new JSONArray();
-					JSONArray vf = new JSONArray();
-
-					//adds all elements from toVouch to IDs
-					/*for(Map.Entry<String,Person> map : toVouch.entrySet()){
-
-						tv.put(map.getKey());
-
-					}*/
-					for(int i = 0; i < IDs.size(); i ++){
-						
-						String vID = IDs.get(i);
-						if(vID != null)
-							tv.put(vID);
+						Log.d("Baid", "Updated User Vouch Data");
 					}
-					//puts skipped contacts at the end
-					for(int i = 0; i < skipped.size(); i ++){
-						
-						String cID = skipped.get(i);
-						if(cID != null)
-							tv.put(cID);
-					}
-
-					for(Map.Entry<String,Person> map : vouchedFor.entrySet()){
-
-						vf.put(map.getKey());
-
-					}
-
-
-					//upload to database
-
-					person.put("toVouch", tv);
-					person.put("vouchedFor", vf);
-
-					//gets number of vouches receieved
-					List<Integer> nvrDatabase = new ArrayList<Integer>();
-					nvrDatabase = person.getList("numberVouchesReceived");
-					assert(nvrDatabase.size() == 9);
-					int numReceived = nvrDatabase.get(8);
-
-					//get numberVouchesGiven
-					List<Integer> nvgDatabase = new ArrayList<Integer>();
-					nvgDatabase = person.getList("numberVouchesGiven");
-					assert(nvgDatabase.size() == 5);
-
-					JSONArray nvgToUpload = new JSONArray();
-					//place holder for skips
-					nvgToUpload.put(0);
-
-					//counts all given vouches
-					int counter = 0;
-					//I'm starting at one, because I don't want to count skips
-					for(int i = 1; i < nvgDatabase.size(); i ++){
-
-
-
-						int value = nvgDatabase.get(i);
-						int curValue = nvg[i];
-						nvgToUpload.put(curValue + value);
-						counter += curValue + value;
-
-					}
-
-					person.put("numberVouchesGiven", nvgToUpload);
-
-					int tvs = person.getInt("totalVouchScore");
-					tvs += earnedScore;
-					person.put("totalVouchScore", tvs);
-					Log.d("Baid", "User's new total vouch score is " + tvs);
-
-
-					person.saveInBackground(new SaveCallback(){
-
-						@Override
-						public void done(ParseException e) {
-							// TODO Auto-generated method stub
-							//data was successfully saved
-							if(e == null){
-
-								Log.d("Baid", "Data Saved");
-								//Toast.makeText(getActivity(), "Data Saved!", Toast.LENGTH_SHORT).show();
-								//Toast.makeText(getActivity(), "Data Saved!", Toast.LENGTH_SHORT).show();
-							}
-						}
-
-
-					});
 				}
 
+
+			});
+
+		}
+
+		//save user score
+		ParseObject score = LoginActivity.getParseScore();
+		score.saveInBackground(new SaveCallback(){
+
+			@Override
+			public void done(ParseException e) {
+				// TODO Auto-generated method stub
+				if(e == null){
+
+					Log.d("Baid", "User scoreData saved");
+				}
 			}
 
-
 		});
+
 	}
 
 	private void resetButtons(){
@@ -800,7 +784,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 		String name = connection.getFirstName() + " " + connection.getLastName();
 
 		//skips private accounts and skips accounts that we have already vouched for
-		if(name.equals("private private") || vouchedFor.get(connection.getId()) != null){
+		if(name.equals("private private")){
 
 			//we need to skip current connection
 			Log.d("Baid", "Private connection");
@@ -855,7 +839,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 		// TODO Auto-generated method stub
 		super.onResume();
 		mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
-		  
+
 
 		//reset numberVouchesGiven to 0
 		nvg = new int[5];
@@ -864,65 +848,30 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 			nvg[i] = 0;
 		}
 		earnedScore = 0;
+		//
+
 
 		//retrieve toVouch and vouchedFor
 		IDs = new ArrayList<String>();
 		skipped = new ArrayList<String>();
 		curIndex = -1;
 
+
+
 		toVouch = new HashMap<String, Person>();
-		vouchedFor = new HashMap<String, Person>();
-		ParseQuery<ParseObject> query = ParseQuery.getQuery("Person");
-		query.whereEqualTo("linkedinID", LoginActivity.getUserID());
-		query.findInBackground(new FindCallback<ParseObject>(){
 
-			@Override
-			public void done(List<ParseObject> objects, ParseException e) {
-				// TODO Auto-generated method stub
-				if(objects.size() == 1 && e == null){
+		ParseObject user = LoginActivity.getParseUser();
 
-					ParseObject person = objects.get(0);
+		List<String> tv = new ArrayList<String>();
+		tv = user.getList("toVouch");
+		if(tv == null){
 
+			Log.d("Baid", "Error! toVouch should not be null");
+		}
 
-					List<String> tvData = new ArrayList<String>();
-					List<String> vfData = new ArrayList<String>();
-					tvData = person.getList("toVouch");
-					vfData = person.getList("vouchedFor");
-					if(tvData != null && vfData != null){
-
-						Log.d("Baid", "Loaded " + tvData.size() + " connections that need to be vouched for.");
-						Log.d("Baid", vfData.size() + " connections have already been vouched for.");
-						Log.d("Baid", "Current index is " + curIndex);
-						createMaps(tvData, vfData);
-						setConnection();
-					}
-					else{
-
-						initalizeMaps();
-						setConnection();
-					}
-
-				}
-
-			}
-
-
-		});
-
-		//these hashtables are only accurate if this is first vouching session since contactDataListener was called
-
-
-
-
-
-	}
-
-	private void createMaps(List<String> tv, List<String> vf){
-
-		//ISH: TODO what if these are null
 		HashMap<String, Person> all = LoginActivity.getConnectionHashMap();
-		
-		//creates TV hashmap
+
+		//creates list of connections to vouch for
 		for(int i = 0; i < tv.size(); i ++){
 
 			String id = tv.get(i);
@@ -930,40 +879,18 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 			//add to IDs
 			IDs.add(id);
 
+
 			Person contact = all.get(id);
 			toVouch.put(id, contact);
-			
-	
-
-		}
-		//creates VF hashmap
-		for(int i = 0; i < vf.size(); i ++){
-
-			String id = vf.get(i);
-			Person contact = all.get(id);
-			vouchedFor.put(id, contact);
 
 		}
 
-
+		setConnection();
 
 	}
 
-	//if database doesn't have a record, we will use the information from contactdatalistener
-	private void initalizeMaps(){
-
-		toVouch = LoginActivity.getConnectionHashMap();
-		
-
-		//adds all elements from toVouch to IDs
-		for(Map.Entry<String,Person> map : toVouch.entrySet()){
-
-			IDs.add(map.getKey());
-
-		}
 
 
-	}
 
 
 	//handles shake
@@ -984,13 +911,13 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 			mAccelCurrent = (float) Math.sqrt((double) (x*x + y*y + z*z));
 			float delta = mAccelCurrent - mAccelLast;
 			mAccel = mAccel * 0.9f + delta; // perform low-cut filter
-			
+
 			if (mAccel > 7) {
-			    Toast toast = Toast.makeText(getActivity(), "Reset.", Toast.LENGTH_LONG);
-			    toast.show();
-			    resetButtons();
-			   // mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
-				
+				Toast toast = Toast.makeText(getActivity(), "Reset.", Toast.LENGTH_LONG);
+				toast.show();
+				resetButtons();
+				// mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+
 			}
 		}
 

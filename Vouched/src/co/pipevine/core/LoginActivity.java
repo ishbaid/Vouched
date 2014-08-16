@@ -95,6 +95,10 @@ public class LoginActivity extends Activity {
 	public static ParseObject getParseUser(){return parseUser;};
 	public static ParseObject getParseScore(){return parseScore;};
 	
+	//mutators for user ParseObjects
+	public static void setParseUser(ParseObject person){parseUser = person;}
+	public static void setParseScore(ParseObject score){parseScore = score;}
+	
 	//accessors for connections
 	public static HashMap<String, Person>getConnectionHashMap(){ return allConnections;}
 	public static ArrayList<String> getOrderedNames(){return orderedNames;}

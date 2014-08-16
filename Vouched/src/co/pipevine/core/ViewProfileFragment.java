@@ -30,16 +30,16 @@ public class ViewProfileFragment extends Fragment implements View.OnClickListene
 
 	ImageView viewPic;
 	TextView viewName, viewInfo, vScore, given, received;
-	
+
 	//bar and anti bar add to constant number
 	//bars for all traits
 	View bProf, bInteg, bComm, bInnovation, bProd, bAdapt, bLead, bTeam;
-	
+
 	//keeps track of antibars for all graphs
 	View  aProf, aInteg, aComm, aInnovation, aProd, aAdapt,  aLead, aTeam;
 
 	TextView sProf, sInteg, sComm, sInnovation, sProd, sAdapt, sLead, sTeam;
-	
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,7 +61,7 @@ public class ViewProfileFragment extends Fragment implements View.OnClickListene
 		bAdapt = (View) rootView.findViewById(R.id.bar_adapt);
 		bLead = (View) rootView.findViewById(R.id.bar_lead);
 		bTeam = (View) rootView.findViewById(R.id.bar_team);
-		
+
 		aProf = (View) rootView.findViewById(R.id.blank_prof);
 		aInteg = (View) rootView.findViewById(R.id.blank_integ);
 		aComm = (View) rootView.findViewById(R.id.blank_comm);
@@ -70,7 +70,7 @@ public class ViewProfileFragment extends Fragment implements View.OnClickListene
 		aAdapt = (View) rootView.findViewById(R.id.blank_adapt);
 		aLead = (View) rootView.findViewById(R.id.blank_lead);
 		aTeam = (View) rootView.findViewById(R.id.blank_team);
-		
+
 		sProf = (TextView) rootView.findViewById(R.id.score_prof);
 		sInteg = (TextView) rootView.findViewById(R.id.score_integ);
 		sComm = (TextView) rootView.findViewById(R.id.score_comm);
@@ -79,7 +79,7 @@ public class ViewProfileFragment extends Fragment implements View.OnClickListene
 		sAdapt = (TextView) rootView.findViewById(R.id.score_adapt);
 		sLead = (TextView) rootView.findViewById(R.id.score_lead);
 		sTeam = (TextView) rootView.findViewById(R.id.score_team);
-		
+
 		setGraph(10, 20, 30, 50, 70, 10, 20, 50);
 
 		Person connection = ViewConnectionProfileActivity.connection; 
@@ -101,149 +101,128 @@ public class ViewProfileFragment extends Fragment implements View.OnClickListene
 		return rootView;
 		//return super.onCreateView(inflater, container, savedInstanceState);
 	}
-	
+
 	//sets graph
 	private void setGraph(int prof, int integ, int comm, int innovation, int prod, int adapt, int lead, int team ){
-		
+
 		int total = 100;
-		
+
 		LayoutParams params = (LayoutParams) bProf.getLayoutParams();
 		params.width = prof;
 		bProf.setLayoutParams(params);
-		
+
 		params = (LayoutParams) bInteg.getLayoutParams();
 		params.width = integ;
 		bInteg.setLayoutParams(params);
-		
+
 		params = (LayoutParams) bComm.getLayoutParams();
 		params.width = comm;
 		bComm.setLayoutParams(params);
-		
+
 		params = (LayoutParams) bInnovation.getLayoutParams();
 		params.width = innovation;
 		bInnovation.setLayoutParams(params);
-		
+
 		params = (LayoutParams) bProd.getLayoutParams();
 		params.width = prod;
 		bProd.setLayoutParams(params);
-		
+
 		params = (LayoutParams) bAdapt.getLayoutParams();
 		params.width = adapt;
 		bAdapt.setLayoutParams(params);
-		
+
 		params = (LayoutParams) bLead.getLayoutParams();
 		params.width = lead;
 		bLead.setLayoutParams(params);
-		
+
 		params = (LayoutParams) bTeam.getLayoutParams();
 		params.width = team;
 		bTeam.setLayoutParams(params);
-		
-		
+
+
 		//set antibars		
-		 params = (LayoutParams) aProf.getLayoutParams();
+		params = (LayoutParams) aProf.getLayoutParams();
 		params.width = 100 - prof;
 		aProf.setLayoutParams(params);
-		
+
 		params = (LayoutParams) aInteg.getLayoutParams();
 		params.width = 100 - integ;
 		aInteg.setLayoutParams(params);
-		
+
 		params = (LayoutParams) aComm.getLayoutParams();
 		params.width = 100 - comm;
 		aComm.setLayoutParams(params);
-		
+
 		params = (LayoutParams) aInnovation.getLayoutParams();
 		params.width = 100 - innovation;
 		aInnovation.setLayoutParams(params);
-		
+
 		params = (LayoutParams) aProd.getLayoutParams();
 		params.width = 100 - prod;
 		aProd.setLayoutParams(params);
-		
+
 		params = (LayoutParams) aAdapt.getLayoutParams();
 		params.width = 100 -adapt;
 		aAdapt.setLayoutParams(params);
-		
+
 		params = (LayoutParams) aLead.getLayoutParams();
 		params.width = 100 - lead;
 		aLead.setLayoutParams(params);
-		
+
 		params = (LayoutParams) aTeam.getLayoutParams();
 		params.width = 100 - team;
 		aTeam.setLayoutParams(params);
 
-		
+
 	}
 	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		ParseQuery<ParseObject> query = ParseQuery.getQuery("Person");
-		query.whereEqualTo("linkedinID", ViewConnectionProfileActivity.getConnectionID());
-		query.findInBackground(new FindCallback<ParseObject>(){
+
+		ParseQuery<ParseObject> innerSearch = ParseQuery.getQuery("User");
+		innerSearch.whereEqualTo("linkedinID", ViewConnectionProfileActivity.getConnectionID());
+
+		ParseQuery<ParseObject> search = ParseQuery.getQuery("ScoreData");
+		search.whereMatchesQuery("scoreForUser", innerSearch);
+		search.findInBackground(new FindCallback<ParseObject>(){
 
 			@Override
 			public void done(List<ParseObject> objects, ParseException e) {
 				// TODO Auto-generated method stub
+				if(e == null){
 
-				if(e == null && objects.size() == 1){
+					if(objects.size() == 1){
 
-					ParseObject person = objects.get(0);
+						ParseObject score = objects.get(0);
+						int tvs = score.getInt("totalVouchScore");
+						int vg = score.getInt("totalVouchesGiven");
+						int vr = score.getInt("totalVouchesReceived");
 
-					int vs = person.getInt("totalVouchScore");
-					vScore.setText(vs + "");
 
-					List<Integer> nvg = new ArrayList<Integer>();
-					nvg = person.getList("numberVouchesGiven");
 
-					List<Integer> nvr = new ArrayList<Integer>();
-					nvr = person.getList("numberVouchesReceieved");
+						vScore.setText(tvs + "");
+						given.setText(vg + "X");
+						received.setText(vr + "X");
 
-					if(nvg != null){
-
-						//size should be 5
-						if(nvg.size() != 5){
-
-							Log.d("Baid", "Error 6");
-						}
-
-						int givenCount = 0;
-						for(int i = 1; i < nvg.size(); i ++){
-
-							givenCount += nvg.get(i);
-						}
-						given.setText(givenCount + "");
 
 					}
+					else{
 
-					if(nvr != null){
-
-						//size should be 9
-						if(nvr.size() == 9){
-
-							received.setText(nvr.get(nvr.size() - 1) + "");
-
-
-						}else{
-
-							Log.d("Baid", "Error 6");
-						}
-
+						Log.d("Baid", "Didn't find scoreData: " + objects.size());
 					}
-
-
 				}
 			}
 
 
 		});
+
 	}
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		int id = v.getId();
-		
+
 	}
 
 

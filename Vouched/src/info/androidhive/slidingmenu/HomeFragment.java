@@ -164,72 +164,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 			int vs = score.getInt("totalVouchScore");
 			int received = score.getInt("totalVouchesReceived");
 			int given = score.getInt("totalVouchesGiven");
-			setConnectionNumber(vs, received, given);
+			setConnectionNumber(vs, given, received);
 		}
 
 		
-		
-		ParseQuery<ParseObject> query = ParseQuery.getQuery("Person");
-		query.whereEqualTo("linkedinID", LoginActivity.getUserID());
-		query.findInBackground(new FindCallback<ParseObject>(){
-
-			@Override
-			public void done(List<ParseObject> objects, ParseException e) {
-				// TODO Auto-generated method stub
-
-				if(e == null && objects.size() == 1){
-
-					ParseObject person = objects.get(0);
-
-					int vs = person.getInt("totalVouchScore");
-					int givenValue = 0;
-					int receiveValue = 0;
-
-					List<Integer> nvg = new ArrayList<Integer>();
-					nvg = person.getList("numberVouchesGiven");
-
-					List<Integer> nvr = new ArrayList<Integer>();
-					nvr = person.getList("numberVouchesReceieved");
-
-					if(nvg != null){
-
-						//size should be 5
-						if(nvg.size() != 5){
-
-							Log.d("Baid", "Error 6");
-						}
-
-
-						for(int i = 1; i < nvg.size(); i ++){
-
-							givenValue += nvg.get(i);
-						}
-
-
-					}
-
-					if(nvr != null){
-
-						//size should be 9
-						if(nvr.size() == 9){
-
-							receiveValue = nvr.get(nvr.size() - 1);
-						}
-						else{
-
-							Log.d("Baid", "Error 6");
-						}
-
-					}
-
-
-					//setConnectionNumber(vs, givenValue, receiveValue);
-
-				}
-			}
-
-
-		});
 
 	}
 	//updates stats
