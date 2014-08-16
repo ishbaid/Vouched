@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.brickred.socialauth.Contact;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -56,6 +57,9 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 	ArrayList<String> IDs;
 	ArrayList<String>skipped;
 
+	//keeps track of vouches traits and order
+	HashMap<String, Integer> vouchData;
+
 	static //keeps track of current index
 	int curIndex = -1;
 
@@ -100,6 +104,10 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 			"teamworkScore"
 
 	};
+
+	//keeps track of traits to be used for vouchData
+	String [] traits = {"professionalism", "productivity", "integrity", "adaptability", "communication"
+			, "leadership", "innovation", "teamwork"};
 
 	//keeps track of which connections have been vouched for and which haven't
 	static HashMap<String, Person> toVouch;
@@ -199,6 +207,9 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 		Array[7] = Teamwork
 		Array[8] = Total*/
 		//initialize score vouches array to 0's
+
+		vouchData = new HashMap<String, Integer>();
+
 
 		svr = new int[9];
 		for(int i = 0; i < svr.length; i ++ ){
@@ -324,6 +335,8 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 	//if score data exits, we will update it for connection
 	private void updateScoreData(ParseObject person){
 
+
+
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("ScoreData");
 		query.whereEqualTo("scoreForUser", person);
 		query.findInBackground(new FindCallback<ParseObject>(){
@@ -336,6 +349,9 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 					if(objects.size() == 1){
 
 						ParseObject score = objects.get(0);
+						ParseObject vouchObject = new ParseObject("Vouch");
+						vouchObject.saveInBackground();
+						int rank = 1;
 
 						int scoreToAdd = 0;
 						for(int i = 0; i < allButtons.length; i ++){
@@ -350,9 +366,21 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 								score.put(traitNumbers[i], traitNum + 1);
 								score.put(traitScores[i], svr[i] + traitScore);
 								scoreToAdd += svr[i];
+
+								vouchData.put(traits[i], rank);
+								rank ++;
 							}
 
 						}
+
+						//creates vouch object
+						vouchObject.put("isFor", currentConnection.getId());
+						vouchObject.put("isFrom", LoginActivity.getUserID());
+						//initalizes jsonobject with hashmap
+						JSONObject data = new JSONObject(vouchData);
+						vouchObject.put("data", data.toString());
+
+
 
 						//increment connection score
 						int tvs = score.getInt("totalVouchScore");
@@ -372,6 +400,8 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 									Log.d("Baid", "Connection's score has been saved!");
 
+									//add callback if you want to know when it finishes
+									
 									updateUserData();
 									vouchContact();
 									setConnection();
@@ -403,7 +433,10 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 
 		final ParseObject score = new ParseObject("ScoreData");
+		ParseObject vouchObject = new ParseObject("Vouch");
+		vouchObject.saveInBackground();
 
+		int rank = 1;
 		int scoreToAdd = 0;
 		for(int i = 0; i < allButtons.length; i ++){
 
@@ -415,6 +448,10 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 				score.put(traitNumbers[i], 1);
 				score.put(traitScores[i], svr[i]);
 				scoreToAdd += svr[i];
+
+				vouchData.put(traits[i], rank);
+				rank ++;
+
 			}
 			else{
 
@@ -422,6 +459,34 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 				score.put(traitScores[i], 0);
 			}
 		}
+
+		/*for (Map.Entry<String, Integer> entry : vouchData.entrySet()) {
+
+			String key = entry.getKey();
+		    Integer value = entry.getValue();
+		    Log.d("Baid", "Key: " + key + "value:  " + value);
+		    // ...
+		}*/
+
+		//creates vouch object
+		vouchObject.put("isFor", currentConnection.getId());
+		vouchObject.put("isFrom", LoginActivity.getUserID());
+		//initalizes jsonobject with hashmap
+		JSONObject data = new JSONObject(vouchData);
+		vouchObject.put("data", data.toString());
+		//add callback if you want to find out when have has been completed
+		vouchObject.saveInBackground(new SaveCallback(){
+
+			@Override
+			public void done(ParseException e) {
+				// TODO Auto-generated method stub
+				if(e == null)
+					Log.d("Baid", "Saved Vouch object!");
+			}
+			
+			
+		});
+
 
 
 
@@ -445,6 +510,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 				if(e == null){
 
 					Log.d("Baid", "ScoreData saved for new connection");
+
 					updateUserData();
 					vouchContact();
 					setConnection();
@@ -664,6 +730,8 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 			svr[i] = 0;
 		}
+
+		vouchData = new HashMap<String, Integer>();
 
 		curRank = 1;
 	}
