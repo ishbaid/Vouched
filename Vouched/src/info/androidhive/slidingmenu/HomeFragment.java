@@ -21,6 +21,7 @@ import co.pipevine.android.R;
 import co.pipevine.core.DownloadImagesTask;
 import co.pipevine.core.LoginActivity;
 import co.pipevine.core.OnSwipeTouchListener;
+import co.pipevine.core.ViewConnectionProfileActivity;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -47,6 +48,30 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
 	TextView sProf, sInteg, sComm, sInnovation, sProd, sAdapt, sLead, sTeam;
 	
+	//keeps track of scoreData keys
+	String [] traitNumbers = {
+			"professionalismNumber",
+			"productivityNumber",
+			"integrityNumber",
+			"adaptabilityNumber",
+			"communicationNumber",
+			"leadershipNumber",
+			"innovationNumber",
+			"teamworkNumber",	
+
+	};
+	String [] traitScores = {
+
+			"professionalismScore",
+			"productivityScore",
+			"integrityScore",
+			"adaptabilityScore",
+			"communicationScore",
+			"leadershipScore",
+			"innovationScore",
+			"teamworkScore"
+
+	};
 	//contains profile picture
 	ImageView proPic;
 	public HomeFragment(){}
@@ -158,15 +183,61 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 			proPic.setLayoutParams(params);
 		}
 
-		ParseObject score = LoginActivity.getParseScore();
-		if(score != null){
-			
-			int vs = score.getInt("totalVouchScore");
-			int received = score.getInt("totalVouchesReceived");
-			int given = score.getInt("totalVouchesGiven");
-			setConnectionNumber(vs, given, received);
-		}
+		ParseQuery<ParseObject> innerSearch = ParseQuery.getQuery("User");
+		innerSearch.whereEqualTo("linkedinID", LoginActivity.getUserID());
 
+		ParseQuery<ParseObject> search = ParseQuery.getQuery("ScoreData");
+		search.whereMatchesQuery("scoreForUser", innerSearch);
+		search.findInBackground(new FindCallback<ParseObject>(){
+
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				// TODO Auto-generated method stub
+				if(e == null){
+					
+					if(objects.size() == 1){
+						
+						Log.d("Baid", "Found User ScoreData");
+						ParseObject score = objects.get(0);
+						int vs = score.getInt("totalVouchScore");
+						int received = score.getInt("totalVouchesReceived");
+						int given = score.getInt("totalVouchesGiven");
+						setConnectionNumber(vs, given, received);
+						
+						int []percents = new int[8];
+						
+						for(int i = 0; i < traitNumbers.length; i ++){
+							
+							int number = score.getInt(traitNumbers[i]);
+							number *= 100;
+							if(received != 0)
+								percents[i] = number/received;
+							else
+								percents[i] = 0;
+							
+						}
+						setGraph(percents[0], percents[2], percents[4], percents[6], percents[1], percents[3], percents[5], percents[7]);
+					
+						int [] scores = new int[8];
+						for(int i = 0; i < traitScores.length; i ++){
+							
+							scores[i] = score.getInt(traitScores[i]);
+							
+						}
+						setScores(scores[0], scores[2], scores[4], scores[6], scores[1], scores[3], scores[5], scores[7]);
+						
+						
+					}
+					else{
+						
+						Log.d("Baid", "Couldn't find user score data");
+					}
+				}
+			}
+			
+			
+		});
+		
 		
 
 	}
@@ -180,6 +251,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 		numReceived.setText(received + "");
 		Log.d("Baid", "score: " + vScore + " Given: " + given + " Received: " + received);
 
+	}
+	
+	//sets scores
+	private void setScores(int prof, int integ, int comm, int innovation, int prod, int adapt, int lead, int team ){
+		
+		sProf.setText(prof + "");
+		sInteg.setText(integ + "");
+		sComm.setText(comm + "");
+		sInnovation.setText(innovation + "");
+		sProd.setText(prod + "");
+		sAdapt.setText(adapt + "");
+		sLead.setText(lead + "");
+		sTeam.setText(team + "");
 	}
 
 	//sets graph

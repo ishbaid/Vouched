@@ -94,11 +94,11 @@ public class LoginActivity extends Activity {
 	public static String getUserID(){return id;}
 	public static ParseObject getParseUser(){return parseUser;};
 	public static ParseObject getParseScore(){return parseScore;};
-	
+
 	//mutators for user ParseObjects
 	public static void setParseUser(ParseObject person){parseUser = person;}
 	public static void setParseScore(ParseObject score){parseScore = score;}
-	
+
 	//accessors for connections
 	public static HashMap<String, Person>getConnectionHashMap(){ return allConnections;}
 	public static ArrayList<String> getOrderedNames(){return orderedNames;}
@@ -106,8 +106,9 @@ public class LoginActivity extends Activity {
 
 	boolean loggedin;
 	LinearLayout background;
-	
-	
+
+	public static LinkedInApiClient client = null;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -216,8 +217,7 @@ public class LoginActivity extends Activity {
 	}
 
 	void showCurrentUser(final LinkedInAccessToken accessToken) {
-		final LinkedInApiClient client = factory
-				.createLinkedInApiClient(accessToken);
+		client = factory.createLinkedInApiClient(accessToken);
 
 		new AsyncTask<Void, Void, Object>() {
 
@@ -328,10 +328,10 @@ public class LoginActivity extends Activity {
 
 												Log.d("Baid", "Account created");
 												Toast.makeText(LoginActivity.this, "Account Created!", Toast.LENGTH_LONG).show();
-												
+
 												//store person as parseObject to use later
 												parseUser = person;
-												
+
 												createScoreData();
 
 
@@ -386,7 +386,7 @@ public class LoginActivity extends Activity {
 											public void done(ParseException e) {
 												// TODO Auto-generated method stub
 												if(e == null){
-													
+
 													Toast.makeText(LoginActivity.this, "Partial Account Updated!", Toast.LENGTH_SHORT).show();
 													Log.d("Baid", "Updated Account");
 													//store user to access later
@@ -402,10 +402,10 @@ public class LoginActivity extends Activity {
 									}//if toVouch is null
 									//otherwise, the current user already has an existing full account
 									else{
-										
+
 										//store user to use later
 										parseUser = person;
-										
+
 										createScoreData();
 									}
 
@@ -699,10 +699,10 @@ public class LoginActivity extends Activity {
 
 	//creates scoreDataObject for current user or stores it if it already exists
 	private void createScoreData(){
-		
+
 		//if parseUser is null, then we cannot create scoreData
 		if(parseUser == null){
-			
+
 			Log.d("score", "Error: parseUser is null ");
 			AlertDialog alertDialog = new AlertDialog.Builder(LoginActivity.this).create();  
 			alertDialog.setTitle("Uh oh!");  
@@ -710,9 +710,9 @@ public class LoginActivity extends Activity {
 			alertDialog.setCanceledOnTouchOutside(true);
 			alertDialog.show(); 
 			return;
-			
+
 		}
-		
+
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("ScoreData");
 		query.whereEqualTo("scoreForUser", parseUser);
 		query.findInBackground(new FindCallback<ParseObject>(){
@@ -721,12 +721,12 @@ public class LoginActivity extends Activity {
 			public void done(List<ParseObject> objects, ParseException e) {
 				// TODO Auto-generated method stub
 				if(e == null){
-					
+
 					//if no scoredata exits, we will make one
 					if(objects.size() == 0){
-						
+
 						final ParseObject score = new ParseObject("ScoreData");
-						
+
 						score.put("professionalismNumber", 0);
 						score.put("professionalismScore", 0);
 						score.put("integrityNumber", 0);
@@ -767,29 +767,29 @@ public class LoginActivity extends Activity {
 
 
 						});
-						
+
 					}//objects size == 0
 					else if(objects.size() == 1){
-						
-						
+
+
 						ParseObject score = objects.get(0);
 						parseScore = score;
 						Log.d("Baid", "Successfully retrieved parseScore!");
 					}// objects size == 1
 					else{
-						
+
 						Log.d("Baid", "Error. Incorrect number of scoreData");
 					}
 				}// e== null
-				
-			}
-			
-			
-			
-		});
-		
 
-		
+			}
+
+
+
+		});
+
+
+
 
 	}
 

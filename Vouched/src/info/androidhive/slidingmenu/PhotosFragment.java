@@ -1,6 +1,7 @@
 package info.androidhive.slidingmenu;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,11 +13,14 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,9 +28,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -122,10 +129,8 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 	//scoreVouchesReceived
 	int [] svr;
-	//keeps track of number of vouches given
-	int [] nvg;
-	//keeps track of score earned in current vouching session
-	int earnedScore;
+
+
 
 	public PhotosFragment(){}
 
@@ -279,12 +284,22 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 					if(objects.size() == 1){
 
 						ParseObject person = objects.get(0);
+						
+						//if user does not have an account, bring up option to send an invite
+						List<String>tv = new ArrayList<String>();
+						tv = person.getList("toVouch");
+						if(tv == null)
+							inviteDialog(currentConnection.getId());
 						updateScoreData(person);
 
 					}//objects.size == 1
 					//account does not exits
 					else if(objects.size() == 0){
-
+						
+						//send invite
+						if(!PagesFragment.neverState)
+							inviteDialog(currentConnection.getId());
+						
 						final ParseObject person = new ParseObject("User");
 
 						person.put("linkedinID", connection.getId());
@@ -330,6 +345,87 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 	}
 
+	private void inviteDialog(final String curID){
+		
+		AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+
+		alert.setTitle("Invite");
+		alert.setMessage("Enter Message:");
+
+		// Set an EditText view to get user input 
+		LinearLayout dialog = new LinearLayout(getActivity());
+		dialog.setOrientation(LinearLayout.VERTICAL);
+		
+		final EditText input = new EditText(getActivity());
+		input.setText("Hey " + currentConnection.getFirstName() + ",\n\n");
+		input.setText(input.getText() + getString(R.string.invite_message));
+		input.setText(input.getText() + "\n" + LoginActivity.getFirst());
+		dialog.addView(input);
+		
+		final CheckBox ask = new CheckBox(getActivity());
+		ask.setText("Apply to All");
+		dialog.addView(ask);
+		
+		alert.setView(dialog);
+
+		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				String value = input.getText().toString();
+				
+				if(ask.isChecked()){
+					
+					PagesFragment.setAuto(true);
+				}
+				final String message = input.getText().toString();
+				new AsyncTask<Void, Void, Object>(){
+
+					ProgressDialog progDailog;
+					@Override
+					protected void onPreExecute() {
+						// TODO Auto-generated method stub
+						super.onPreExecute();
+						progDailog = new ProgressDialog(getActivity());
+						progDailog.setMessage("Sending...");
+						progDailog.setIndeterminate(false);
+						progDailog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+						progDailog.setCancelable(true);
+						progDailog.show();
+					}
+
+					@Override
+					protected Object doInBackground(Void... params) {
+						// TODO Auto-generated method stub
+						LoginActivity.client.sendMessage(Arrays.asList(curID, LoginActivity.getUserID()), "I just vouched for you", message);
+						return null;
+					}
+
+					@Override
+					protected void onPostExecute(Object result) {
+						// TODO Auto-generated method stub
+						super.onPostExecute(result);
+						Log.d("Baid", "Message sent");
+						progDailog.dismiss();
+						
+					}
+					
+					
+				}.execute();
+			}
+		});
+		
+		
+		alert.setNegativeButton("Not Right Now", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				// Canceled.
+				if(ask.isChecked()){
+					
+					PagesFragment.setNever(true);
+				}
+			}
+		});
+
+		alert.show();
+	}
 
 
 	//if score data exits, we will update it for connection
@@ -545,7 +641,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 		setConnection();
 		resetButtons();
-		Toast.makeText(getActivity(), "Dismissed", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(getActivity(), "Dismissed", Toast.LENGTH_SHORT).show();
 
 
 	}
@@ -553,8 +649,8 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 	private void vouch(){
 
 		uploadToDatabase();
-		Toast.makeText(getActivity(), "Vouched!", Toast.LENGTH_SHORT).show();
-
+		//Toast.makeText(getActivity(), "Vouched!", Toast.LENGTH_SHORT).show();
+		
 	}
 
 
@@ -865,7 +961,11 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 		cName.setText(name);
 
-		cInfo.setText(connection.getHeadline());
+		String header = connection.getHeadline();
+		if(header.length() <= 55)
+			cInfo.setText(connection.getHeadline());
+		else
+			cInfo.setText("");
 		String url = connection.getPictureUrl();
 		cPic.setTag(url);
 		new DownloadImagesTask().execute(cPic);
@@ -909,15 +1009,6 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 		mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
 
 
-		//reset numberVouchesGiven to 0
-		nvg = new int[5];
-		for(int i = 0; i < nvg.length; i ++){
-
-			nvg[i] = 0;
-		}
-		earnedScore = 0;
-		//
-
 
 		//retrieve toVouch and vouchedFor
 		IDs = new ArrayList<String>();
@@ -927,7 +1018,6 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 
 		toVouch = new HashMap<String, Person>();
-
 		ParseObject user = LoginActivity.getParseUser();
 
 		List<String> tv = new ArrayList<String>();
@@ -952,8 +1042,8 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 			toVouch.put(id, contact);
 
 		}
-
 		setConnection();
+
 
 	}
 

@@ -3,22 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <Button
-        android:id="@+id/request"
+    <CheckBox
+        android:id="@+id/checkBox1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="52dp"
-        android:text="Make Request" />
+        android:layout_marginTop="67dp"
+        android:checked="false"
+        android:text="Automatically Invite Connections" />
 
-    <TextView
-        android:id="@+id/textView1"
+    <CheckBox
+        android:id="@+id/checkBox2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/request"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="45dp"
-        android:text="Result" />
+        android:layout_alignLeft="@+id/checkBox1"
+        android:layout_below="@+id/checkBox1"
+        android:layout_marginTop="14dp"
+        android:text="Never ask to send invite." />
 
 </RelativeLayout>

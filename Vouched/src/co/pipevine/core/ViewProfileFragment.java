@@ -8,7 +8,6 @@ import java.util.List;
 import android.support.v4.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +39,30 @@ public class ViewProfileFragment extends Fragment implements View.OnClickListene
 
 	TextView sProf, sInteg, sComm, sInnovation, sProd, sAdapt, sLead, sTeam;
 
+	//keeps track of scoreData keys
+	String [] traitNumbers = {
+			"professionalismNumber",
+			"productivityNumber",
+			"integrityNumber",
+			"adaptabilityNumber",
+			"communicationNumber",
+			"leadershipNumber",
+			"innovationNumber",
+			"teamworkNumber",	
+
+	};
+	String [] traitScores = {
+
+			"professionalismScore",
+			"productivityScore",
+			"integrityScore",
+			"adaptabilityScore",
+			"communicationScore",
+			"leadershipScore",
+			"innovationScore",
+			"teamworkScore"
+
+	};
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,7 +103,8 @@ public class ViewProfileFragment extends Fragment implements View.OnClickListene
 		sLead = (TextView) rootView.findViewById(R.id.score_lead);
 		sTeam = (TextView) rootView.findViewById(R.id.score_team);
 
-		setGraph(10, 20, 30, 50, 70, 10, 20, 50);
+		setGraph(0, 0, 0, 0, 0, 0, 0, 0);
+		setScores(0, 0, 0, 0, 0, 0, 0, 0);
 
 		Person connection = ViewConnectionProfileActivity.connection; 
 		if(connection != null){
@@ -100,6 +124,19 @@ public class ViewProfileFragment extends Fragment implements View.OnClickListene
 
 		return rootView;
 		//return super.onCreateView(inflater, container, savedInstanceState);
+	}
+
+	//sets scores
+	private void setScores(int prof, int integ, int comm, int innovation, int prod, int adapt, int lead, int team ){
+
+		sProf.setText(prof + "");
+		sInteg.setText(integ + "");
+		sComm.setText(comm + "");
+		sInnovation.setText(innovation + "");
+		sProd.setText(prod + "");
+		sAdapt.setText(adapt + "");
+		sLead.setText(lead + "");
+		sTeam.setText(team + "");
 	}
 
 	//sets graph
@@ -204,6 +241,29 @@ public class ViewProfileFragment extends Fragment implements View.OnClickListene
 						vScore.setText(tvs + "");
 						given.setText(vg + "X");
 						received.setText(vr + "X");
+
+						int []percents = new int[8];
+
+						for(int i = 0; i < traitNumbers.length; i ++){
+
+							int number = score.getInt(traitNumbers[i]);
+							number *= 100;
+							if(vr != 0)
+								percents[i] = number/vr;
+							else
+								percents[i] = 0;
+
+						}
+						setGraph(percents[0], percents[2], percents[4], percents[6], percents[1], percents[3], percents[5], percents[7]);
+
+						int [] scores = new int[8];
+						for(int i = 0; i < traitScores.length; i ++){
+
+							scores[i] = score.getInt(traitScores[i]);
+
+						}
+						setScores(scores[0], scores[2], scores[4], scores[6], scores[1], scores[3], scores[5], scores[7]);
+
 
 
 					}

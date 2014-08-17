@@ -120,24 +120,24 @@ public final class R {
         public static final int team4=0x7f020042;
     }
     public static final class id {
-        public static final int ImageView01=0x7f0c0058;
-        public static final int LinearLayout01=0x7f0c0057;
-        public static final int LinearLayout02=0x7f0c0059;
-        public static final int TextView03=0x7f0c005b;
-        public static final int TextView05=0x7f0c005a;
-        public static final int TextView06=0x7f0c005d;
-        public static final int TextView07=0x7f0c005c;
-        public static final int TextView08=0x7f0c005f;
-        public static final int TextView09=0x7f0c005e;
-        public static final int TextView11=0x7f0c0061;
-        public static final int TextView12=0x7f0c0060;
-        public static final int TextView13=0x7f0c0062;
+        public static final int ImageView01=0x7f0c0059;
+        public static final int LinearLayout01=0x7f0c0058;
+        public static final int LinearLayout02=0x7f0c005a;
+        public static final int TextView03=0x7f0c005c;
+        public static final int TextView05=0x7f0c005b;
+        public static final int TextView06=0x7f0c005e;
+        public static final int TextView07=0x7f0c005d;
+        public static final int TextView08=0x7f0c0060;
+        public static final int TextView09=0x7f0c005f;
+        public static final int TextView11=0x7f0c0062;
+        public static final int TextView12=0x7f0c0061;
+        public static final int TextView13=0x7f0c0063;
         public static final int about_given=0x7f0c000e;
         public static final int about_received=0x7f0c0010;
         public static final int about_vs=0x7f0c000c;
-        public static final int action_settings=0x7f0c0063;
-        public static final int adapt=0x7f0c004c;
-        public static final int background=0x7f0c0045;
+        public static final int action_settings=0x7f0c0064;
+        public static final int adapt=0x7f0c004d;
+        public static final int background=0x7f0c0046;
         public static final int bar_adapt=0x7f0c002a;
         public static final int bar_comm=0x7f0c001e;
         public static final int bar_innovation=0x7f0c0022;
@@ -154,10 +154,12 @@ public final class R {
         public static final int blank_prod=0x7f0c0027;
         public static final int blank_prof=0x7f0c0017;
         public static final int blank_team=0x7f0c0033;
-        public static final int cInfo=0x7f0c0046;
-        public static final int cName=0x7f0c0047;
-        public static final int cPic=0x7f0c0048;
-        public static final int comm=0x7f0c004d;
+        public static final int cInfo=0x7f0c0047;
+        public static final int cName=0x7f0c0048;
+        public static final int cPic=0x7f0c0049;
+        public static final int checkBox1=0x7f0c0042;
+        public static final int checkBox2=0x7f0c0043;
+        public static final int comm=0x7f0c004e;
         public static final int counter=0x7f0c0005;
         public static final int dashboard2_background=0x7f0c0040;
         public static final int dashboard_background=0x7f0c0007;
@@ -168,8 +170,8 @@ public final class R {
         public static final int header3=0x7f0c0014;
         public static final int icon=0x7f0c0003;
         public static final int info=0x7f0c0008;
-        public static final int innovation=0x7f0c004f;
-        public static final int integ=0x7f0c004b;
+        public static final int innovation=0x7f0c0050;
+        public static final int integ=0x7f0c004c;
         public static final int label_adapt=0x7f0c0029;
         public static final int label_comm=0x7f0c001d;
         public static final int label_innovation=0x7f0c0021;
@@ -178,20 +180,19 @@ public final class R {
         public static final int label_prod=0x7f0c0025;
         public static final int label_prof=0x7f0c0015;
         public static final int label_team=0x7f0c0031;
-        public static final int lead=0x7f0c004e;
+        public static final int lead=0x7f0c004f;
         public static final int linearLayout1=0x7f0c000b;
         public static final int linearLayout2=0x7f0c0035;
         public static final int linearLayout3=0x7f0c003f;
         public static final int list=0x7f0c0041;
         public static final int list_slidermenu=0x7f0c0002;
         public static final int name=0x7f0c0009;
-        public static final int next=0x7f0c0052;
+        public static final int next=0x7f0c0053;
         public static final int num_given=0x7f0c000f;
         public static final int num_received=0x7f0c0011;
         public static final int proPic=0x7f0c000a;
-        public static final int prod=0x7f0c004a;
-        public static final int prof=0x7f0c0049;
-        public static final int request=0x7f0c0042;
+        public static final int prod=0x7f0c004b;
+        public static final int prof=0x7f0c004a;
         public static final int score_adapt=0x7f0c002c;
         public static final int score_comm=0x7f0c0020;
         public static final int score_innovation=0x7f0c0024;
@@ -200,10 +201,10 @@ public final class R {
         public static final int score_prod=0x7f0c0028;
         public static final int score_prof=0x7f0c0018;
         public static final int score_team=0x7f0c0034;
-        public static final int search=0x7f0c0064;
-        public static final int skip=0x7f0c0051;
-        public static final int spash_background=0x7f0c0053;
-        public static final int team=0x7f0c0050;
+        public static final int search=0x7f0c0065;
+        public static final int skip=0x7f0c0052;
+        public static final int spash_background=0x7f0c0054;
+        public static final int team=0x7f0c0051;
         public static final int textView1=0x7f0c0036;
         public static final int textView2=0x7f0c0037;
         public static final int textView3=0x7f0c0038;
@@ -214,12 +215,12 @@ public final class R {
         public static final int textView8=0x7f0c003d;
         public static final int textView9=0x7f0c003e;
         public static final int title=0x7f0c0004;
-        public static final int toggleButton1=0x7f0c0043;
-        public static final int toggleButton2=0x7f0c0044;
+        public static final int toggleButton1=0x7f0c0044;
+        public static final int toggleButton2=0x7f0c0045;
         public static final int txtLabel=0x7f0c0006;
-        public static final int viewInfo=0x7f0c0056;
-        public static final int viewName=0x7f0c0055;
-        public static final int viewPic=0x7f0c0054;
+        public static final int viewInfo=0x7f0c0057;
+        public static final int viewName=0x7f0c0056;
+        public static final int viewPic=0x7f0c0055;
         public static final int viewpager=0x01010000;
         public static final int vouch_score=0x7f0c000d;
     }
@@ -246,10 +247,11 @@ public final class R {
         public static final int app_name=0x7f080000;
         /**  Content Description 
          */
-        public static final int desc_list_item_icon=0x7f080005;
+        public static final int desc_list_item_icon=0x7f080006;
         public static final int drawer_close=0x7f080004;
         public static final int drawer_open=0x7f080003;
         public static final int hello_world=0x7f080002;
+        public static final int invite_message=0x7f080005;
     }
     public static final class style {
         /** 
