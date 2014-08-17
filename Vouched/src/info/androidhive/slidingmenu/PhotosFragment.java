@@ -23,7 +23,9 @@ import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -140,6 +142,8 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 		View rootView = inflater.inflate(R.layout.fragment_photos, container, false);
 
+		//sets up double tap
+
 
 		//setup accelerometer
 		/* do this in onCreate */
@@ -245,6 +249,23 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 				//save changes
 				vouch();
 			}
+
+			//invite comes up
+			@Override
+			public void onSwipeUp() {
+				// TODO Auto-generated method stub
+				super.onSwipeUp();
+				Log.d("Baid", "swipe up");
+				inviteDialog(currentConnection.getId());
+			}
+
+			@Override
+			public void onSwipeDown() {
+				// TODO Auto-generated method stub
+				super.onSwipeDown();
+				Log.d("Baid", "swipe down");
+			}
+			
 
 
 		});
@@ -648,7 +669,22 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 	private void vouch(){
 
-		uploadToDatabase();
+		int traitsVouched = curRank - 1;
+		if(traitsVouched == 0){
+			
+			//AlertView: Must vouch at least one trait
+			AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();  
+			alertDialog.setTitle("Alert ");  
+			alertDialog.setMessage("You must vouch at least one trait");
+			alertDialog.setCanceledOnTouchOutside(true);
+			alertDialog.show(); 
+		}
+		else{
+			
+			uploadToDatabase();
+		}
+		
+		
 		//Toast.makeText(getActivity(), "Vouched!", Toast.LENGTH_SHORT).show();
 		
 	}

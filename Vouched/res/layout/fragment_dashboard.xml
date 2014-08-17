@@ -209,7 +209,8 @@
             android:layout_below="@+id/header"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/label_prof"
-            android:background="#669900" />
+            android:background="#669900"
+             />
 
         <View
             android:id="@+id/blank_prof"
@@ -495,6 +496,16 @@
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/blank_team"
             android:text="100" />
+
+        <Button
+            android:id="@+id/fb"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignRight="@+id/proPic"
+            android:layout_below="@+id/label_team"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/facebook" />
+
     </RelativeLayout>
 
 </FrameLayout>

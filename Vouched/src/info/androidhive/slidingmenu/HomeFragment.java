@@ -1,27 +1,32 @@
 package info.androidhive.slidingmenu;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import co.pipevine.android.R;
 import co.pipevine.core.DownloadImagesTask;
 import co.pipevine.core.LoginActivity;
 import co.pipevine.core.OnSwipeTouchListener;
-import co.pipevine.core.ViewConnectionProfileActivity;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -38,16 +43,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 	static TextView score;
 	static TextView numGiven;
 	static TextView numReceived;
-	
+
 	//bar and anti bar add to constant number
 	//bars for all traits
 	View bProf, bInteg, bComm, bInnovation, bProd, bAdapt, bLead, bTeam;
-	
+
 	//keeps track of antibars for all graphs
 	View  aProf, aInteg, aComm, aInnovation, aProd, aAdapt,  aLead, aTeam;
 
 	TextView sProf, sInteg, sComm, sInnovation, sProd, sAdapt, sLead, sTeam;
-	
+
 	//keeps track of scoreData keys
 	String [] traitNumbers = {
 			"professionalismNumber",
@@ -74,6 +79,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 	};
 	//contains profile picture
 	ImageView proPic;
+	Button fb;
 	public HomeFragment(){}
 
 	@Override
@@ -81,6 +87,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 			Bundle savedInstanceState) {
 
 		View rootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
+
+		fb = (Button) rootView.findViewById(R.id.fb);
+		fb.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				share();
+			}
+		});
 
 		bProf = (View) rootView.findViewById(R.id.bar_prof);
 		bInteg = (View) rootView.findViewById(R.id.bar_integ);
@@ -90,7 +106,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 		bAdapt = (View) rootView.findViewById(R.id.bar_adapt);
 		bLead = (View) rootView.findViewById(R.id.bar_lead);
 		bTeam = (View) rootView.findViewById(R.id.bar_team);
-		
+
 		aProf = (View) rootView.findViewById(R.id.blank_prof);
 		aInteg = (View) rootView.findViewById(R.id.blank_integ);
 		aComm = (View) rootView.findViewById(R.id.blank_comm);
@@ -99,7 +115,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 		aAdapt = (View) rootView.findViewById(R.id.blank_adapt);
 		aLead = (View) rootView.findViewById(R.id.blank_lead);
 		aTeam = (View) rootView.findViewById(R.id.blank_team);
-		
+
 		sProf = (TextView) rootView.findViewById(R.id.score_prof);
 		sInteg = (TextView) rootView.findViewById(R.id.score_integ);
 		sComm = (TextView) rootView.findViewById(R.id.score_comm);
@@ -108,9 +124,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 		sAdapt = (TextView) rootView.findViewById(R.id.score_adapt);
 		sLead = (TextView) rootView.findViewById(R.id.score_lead);
 		sTeam = (TextView) rootView.findViewById(R.id.score_team);
-		
+
 		setGraph(10, 20, 30, 50, 70, 10, 20, 50);
-		
+
 		aboutVS = (LinearLayout) rootView.findViewById(R.id.about_vs);
 		aboutGiven = (LinearLayout) rootView.findViewById(R.id.about_given);
 		aboutReceived = (LinearLayout) rootView.findViewById(R.id.about_received);
@@ -194,51 +210,51 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 			public void done(List<ParseObject> objects, ParseException e) {
 				// TODO Auto-generated method stub
 				if(e == null){
-					
+
 					if(objects.size() == 1){
-						
+
 						Log.d("Baid", "Found User ScoreData");
 						ParseObject score = objects.get(0);
 						int vs = score.getInt("totalVouchScore");
 						int received = score.getInt("totalVouchesReceived");
 						int given = score.getInt("totalVouchesGiven");
 						setConnectionNumber(vs, given, received);
-						
+
 						int []percents = new int[8];
-						
+
 						for(int i = 0; i < traitNumbers.length; i ++){
-							
+
 							int number = score.getInt(traitNumbers[i]);
 							number *= 100;
 							if(received != 0)
 								percents[i] = number/received;
 							else
 								percents[i] = 0;
-							
+
 						}
 						setGraph(percents[0], percents[2], percents[4], percents[6], percents[1], percents[3], percents[5], percents[7]);
-					
+
 						int [] scores = new int[8];
 						for(int i = 0; i < traitScores.length; i ++){
-							
+
 							scores[i] = score.getInt(traitScores[i]);
-							
+
 						}
 						setScores(scores[0], scores[2], scores[4], scores[6], scores[1], scores[3], scores[5], scores[7]);
-						
-						
+
+
 					}
 					else{
-						
+
 						Log.d("Baid", "Couldn't find user score data");
 					}
 				}
 			}
-			
-			
+
+
 		});
-		
-		
+
+
 
 	}
 	//updates stats
@@ -252,10 +268,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 		Log.d("Baid", "score: " + vScore + " Given: " + given + " Received: " + received);
 
 	}
-	
+
 	//sets scores
 	private void setScores(int prof, int integ, int comm, int innovation, int prod, int adapt, int lead, int team ){
-		
+
 		sProf.setText(prof + "");
 		sInteg.setText(integ + "");
 		sComm.setText(comm + "");
@@ -268,89 +284,89 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
 	//sets graph
 	private void setGraph(int prof, int integ, int comm, int innovation, int prod, int adapt, int lead, int team ){
-		
+
 		int total = 100;
-		
+
 		LayoutParams params = (LayoutParams) bProf.getLayoutParams();
 		params.width = prof;
 		bProf.setLayoutParams(params);
-		
+
 		params = (LayoutParams) bInteg.getLayoutParams();
 		params.width = integ;
 		bInteg.setLayoutParams(params);
-		
+
 		params = (LayoutParams) bComm.getLayoutParams();
 		params.width = comm;
 		bComm.setLayoutParams(params);
-		
+
 		params = (LayoutParams) bInnovation.getLayoutParams();
 		params.width = innovation;
 		bInnovation.setLayoutParams(params);
-		
+
 		params = (LayoutParams) bProd.getLayoutParams();
 		params.width = prod;
 		bProd.setLayoutParams(params);
-		
+
 		params = (LayoutParams) bAdapt.getLayoutParams();
 		params.width = adapt;
 		bAdapt.setLayoutParams(params);
-		
+
 		params = (LayoutParams) bLead.getLayoutParams();
 		params.width = lead;
 		bLead.setLayoutParams(params);
-		
+
 		params = (LayoutParams) bTeam.getLayoutParams();
 		params.width = team;
 		bTeam.setLayoutParams(params);
-		
-		
+
+
 		//set antibars		
-		 params = (LayoutParams) aProf.getLayoutParams();
+		params = (LayoutParams) aProf.getLayoutParams();
 		params.width = 100 - prof;
 		aProf.setLayoutParams(params);
-		
+
 		params = (LayoutParams) aInteg.getLayoutParams();
 		params.width = 100 - integ;
 		aInteg.setLayoutParams(params);
-		
+
 		params = (LayoutParams) aComm.getLayoutParams();
 		params.width = 100 - comm;
 		aComm.setLayoutParams(params);
-		
+
 		params = (LayoutParams) aInnovation.getLayoutParams();
 		params.width = 100 - innovation;
 		aInnovation.setLayoutParams(params);
-		
+
 		params = (LayoutParams) aProd.getLayoutParams();
 		params.width = 100 - prod;
 		aProd.setLayoutParams(params);
-		
+
 		params = (LayoutParams) aAdapt.getLayoutParams();
 		params.width = 100 -adapt;
 		aAdapt.setLayoutParams(params);
-		
+
 		params = (LayoutParams) aLead.getLayoutParams();
 		params.width = 100 - lead;
 		aLead.setLayoutParams(params);
-		
+
 		params = (LayoutParams) aTeam.getLayoutParams();
 		params.width = 100 - team;
 		aTeam.setLayoutParams(params);
 
-		
+
 	}
-	
+
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		int id = v.getId();
 		if(v instanceof LinearLayout){
-			
+
 			AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();  
 			alertDialog.setTitle("Information");  
-			
+
 			alertDialog.setCanceledOnTouchOutside(true);
-			
+
 			if(id == aboutVS.getId()){
 
 				alertDialog.setMessage("The VouchScore is based on total points for vouches received, plus points for vouches given, plus points for sharing the Vouched app. ");
@@ -364,12 +380,56 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 				alertDialog.setMessage("The number of people who have vouched for you. ");
 
 			}
-			
+
 			alertDialog.show(); 
 
 		}
 
 
+	}
+
+	private void share(){
+
+		AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+
+		alert.setTitle("Share Vouched");
+		alert.setMessage("Enter your message:");
+
+		// Set an EditText view to get user input 
+		final EditText input = new EditText(getActivity());
+		
+		//gets rid of "thanks" from invite message
+		String shareMessage = getString(R.string.invite_message);
+		int end = shareMessage.indexOf("Thanks");
+		shareMessage = shareMessage.substring(0, end);
+		
+		input.setText(shareMessage);
+
+		alert.setView(input);
+
+		alert.setPositiveButton("Share", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+
+
+				final String message = input.getText().toString();
+				Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+				sharingIntent.setType("text/plain");
+				sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
+				sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Vouched App");
+				startActivity(Intent.createChooser(sharingIntent, "Share using"));
+
+			}
+		});
+
+
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				// Canceled.
+
+			}
+		});
+
+		alert.show();
 	}
 
 
