@@ -39,6 +39,7 @@ public class ViewProfileFragment extends Fragment implements View.OnClickListene
 
 	TextView sProf, sInteg, sComm, sInnovation, sProd, sAdapt, sLead, sTeam;
 
+	Button vouch;
 	//keeps track of scoreData keys
 	String [] traitNumbers = {
 			"professionalismNumber",
@@ -75,6 +76,8 @@ public class ViewProfileFragment extends Fragment implements View.OnClickListene
 		vScore = (TextView) rootView.findViewById(R.id.vouch_score);
 		given = (TextView) rootView.findViewById(R.id.num_given);
 		received = (TextView) rootView.findViewById(R.id.num_received);
+		
+		vouch = (Button) rootView.findViewById(R.id.vouch);
 
 		bProf = (View) rootView.findViewById(R.id.bar_prof);
 		bInteg = (View) rootView.findViewById(R.id.bar_integ);
@@ -283,6 +286,9 @@ public class ViewProfileFragment extends Fragment implements View.OnClickListene
 		// TODO Auto-generated method stub
 		int id = v.getId();
 
+		if(id == vouch.getId()){
+
+		}
 	}
 
 
