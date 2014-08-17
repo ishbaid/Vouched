@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="fill_parent"
+        android:layout_height="75dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="#626060"
+        android:text="TOTAL VOUCH SCORE"
+        android:textColor="@android:color/white"
+        android:textSize="28dp" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="fill_parent"
+        android:layout_height="75dp"
+        android:layout_alignLeft="@+id/button3"
+        android:layout_below="@+id/button3"
+        android:layout_marginTop="15dp"
+        android:background="#767474"
+        android:text="Communication"
+        android:textColor="@android:color/white"
+        android:textSize="28dp" />
+
+    <Button
+        android:id="@+id/button6"
+        android:layout_width="fill_parent"
+        android:layout_height="75dp"
+        android:layout_alignLeft="@+id/button5"
+        android:layout_below="@+id/button5"
+        android:layout_marginTop="15dp"
+        android:background="#767474"
+        android:text="Productivity"
+        android:textColor="@android:color/white"
+        android:textSize="28dp" />
+
+    <Button
+        android:id="@+id/button7"
+        android:layout_width="fill_parent"
+        android:layout_height="75dp"
+        android:layout_alignLeft="@+id/button6"
+        android:layout_below="@+id/button6"
+        android:layout_marginTop="15dp"
+        android:background="#767474"
+        android:text="Adaptability"
+        android:textColor="@android:color/white"
+        android:textSize="28dp" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="fill_parent"
+        android:layout_height="75dp"
+        android:layout_below="@+id/button1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:background="#767474"
+        android:text="Professionalism"
+        android:textColor="@android:color/white"
+        android:textSize="28dp" />
+
+    <Button
+        android:id="@+id/button8"
+        android:layout_width="fill_parent"
+        android:layout_height="75dp"
+        android:layout_alignRight="@+id/button7"
+        android:layout_below="@+id/button7"
+        android:layout_marginTop="15dp"
+        android:background="#767474"
+        android:text="Leadership"
+        android:textColor="@android:color/white"
+        android:textSize="28dp" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="fill_parent"
+        android:layout_height="75dp"
+        android:layout_alignLeft="@+id/button2"
+        android:layout_below="@+id/button2"
+        android:layout_marginTop="15dp"
+        android:background="#767474"
+        android:text="Integrity"
+        android:textColor="@android:color/white"
+        android:textSize="28dp" />
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="fill_parent"
+        android:layout_height="75dp"
+        android:layout_alignLeft="@+id/button4"
+        android:layout_below="@+id/button4"
+        android:layout_marginTop="15dp"
+        android:background="#767474"
+        android:text="Innovation"
+        android:textColor="@android:color/white"
+        android:textSize="28dp" />
+
+    <Button
+        android:id="@+id/button9"
+        android:layout_width="fill_parent"
+        android:layout_height="75dp"
+        android:layout_alignRight="@+id/button8"
+        android:layout_below="@+id/button8"
+        android:layout_marginTop="15dp"
+        android:background="#767474"
+        android:text="Teamwork"
+        android:textColor="@android:color/white"
+        android:textSize="28dp" />
+
+</RelativeLayout>

@@ -462,12 +462,4 @@
         android:layout_toRightOf="@+id/blank_team"
         android:text="100" />
 
-    <Button
-        android:id="@+id/vouch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/label_team"
-        android:layout_centerHorizontal="true"
-        android:text="Vouch" />
-
 </RelativeLayout>

@@ -33,107 +33,14 @@
         android:text="Additional Info"
         android:textSize="24dp" />
 
-    <!-- Displays Vouch Scores -->
-
-      <LinearLayout
-                android:id="@+id/LinearLayout01"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/ImageView01"
-                android:layout_below="@+id/LinearLayout02"
-                android:layout_marginTop="350dp"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/TextView05"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="VOUCHED REPUTATION\t\t\t\t\t\t\t SCORE"
-                    android:textColor="#669900"
-                    android:textSize="28dp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/TextView03"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="Professionalism"
-                    android:textSize="28dp" />
-
-                <TextView
-                    android:id="@+id/TextView07"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="Integrity"
-                    android:textSize="28dp" />
-
-                <TextView
-                    android:id="@+id/TextView06"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="Communication"
-                    android:textSize="28dp" />
-
-                <TextView
-                    android:id="@+id/TextView09"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="Innovation"
-                    android:textSize="28dp" />
-
-                <TextView
-                    android:id="@+id/TextView08"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="Productivity"
-                    android:textSize="28dp" />
-
-                <TextView
-                    android:id="@+id/TextView12"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="Adaptability"
-                    android:textSize="28dp" />
-
-                <TextView
-                    android:id="@+id/TextView11"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="Leadership"
-                    android:textSize="28dp" />
-
-                <TextView
-                    android:id="@+id/TextView13"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="Teamwork"
-                    android:textSize="28dp" />
-            </LinearLayout>
-
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/viewPic"
         android:layout_below="@+id/viewPic"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="75dp"
+        android:layout_marginLeft="30dp"
         android:orientation="horizontal" >
 
         <LinearLayout
@@ -211,7 +118,364 @@
                 android:textSize="56dp" />
         </LinearLayout>
     </LinearLayout>
+    <!-- Displays Vouch Scores -->
 
-    
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout1"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="25dp"
+        android:text="VOUCHED REPUTATION"
+        android:textColor="#669900"
+        android:textSize="18dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/header2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout1"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="25dp"
+        android:layout_toRightOf="@+id/header"
+        android:text="%VOUHED FOR"
+        android:textColor="#669900"
+        android:textSize="18dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/header3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout1"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="25dp"
+        android:layout_toRightOf="@+id/header2"
+        android:text="SCORE"
+        android:textColor="#669900"
+        android:textSize="18dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/label_prof"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/header"
+        android:layout_below="@+id/header"
+        android:layout_marginTop="20dp"
+        android:text="Professionalism"
+        android:textSize="22dp" />
+
+    <View
+        android:id="@+id/bar_prof"
+        android:layout_width="50dp"
+        android:layout_height="10dp"
+        android:layout_alignLeft="@+id/header2"
+        android:layout_below="@+id/header"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/label_prof"
+        android:background="#669900" />
+
+    <View
+        android:id="@+id/blank_prof"
+        android:layout_width="50dp"
+        android:layout_height="10dp"
+        android:layout_below="@+id/header"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/bar_prof"
+        android:background="#ddd7d7" />
+
+    <TextView
+        android:id="@+id/score_prof"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/header3"
+        android:layout_below="@+id/header"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/blank_prof"
+        android:text="100"
+        android:textSize="22dp" />
+
+    <TextView
+        android:id="@+id/label_integ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/header"
+        android:layout_below="@+id/label_prof"
+        android:layout_marginTop="20dp"
+        android:text="Integrity"
+        android:textSize="22dp" />
+
+    <View
+        android:id="@+id/bar_integ"
+        android:layout_width="50dp"
+        android:layout_height="10dp"
+        android:layout_alignLeft="@+id/header2"
+        android:layout_below="@+id/label_prof"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/label_integ"
+        android:background="#669900" />
+
+    <View
+        android:id="@+id/blank_integ"
+        android:layout_width="50dp"
+        android:layout_height="10dp"
+        android:layout_below="@+id/label_prof"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/bar_integ"
+        android:background="#ddd7d7" />
+
+    <TextView
+        android:id="@+id/score_integ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/header3"
+        android:layout_below="@+id/label_prof"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/blank_integ"
+        android:text="100"
+        android:textSize="22dp" />
+
+    <TextView
+        android:id="@+id/label_comm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/header"
+        android:layout_below="@+id/label_integ"
+        android:layout_marginTop="20dp"
+        android:text="Communication"
+        android:textSize="22dp" />
+
+    <View
+        android:id="@+id/bar_comm"
+        android:layout_width="50dp"
+        android:layout_height="10dp"
+        android:layout_alignLeft="@+id/header2"
+        android:layout_below="@+id/label_integ"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/label_comm"
+        android:background="#669900" />
+
+    <View
+        android:id="@+id/blank_comm"
+        android:layout_width="50dp"
+        android:layout_height="10dp"
+        android:layout_below="@+id/label_integ"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/bar_comm"
+        android:background="#ddd7d7" />
+
+    <TextView
+        android:id="@+id/score_comm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/header3"
+        android:layout_below="@+id/label_integ"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/blank_comm"
+        android:text="100"
+        android:textSize="22dp" />
+
+    <TextView
+        android:id="@+id/label_innovation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/header"
+        android:layout_below="@+id/label_comm"
+        android:layout_marginTop="20dp"
+        android:text="Innovation"
+        android:textSize="22dp" />
+
+    <View
+        android:id="@+id/bar_innovation"
+        android:layout_width="50dp"
+        android:layout_height="10dp"
+        android:layout_alignLeft="@+id/header2"
+        android:layout_below="@+id/label_comm"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/label_innovation"
+        android:background="#669900" />
+
+    <View
+        android:id="@+id/blank_innovation"
+        android:layout_width="50dp"
+        android:layout_height="10dp"
+        android:layout_below="@+id/label_comm"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/bar_innovation"
+        android:background="#ddd7d7" />
+
+    <TextView
+        android:id="@+id/score_innovation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/header3"
+        android:layout_below="@+id/label_comm"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/blank_innovation"
+        android:text="100"
+        android:textSize="22dp" />
+
+    <TextView
+        android:id="@+id/label_prod"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/header"
+        android:layout_below="@+id/label_innovation"
+        android:layout_marginTop="20dp"
+        android:text="Productivity"
+        android:textSize="22dp" />
+
+    <View
+        android:id="@+id/bar_prod"
+        android:layout_width="50dp"
+        android:layout_height="10dp"
+        android:layout_alignLeft="@+id/header2"
+        android:layout_below="@+id/label_innovation"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/label_prod"
+        android:background="#669900" />
+
+    <View
+        android:id="@+id/blank_prod"
+        android:layout_width="50dp"
+        android:layout_height="10dp"
+        android:layout_below="@+id/label_innovation"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/bar_prod"
+        android:background="#ddd7d7" />
+
+    <TextView
+        android:id="@+id/score_prod"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/header3"
+        android:layout_below="@+id/label_innovation"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/blank_prod"
+        android:text="100"
+        android:textSize="22dp" />
+
+    <TextView
+        android:id="@+id/label_adapt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/header"
+        android:layout_below="@+id/label_prod"
+        android:layout_marginTop="20dp"
+        android:text="Adaptability"
+        android:textSize="22dp" />
+
+    <View
+        android:id="@+id/bar_adapt"
+        android:layout_width="50dp"
+        android:layout_height="10dp"
+        android:layout_alignLeft="@+id/header2"
+        android:layout_below="@+id/label_prod"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/label_adapt"
+        android:background="#669900" />
+
+    <View
+        android:id="@+id/blank_adapt"
+        android:layout_width="50dp"
+        android:layout_height="10dp"
+        android:layout_below="@+id/label_prod"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/bar_adapt"
+        android:background="#ddd7d7" />
+
+    <TextView
+        android:id="@+id/score_adapt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/header3"
+        android:layout_below="@+id/label_prod"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/blank_adapt"
+        android:text="100"
+        android:textSize="22dp" />
+
+    <TextView
+        android:id="@+id/label_lead"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/header"
+        android:layout_below="@+id/label_adapt"
+        android:layout_marginTop="20dp"
+        android:text="Leadership"
+        android:textSize="22dp" />
+
+    <View
+        android:id="@+id/bar_lead"
+        android:layout_width="50dp"
+        android:layout_height="10dp"
+        android:layout_alignLeft="@+id/header2"
+        android:layout_below="@+id/label_adapt"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/label_lead"
+        android:background="#669900" />
+
+    <View
+        android:id="@+id/blank_lead"
+        android:layout_width="50dp"
+        android:layout_height="10dp"
+        android:layout_below="@+id/label_adapt"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/bar_lead"
+        android:background="#ddd7d7" />
+
+    <TextView
+        android:id="@+id/score_lead"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/header3"
+        android:layout_below="@+id/label_adapt"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/blank_lead"
+        android:text="100"
+        android:textSize="22dp" />
+
+    <TextView
+        android:id="@+id/label_team"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/header"
+        android:layout_below="@+id/label_lead"
+        android:layout_marginTop="20dp"
+        android:text="Teamwork"
+        android:textSize="22dp" />
+
+    <View
+        android:id="@+id/bar_team"
+        android:layout_width="50dp"
+        android:layout_height="10dp"
+        android:layout_alignLeft="@+id/header2"
+        android:layout_below="@+id/label_lead"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/label_team"
+        android:background="#669900" />
+
+    <View
+        android:id="@+id/blank_team"
+        android:layout_width="50dp"
+        android:layout_height="10dp"
+        android:layout_below="@+id/label_lead"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/bar_team"
+        android:background="#ddd7d7" />
+
+    <TextView
+        android:id="@+id/score_team"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/header3"
+        android:layout_below="@+id/label_lead"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/blank_team"
+        android:text="100"
+        android:textSize="22dp" />
 
 </RelativeLayout>
