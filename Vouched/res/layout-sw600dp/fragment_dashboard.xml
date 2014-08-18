@@ -515,16 +515,6 @@
             android:layout_toRightOf="@+id/blank_team"
             android:text="100" />
 
-        <Button
-            android:id="@+id/fb"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignRight="@+id/label_team"
-            android:layout_below="@+id/label_team"
-            android:layout_marginTop="25dp"
-            android:text=""
-            android:background="@drawable/facebook" />
-
     </RelativeLayout>
 
 </FrameLayout>

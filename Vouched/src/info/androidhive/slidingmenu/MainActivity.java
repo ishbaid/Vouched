@@ -8,11 +8,15 @@ import java.util.ArrayList;
 
 
 
+
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -25,6 +29,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 import co.pipevine.android.R;
@@ -189,7 +194,11 @@ public class MainActivity extends Activity {
 		// Handle action bar actions click
 		switch (item.getItemId()) {
 		case R.id.action_settings:
+			displayView(4);
 			return true;
+		case R.id.share:
+			share();
+			return false;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -203,6 +212,7 @@ public class MainActivity extends Activity {
 		// if nav drawer is opened, hide the action items
 		boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
 		menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
+		menu.findItem(R.id.share).setVisible(!drawerOpen);
 		return super.onPrepareOptionsMenu(menu);
 	}
 
@@ -280,6 +290,44 @@ public class MainActivity extends Activity {
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
+	private void share(){
+
+		AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+
+		alert.setTitle("Share Vouched");
+		alert.setMessage("Enter your message:");
+
+		// Set an EditText view to get user input 
+		final EditText input = new EditText(MainActivity.this);
+		//set pre-formated text
+		input.setText(getString(R.string.share_message));
+
+		alert.setView(input);
+
+		alert.setPositiveButton("Share", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+
+
+				final String message = input.getText().toString();
+				Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+				sharingIntent.setType("text/plain");
+				sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
+				sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Vouched App");
+				startActivity(Intent.createChooser(sharingIntent, "Share using"));
+
+			}
+		});
+
+
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				// Canceled.
+
+			}
+		});
+
+		alert.show();
+	}
 
 
 

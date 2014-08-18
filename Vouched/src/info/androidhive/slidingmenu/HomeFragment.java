@@ -1,5 +1,6 @@
 package info.androidhive.slidingmenu;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,17 +17,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 import co.pipevine.android.R;
 import co.pipevine.core.DownloadImagesTask;
 import co.pipevine.core.LoginActivity;
 import co.pipevine.core.OnSwipeTouchListener;
+import co.pipevine.core.ViewConnectionProfileActivity;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -79,7 +86,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 	};
 	//contains profile picture
 	ImageView proPic;
-	Button fb;
+
 	public HomeFragment(){}
 
 	@Override
@@ -88,15 +95,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
 		View rootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-		fb = (Button) rootView.findViewById(R.id.fb);
-		fb.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				share();
-			}
-		});
 
 		bProf = (View) rootView.findViewById(R.id.bar_prof);
 		bInteg = (View) rootView.findViewById(R.id.bar_integ);
@@ -374,62 +372,152 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 			else if(id == aboutGiven.getId()){
 
 				alertDialog.setMessage("The number of individual connections you have vouched for. ");
+				getGiven();
 			}
 			else if(id == aboutReceived.getId()){
 
 				alertDialog.setMessage("The number of people who have vouched for you. ");
-
+				getReceived();
 			}
 
-			alertDialog.show(); 
+			//alertDialog.show(); 
 
 		}
 
 
 	}
 
-	private void share(){
+	private void getGiven(){
 
-		AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+		Log.d("Baid", "getGiven");
+		ParseQuery<ParseObject> inner = ParseQuery.getQuery("Vouch");
+		inner.whereEqualTo("isFrom", LoginActivity.getUserID());
+		inner.findInBackground(new FindCallback<ParseObject>(){
 
-		alert.setTitle("Share Vouched");
-		alert.setMessage("Enter your message:");
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				// TODO Auto-generated method stub
+				if(e == null){
 
-		// Set an EditText view to get user input 
-		final EditText input = new EditText(getActivity());
-		
-		//gets rid of "thanks" from invite message
-		String shareMessage = getString(R.string.invite_message);
-		int end = shareMessage.indexOf("Thanks");
-		shareMessage = shareMessage.substring(0, end);
-		
-		input.setText(shareMessage);
+					Log.d("Baid", "Results given: " + objects.size());
+					ArrayList<String> resultIDs = new ArrayList<String>();
+					for(int i = 0; i < objects.size(); i ++){
 
-		alert.setView(input);
+						ParseObject result = objects.get(i);
+						String rID = result.getString("isFor");
+						resultIDs.add(rID);
 
-		alert.setPositiveButton("Share", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-
-
-				final String message = input.getText().toString();
-				Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-				sharingIntent.setType("text/plain");
-				sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
-				sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Vouched App");
-				startActivity(Intent.createChooser(sharingIntent, "Share using"));
+					}
+					if(resultIDs.size() > 0)
+						retrieveNames(resultIDs);
+				}
 
 			}
+
+
 		});
 
 
-		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-				// Canceled.
+	}
+
+	private void getReceived(){
+
+		Log.d("Baid", "getReceived");
+		ParseQuery<ParseObject> inner = ParseQuery.getQuery("Vouch");
+		inner.whereEqualTo("isFor", LoginActivity.getUserID());
+		inner.findInBackground(new FindCallback<ParseObject>(){
+
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				// TODO Auto-generated method stub
+				if(e == null){
+
+					Log.d("Baid", "Results received: " + objects.size());
+					ArrayList<String> resultIDs = new ArrayList<String>();
+					for(int i = 0; i < objects.size(); i ++){
+
+						ParseObject result = objects.get(i);
+						//find out who user received vouches from
+						String rID = result.getString("isFrom");
+						resultIDs.add(rID);
+
+					}
+					if(resultIDs.size() > 0)
+						retrieveNames(resultIDs);
+
+				}
 
 			}
+
+
 		});
 
-		alert.show();
+	}
+
+	private void retrieveNames(ArrayList<String> IDs){
+
+		ParseQuery<ParseObject> inner = ParseQuery.getQuery("User");
+		inner.whereContainedIn("linkedinID", IDs);
+		inner.findInBackground(new FindCallback<ParseObject>(){
+
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				// TODO Auto-generated method stub
+
+				final List<ParseObject> resultUsers = objects;
+				if(e == null){
+
+					Log.d("Baid", "Retrieved " + objects.size() + " names");
+					ArrayList<String> names = new ArrayList<String>();
+					for(int i = 0; i < objects.size(); i ++){
+
+						ParseObject user = objects.get(i);
+						String name = user.getString("firstName") + " " + user.getString("lastName");
+						names.add(name);
+					}
+
+					final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();  
+					alertDialog.setTitle("Results");
+
+					alertDialog.setCanceledOnTouchOutside(true);
+
+					
+					ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+							android.R.layout.simple_list_item_1, android.R.id.text1, names);
+
+					
+
+					alertDialog.show();
+					//LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+					alertDialog.setContentView(R.layout.list);
+					
+					ListView list = (ListView) alertDialog.findViewById(R.id.dialog_list);
+					list.setAdapter(adapter);
+					list.setOnItemClickListener(new OnItemClickListener(){
+
+						@Override
+						public void onItemClick(AdapterView<?> adapter, View view,
+								int position, long id) {
+							// TODO Auto-generated method stub
+							
+							ParseObject person = resultUsers.get(position);
+							String reverseName = person.getString("lastName") + ", " + person.getString("firstName");
+							
+							Intent intent = new Intent(getActivity(), ViewConnectionProfileActivity.class);
+							intent.putExtra("reverseName", reverseName);
+							startActivity(intent);
+							alertDialog.dismiss();
+						}
+						
+						
+					});
+
+				}
+			}
+
+
+		});
+
 	}
 
 

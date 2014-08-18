@@ -62,7 +62,7 @@ public class Leaderboards extends Activity {
 						
 						String toAdd = "";
 						if(person != null)
-							toAdd =   score.getInt(key) + "-" + person.getString("firstName") + " " + person.getString("lastName");
+							toAdd =   (i + 1) + ") " + person.getString("firstName") + " " + person.getString("lastName");
 
 
 						top.add(toAdd);

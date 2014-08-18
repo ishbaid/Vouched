@@ -497,14 +497,7 @@
             android:layout_toRightOf="@+id/blank_team"
             android:text="100" />
 
-        <Button
-            android:id="@+id/fb"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_alignRight="@+id/proPic"
-            android:layout_below="@+id/label_team"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/facebook" />
+        
 
     </RelativeLayout>
 

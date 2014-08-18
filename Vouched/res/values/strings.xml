@@ -9,6 +9,8 @@
     <string name="invite_message">I just used the Vouched app to recommend you for your best professional traits.\n
 Are you a leader? An innovator? A great communicator? Download the app to find out.\n\niTunes: LINK
 \nGoogle Play: LINK\nwww.vouchedapp.com\n\nThanks,</string>
+    <string name="share_message">Are you a leader? An innovator? A great communicator? Download the app to find out.\n\niTunes: LINK
+\nGoogle Play: LINK\nwww.vouchedapp.com</string>
 
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
