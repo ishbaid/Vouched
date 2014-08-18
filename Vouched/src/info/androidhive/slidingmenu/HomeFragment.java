@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
+import android.support.v4.app.*;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -141,7 +141,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 			public void onSwipeLeft() {
 				// TODO Auto-generated method stub
 				super.onSwipeLeft();
-				FragmentTransaction ft = getFragmentManager().beginTransaction();
+				/*FragmentTransaction ft = getFragmentManager().beginTransaction();
 				ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
 
 				Fragment newFragment = new HomeFragment2();
@@ -149,7 +149,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 				ft.replace(R.id.frame_container, newFragment);
 
 				// Start the animated transition.
-				ft.commit();
+				ft.commit();*/
 			}
 
 

@@ -26,7 +26,7 @@ public class HomeFragment2 extends Fragment {
 			public void onSwipeRight() {
 				// TODO Auto-generated method stub
 				super.onSwipeRight();
-				FragmentTransaction ft = getFragmentManager().beginTransaction();
+				/*FragmentTransaction ft = getFragmentManager().beginTransaction();
 				ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
 
 				Fragment newFragment = new HomeFragment();
@@ -34,7 +34,7 @@ public class HomeFragment2 extends Fragment {
 				ft.replace(R.id.frame_container, newFragment);
 				
 				// Start the animated transition.
-				ft.commit();
+				ft.commit();*/
 			}
 			
 			

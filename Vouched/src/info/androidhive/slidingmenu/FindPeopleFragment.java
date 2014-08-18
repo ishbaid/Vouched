@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import android.app.Fragment;
+import android.support.v4.app.*;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;

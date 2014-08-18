@@ -11,8 +11,9 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentManager;
+//import android.app.Fragment;
+//import android.app.FragmentManager;
+import android.support.v4.app.*;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -36,7 +37,7 @@ import co.pipevine.android.R;
 
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity {
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
@@ -250,7 +251,7 @@ public class MainActivity extends Activity {
 		}
 
 		if (fragment != null) {
-			FragmentManager fragmentManager = getFragmentManager();
+			FragmentManager fragmentManager = getSupportFragmentManager();
 			fragmentManager.beginTransaction()
 			.replace(R.id.frame_container, fragment).commit();
 

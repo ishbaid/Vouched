@@ -29,8 +29,9 @@ public class ViewConnectionProfileActivity extends FragmentActivity {
 		// TODO Auto-generated method stub
 		super.onCreate(arg0);
 		setContentView(R.layout.viewpager_layout);
+		
 		this.initialisePaging();
-
+		
 		
 
 		
