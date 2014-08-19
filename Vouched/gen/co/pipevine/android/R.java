@@ -125,7 +125,7 @@ public final class R {
         public static final int about_given=0x7f0c0016;
         public static final int about_received=0x7f0c0018;
         public static final int about_vs=0x7f0c0014;
-        public static final int action_settings=0x7f0c005c;
+        public static final int action_settings=0x7f0c005d;
         public static final int adapt=0x7f0c004c;
         public static final int background=0x7f0c0044;
         public static final int bar_adapt=0x7f0c0032;
@@ -159,7 +159,7 @@ public final class R {
         public static final int checkBox1=0x7f0c0042;
         public static final int checkBox2=0x7f0c0043;
         public static final int comm=0x7f0c004d;
-        public static final int container=0x7f0c005b;
+        public static final int container=0x7f0c005c;
         public static final int counter=0x7f0c0005;
         public static final int dashboard2_background=0x7f0c003f;
         public static final int dashboard_background=0x7f0c000f;
@@ -204,8 +204,8 @@ public final class R {
         public static final int score_prod=0x7f0c0030;
         public static final int score_prof=0x7f0c0020;
         public static final int score_team=0x7f0c003c;
-        public static final int search=0x7f0c005d;
-        public static final int share=0x7f0c005e;
+        public static final int search=0x7f0c005e;
+        public static final int share=0x7f0c005f;
         public static final int skip=0x7f0c0052;
         public static final int spash_background=0x7f0c0057;
         public static final int team=0x7f0c0050;
@@ -217,6 +217,7 @@ public final class R {
         public static final int viewName=0x7f0c0059;
         public static final int viewPic=0x7f0c0058;
         public static final int viewpager=0x01010000;
+        public static final int vouch=0x7f0c005b;
         public static final int vouch_score=0x7f0c0015;
     }
     public static final class layout {

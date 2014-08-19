@@ -1,13 +1,14 @@
 package co.pipevine.core;
 
+import info.androidhive.slidingmenu.MainActivity;
 import info.androidhive.slidingmenu.PhotosFragment;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import android.support.v4.app.Fragment;
-import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,11 +66,16 @@ public class ViewProfileFragment extends Fragment implements View.OnClickListene
 
 	};
 
+	Button vouch;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		View rootView = inflater.inflate(R.layout.view_profile, container, false);
+		
+		vouch = (Button) rootView.findViewById(R.id.vouch);
+		vouch.setOnClickListener(this);
+		
 		viewPic = (ImageView) rootView.findViewById(R.id.viewPic);
 		viewName = (TextView) rootView.findViewById(R.id.viewName);
 		viewInfo = (TextView) rootView.findViewById(R.id.viewInfo);
@@ -284,6 +290,16 @@ public class ViewProfileFragment extends Fragment implements View.OnClickListene
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		int id = v.getId();
+		if(id == vouch.getId()){
+			
+			//getActivity().onBackPressed();
+			
+			Intent intent = new Intent(getActivity(), MainActivity.class);
+			intent.putExtra("Fragment", 0);
+			intent.putExtra("ID", ViewConnectionProfileActivity.connection.getId());
+			startActivity(intent);
+
+		}
 
 
 	}

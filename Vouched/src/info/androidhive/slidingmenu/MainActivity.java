@@ -55,7 +55,13 @@ public class MainActivity extends FragmentActivity {
 	private ArrayList<NavDrawerItem> navDrawerItems;
 	private NavDrawerListAdapter adapter;
 
-
+	//keeps track of specific contact to vouch for
+	public static String toVouchID = null;
+	//accessor
+	public static String getTvID(){return toVouchID;}
+	//resets ID when we're done
+	public static void resetTvID(){toVouchID = null;};
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -328,6 +334,30 @@ public class MainActivity extends FragmentActivity {
 		});
 
 		alert.show();
+	}
+
+
+
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		//check if we need to start a specified fragment
+		Intent intent = getIntent();
+		int position = intent.getIntExtra("Fragment", -1);
+		if(position != -1){
+			
+			
+			if(position == 0){
+				
+				//id of person we need to vouch for
+				toVouchID = intent.getStringExtra("ID");
+				
+			}
+			displayView(position);
+			
+		}
 	}
 
 

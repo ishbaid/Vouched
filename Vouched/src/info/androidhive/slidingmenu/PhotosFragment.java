@@ -1065,13 +1065,38 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 		HashMap<String, Person> all = LoginActivity.getConnectionHashMap();
 
+		//finds if there is a specific connection we need to vouch for
+		String tvID = MainActivity.getTvID();
+		boolean found = false;
+		if(tvID != null){
+			
+			//reset id back to null
+			MainActivity.resetTvID();
+			Person toAdd = all.get(tvID);
+			if(toAdd != null){
+				
+				IDs.add(tvID);
+				found = true;
+				
+			}
+			else{
+				
+				Log.d("Baid", "Error: Couldn't find connection to vouch for.");
+			}
+		}
+		
 		//creates list of connections to vouch for
 		for(int i = 0; i < tv.size(); i ++){
 
 			String id = tv.get(i);
+			
+			//if we are vouching for specific person, only add them to list once
+			if(!found || !id.equals(tvID)){
+				
+				//add to IDs
+				IDs.add(id);
+			}
 
-			//add to IDs
-			IDs.add(id);
 
 
 			Person contact = all.get(id);
