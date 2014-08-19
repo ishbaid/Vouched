@@ -123,7 +123,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 		sLead = (TextView) rootView.findViewById(R.id.score_lead);
 		sTeam = (TextView) rootView.findViewById(R.id.score_team);
 
-		setGraph(10, 20, 30, 50, 70, 10, 20, 50);
+		setGraph(0, 0, 0, 0, 0, 0, 0, 0);
 
 		aboutVS = (LinearLayout) rootView.findViewById(R.id.about_vs);
 		aboutGiven = (LinearLayout) rootView.findViewById(R.id.about_given);
@@ -501,10 +501,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 							// TODO Auto-generated method stub
 							
 							ParseObject person = resultUsers.get(position);
-							String reverseName = person.getString("lastName") + ", " + person.getString("firstName");
+							String intentID = person.getString("linkedinID");
 							
 							Intent intent = new Intent(getActivity(), ViewConnectionProfileActivity.class);
-							intent.putExtra("reverseName", reverseName);
+							intent.putExtra("ID", intentID);
 							startActivity(intent);
 							alertDialog.dismiss();
 						}

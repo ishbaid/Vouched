@@ -1,5 +1,7 @@
 package co.pipevine.core;
 
+import info.androidhive.slidingmenu.MainActivity;
+
 import java.util.List;
 import java.util.Vector;
 
@@ -22,7 +24,7 @@ public class ViewConnectionProfileActivity extends FragmentActivity {
 	
 	private PagerAdapter mPagerAdapter;
 	public static Person connection;
-
+	public static boolean isVouched;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -33,13 +35,17 @@ public class ViewConnectionProfileActivity extends FragmentActivity {
 		this.initialisePaging();
 		
 		
-
+		
 		
 		Intent intent = getIntent();
-		String reverseName = intent.getStringExtra("reverseName");
-		if(reverseName != null){
+		String cID = intent.getStringExtra("ID");
+		
+		//determines whether or not connection has been vouched for
+		isVouched = intent.getBooleanExtra("Vouched", false);
+		if(cID!= null){
 			
-			connection = LoginActivity.getAlphaMap().get(reverseName);
+			//get connection from ID
+			connection = LoginActivity.getConnectionHashMap().get(cID);
 			
 		}
 		
@@ -65,5 +71,15 @@ public class ViewConnectionProfileActivity extends FragmentActivity {
     	
     	return connection.getId();
     }
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		super.onBackPressed();
+		Intent intent = new Intent(ViewConnectionProfileActivity.this, MainActivity.class);
+		intent.putExtra("Fragment", 2);
+		startActivity(intent);
+	}
+    
+    
 
 }

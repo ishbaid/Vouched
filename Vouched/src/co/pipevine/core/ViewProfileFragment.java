@@ -75,6 +75,7 @@ public class ViewProfileFragment extends Fragment implements View.OnClickListene
 		
 		vouch = (Button) rootView.findViewById(R.id.vouch);
 		vouch.setOnClickListener(this);
+		vouch.setEnabled(!ViewConnectionProfileActivity.isVouched);
 		
 		viewPic = (ImageView) rootView.findViewById(R.id.viewPic);
 		viewName = (TextView) rootView.findViewById(R.id.viewName);
