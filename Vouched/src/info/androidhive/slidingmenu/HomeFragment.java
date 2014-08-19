@@ -2,6 +2,7 @@ package info.androidhive.slidingmenu;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -35,6 +36,7 @@ import co.pipevine.core.LoginActivity;
 import co.pipevine.core.OnSwipeTouchListener;
 import co.pipevine.core.ViewConnectionProfileActivity;
 
+import com.google.code.linkedinapi.schema.Person;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -59,6 +61,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 	View  aProf, aInteg, aComm, aInnovation, aProd, aAdapt,  aLead, aTeam;
 
 	TextView sProf, sInteg, sComm, sInnovation, sProd, sAdapt, sLead, sTeam;
+
+	HashMap<String, Person>tvMap;
 
 	//keeps track of scoreData keys
 	String [] traitNumbers = {
@@ -360,27 +364,27 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 		int id = v.getId();
 		if(v instanceof LinearLayout){
 
-			AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();  
-			alertDialog.setTitle("Information");  
 
-			alertDialog.setCanceledOnTouchOutside(true);
 
 			if(id == aboutVS.getId()){
 
+				AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();  
+				alertDialog.setTitle("Information");  
+
+				alertDialog.setCanceledOnTouchOutside(true);
 				alertDialog.setMessage("The VouchScore is based on total points for vouches received, plus points for vouches given, plus points for sharing the Vouched app. ");
+				alertDialog.show(); 
 			}
 			else if(id == aboutGiven.getId()){
 
-				alertDialog.setMessage("The number of individual connections you have vouched for. ");
 				getGiven();
 			}
 			else if(id == aboutReceived.getId()){
 
-				alertDialog.setMessage("The number of people who have vouched for you. ");
 				getReceived();
 			}
 
-			//alertDialog.show(); 
+
 
 		}
 
@@ -481,16 +485,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
 					alertDialog.setCanceledOnTouchOutside(true);
 
-					
+
 					ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
 							android.R.layout.simple_list_item_1, android.R.id.text1, names);
 
-					
+
 
 					alertDialog.show();
 					//LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 					alertDialog.setContentView(R.layout.list);
-					
+
 					ListView list = (ListView) alertDialog.findViewById(R.id.dialog_list);
 					list.setAdapter(adapter);
 					list.setOnItemClickListener(new OnItemClickListener(){
@@ -499,17 +503,35 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 						public void onItemClick(AdapterView<?> adapter, View view,
 								int position, long id) {
 							// TODO Auto-generated method stub
-							
+
 							ParseObject person = resultUsers.get(position);
 							String intentID = person.getString("linkedinID");
-							
+
+							//set up tv list and map
+							setupTvList();
+							Person checkVouched = tvMap.get(intentID);
+
+
 							Intent intent = new Intent(getActivity(), ViewConnectionProfileActivity.class);
+
+							//we haven't vouched for this person
+							if(checkVouched != null){
+
+								intent.putExtra("Vouched", false);
+
+							}
+							//we have vouched for this person
+							else{
+
+								intent.putExtra("Vouched", true);
+							}
+
 							intent.putExtra("ID", intentID);
 							startActivity(intent);
 							alertDialog.dismiss();
 						}
-						
-						
+
+
 					});
 
 				}
@@ -517,6 +539,33 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
 
 		});
+
+	}
+
+	//gets list of connections to vouch for
+	private void  setupTvList(){
+
+		//create tovouchMap
+		tvMap = new HashMap<String, Person>();
+
+		HashMap<String, Person> allMap = LoginActivity.getAlphaMap();
+
+
+		List<String> tvList = new ArrayList<String>();
+		tvList = LoginActivity.getTvList();
+
+
+
+		for(int i = 0; i < tvList.size(); i ++){
+
+			String id = tvList.get(i);
+			Person toAdd = allMap.get(id);
+			if(toAdd != null){
+
+				tvMap.put(id, toAdd);
+			}
+		}
+
 
 	}
 

@@ -792,7 +792,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 
 		//update toVouch array
-		ParseObject person = LoginActivity.getParseUser();
+		final ParseObject person = LoginActivity.getParseUser();
 		if(person != null){
 
 			JSONArray tv = new JSONArray();
@@ -819,6 +819,11 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 					if(e == null){
 
 						Log.d("Baid", "Updated User Vouch Data");
+						//set global toVouc list
+						List<String> newTvList = new ArrayList<String>();
+						newTvList = person.getList("toVouch");
+						LoginActivity.setToVouchList(newTvList);
+						
 					}
 				}
 

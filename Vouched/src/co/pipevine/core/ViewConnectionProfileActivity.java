@@ -75,9 +75,7 @@ public class ViewConnectionProfileActivity extends FragmentActivity {
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
 		super.onBackPressed();
-		Intent intent = new Intent(ViewConnectionProfileActivity.this, MainActivity.class);
-		intent.putExtra("Fragment", 2);
-		startActivity(intent);
+
 	}
     
     

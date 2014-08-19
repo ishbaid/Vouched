@@ -83,6 +83,8 @@ public class LoginActivity extends Activity {
 	public static HashMap<String, Person> allConnections;
 	public static ArrayList<String> orderedNames;
 	public static HashMap<String, Person> alphaMap;
+	//keeps track of linkedinIDs of connections, we need to vouch for
+	public static List<String> toVouchList;
 
 	//accessor methods for user
 	public static String getFirst(){return fn;}
@@ -103,7 +105,12 @@ public class LoginActivity extends Activity {
 	public static HashMap<String, Person>getConnectionHashMap(){ return allConnections;}
 	public static ArrayList<String> getOrderedNames(){return orderedNames;}
 	public static HashMap<String, Person>getAlphaMap(){ return alphaMap;}
-
+	public static List<String> getTvList(){return toVouchList;}
+	
+	
+	//mutators for connections
+	public static void setToVouchList(List<String> tv){toVouchList = tv;}
+	
 	boolean loggedin;
 	LinearLayout background;
 
@@ -305,12 +312,15 @@ public class LoginActivity extends Activity {
 									JSONArray tvUpload = new JSONArray();
 									//keeps track of all connections
 									JSONArray allContacts = new JSONArray();
-
+									//keeps track of connections to vouch
+									toVouchList = new ArrayList<String>();
+									
 									//fill toVouch with all connections, because this account is new
 									for(Person contact: contactList.getPersonList()){
 
 										tvUpload.put(contact.getId());
 										allContacts.put(contact.getId());
+										toVouchList.add(contact.getId());
 									}
 
 									//upload jsonarrays
@@ -353,6 +363,7 @@ public class LoginActivity extends Activity {
 									final ParseObject person = objects.get(0);
 									List<String>tvDatabase = new ArrayList<String>();
 									tvDatabase = person.getList("toVouch");
+									toVouchList = tvDatabase;
 									//if toVouch is null, this is a partial account
 									if(tvDatabase == null){
 
@@ -430,217 +441,7 @@ public class LoginActivity extends Activity {
 
 					});//search query
 
-					//query database for current user
-					ParseQuery<ParseObject> query = ParseQuery.getQuery("Person");
-					query.whereEqualTo("linkedinID", id);
-					query.findInBackground(new FindCallback<ParseObject>(){
-
-						@Override
-						public void done(List<ParseObject> objects,
-								ParseException e) {
-							// TODO Auto-generated method stub
-							if(e == null){
-
-								Log.d("Baid", "Search yielded " + objects.size() + " result(s)");
-								if(objects.size() == 0){
-									//account does not exist
-
-									ParseObject person = new ParseObject("Person");
-									person.put("firstName", fn);
-									person.put("lastName", ln);
-									person.put("linkedinID", id);
-									person.put("email", email);
-									person.put("headline", headline);
-									person.put("location", location);
-									person.put("profilePhotoURL", url);
-
-
-
-									int[]nvgZero = {0, 0, 0, 0, 0};
-									ArrayList<Integer>nvgData = new ArrayList<Integer>();
-									for(int i = 0; i < nvgZero.length; i ++){
-
-										nvgData.add(nvgZero[i]);
-									}
-									JSONArray nvg = new JSONArray(nvgData);
-
-
-									//size 9-- 8 traits, and total
-									int[]nvrZero = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-									int[]svrZero = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-									ArrayList<Integer>nvrData = new ArrayList<Integer>();
-									ArrayList<Integer>svrData = new ArrayList<Integer>();
-									for(int i = 0; i < nvrZero.length; i ++){
-
-										nvrData.add(nvrZero[i]);
-										svrData.add(svrZero[i]);
-									}
-									JSONArray nvr = new JSONArray(nvrData);
-									JSONArray svr = new JSONArray(svrData);
-
-									person.put("numberVouchesGiven", nvg);
-									person.put("numberVouchesReceived",nvr);
-									person.put("scoreVouchesReceived", svr);
-
-									//keeps track of social shares
-									boolean[] socialZero = {false, false, false, false, false};
-									ArrayList<Boolean> socialData = new ArrayList<Boolean>();
-									for(int i = 0; i < socialZero.length; i ++){
-
-										socialData.add(socialZero[i]);
-									}
-									JSONArray social = new JSONArray(socialData);
-
-									person.put("socialShares", social);
-									//inital vouch score is 0
-									person.put("totalVouchScore", 0);
-
-									//create toVouch and vouchedFor list
-									JSONArray tvUpload = new JSONArray();
-									//vouchedFor should then empty
-									JSONArray vfUpload = new JSONArray();
-
-									//fill toVouch with all connections, because this account is new
-									for(Person contact: contactList.getPersonList()){
-
-										tvUpload.put(contact.getId());
-									}
-
-									//only upload if we list was empty to begin with
-									person.put("toVouch", tvUpload);
-									person.put("vouchedFor", vfUpload);
-
-
-									person.saveInBackground(new SaveCallback(){
-
-										//when information has been saved
-										@Override
-										public void done(ParseException e) {
-											// TODO Auto-generated method stub
-											//indicates when user has successfully created an account
-											if(e == null)
-												Toast.makeText(LoginActivity.this, "Account Created!", Toast.LENGTH_SHORT).show();
-										}
-
-
-
-									});
-								}// if objects.size == 0
-								//account exits, we can load information
-								else if(objects.size() == 1){
-
-									Log.d("Baid", "Loading data");
-									int vouchScore = 0;
-									int vouchesGiven = 0;						
-									int vouchesReceived = 0;
-
-									//CHECK FOR UPDATES/NEW CONNECTIONS HERE!!!
-
-									//there is only one person with the linkedin ID that was specified
-									ParseObject person = objects.get(0);
-
-
-									//get vouches received
-									List<Integer>nvr = new ArrayList<Integer>();
-									nvr = person.getList("numberVouchesReceived");
-
-									//get vouches received
-									List<Integer>nvg = new ArrayList<Integer>();
-									nvg = person.getList("numberVouchesGiven");
-
-									//nvr is not null, but nvg is null, then this must be a partial account
-									if(nvg == null && nvr != null){
-
-										person.put("email", email);
-										person.put("headline", "HEADLINE");
-										person.put("location", location);
-										JSONArray social = new JSONArray();
-										JSONArray nvgToUpload =  new JSONArray();
-										for(int i = 0; i < 5; i ++){
-											social.put(false);
-											nvgToUpload.put(0);
-										}
-										person.put("socialShares", social);
-										person.put("numberVouchesGiven", nvgToUpload);
-
-
-
-										person.saveInBackground(new SaveCallback(){
-
-											@Override
-											public void done(ParseException e) {
-												// TODO Auto-generated method stub
-												if(e == null){
-
-													Log.d("Baid", "Information updated! Account created!");
-												}
-											}
-
-
-										});
-
-
-									}
-
-
-
-
-
-									//get vouches score
-									vouchScore = person.getInt("totalVouchScore");
-
-
-									if(nvg != null){
-
-										//nvg should have a size of 5
-										assert(nvg.size() == 5);
-										for(int i = 1; i < nvg.size(); i ++){
-
-											//be ware of a classcast exception
-											vouchesGiven += nvg.get(i);
-
-										}
-									}
-
-
-
-									if(nvr != null){
-
-										//should be of size 9
-										assert(nvr.size() == 9);
-										//the very last index keeps track of total
-										vouchesReceived = nvr.get(nvr.size() - 1);
-									}
-									Log.d("Baid", "VS: " + vouchScore + " Given: " + vouchesGiven + " Receieved: " + vouchesReceived);
-
-								}//else if objects.size == 0
-								//there should never be multiple objects with same linkedin ID
-								else{
-
-									AlertDialog alertDialog = new AlertDialog.Builder(LoginActivity.this).create();  
-									alertDialog.setTitle("Uh oh!");  
-									alertDialog.setMessage("Multiple ID's may exits\n" + id);
-									alertDialog.setCanceledOnTouchOutside(true);
-									alertDialog.show(); 
-									return;
-								}//else
-							}//if e == null
-							//error
-							else {
-								Log.d("score", "Error: " + e.getMessage());
-								AlertDialog alertDialog = new AlertDialog.Builder(LoginActivity.this).create();  
-								alertDialog.setTitle("Uh oh!");  
-								alertDialog.setMessage("Something went wrong trying to retrive information.");
-								alertDialog.setCanceledOnTouchOutside(true);
-								alertDialog.show(); 
-								return;
-							}
-
-						}//done
-
-
-					});//findCallback
-
+					
 					// /////////////////////////////////////////////////////////
 					// here you can do client API calls ...
 					// client.postComment(arg0, arg1);
