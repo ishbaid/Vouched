@@ -180,12 +180,7 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
-		SearchManager searchManager =
-				(SearchManager) getSystemService(MainActivity.SEARCH_SERVICE);
-		SearchView searchView =
-				(SearchView) menu.findItem(R.id.search).getActionView();
-		searchView.setSearchableInfo(
-				searchManager.getSearchableInfo(getComponentName()));
+
 		return true;
 	}
 
@@ -202,6 +197,9 @@ public class MainActivity extends FragmentActivity {
 		switch (item.getItemId()) {
 		case R.id.action_settings:
 			displayView(4);
+			return true;
+		case R.id.search:
+			displayView(2);
 			return true;
 		case R.id.share:
 			share();
