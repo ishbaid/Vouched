@@ -7,13 +7,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import com.google.code.linkedinapi.schema.Person;
-import com.parse.ParseObject;
-
-import android.support.v4.app.*;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,22 +20,27 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
 import co.pipevine.android.R;
-
-
 import co.pipevine.core.LoginActivity;
 import co.pipevine.core.ViewConnectionProfileActivity;
+
+import com.google.code.linkedinapi.schema.Person;
+import com.parse.ParseObject;
 
 
 public class FindPeopleFragment extends Fragment {
 
 	ListView cList;
+	EditText search;
 	ArrayAdapter<String> adapter;
 
+	ArrayList<String>data;
+	ArrayList<String>sorted;
 	HashMap<String, Person> tvMap; 
-	
+	int textlength = 0;
 	public FindPeopleFragment(){}
 
 	@Override
@@ -46,40 +50,82 @@ public class FindPeopleFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.fragment_find_people, container, false);
 
 		cList = (ListView) rootView.findViewById(R.id.list);
-		
 
-		
+		//for search
+		data = LoginActivity.getOrderedNames();
+		sorted = new ArrayList<String>();
+
+		search = (EditText) rootView.findViewById(R.id.search);
+		//handles search
+		search.addTextChangedListener(new TextWatcher(){
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// TODO Auto-generated method stub
+
+				textlength = search.getText().length();
+				sorted.clear();
+				for(int i = 0;i < data.size();i++)
+				{
+					if(textlength <= data.get(i).length())
+					{
+						if(search.getText().toString().equalsIgnoreCase((String) data.get(i).subSequence(0, textlength)))
+						{
+							sorted.add(data.get(i));
+						}
+					}
+				}
+
+				cList.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1 , sorted));
+			}
+
+
+		});
 
 		return rootView;
 	}
-	
+
 
 	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
 		ParseObject person = LoginActivity.getParseUser();
-		
+
 		//get list of connnections toVouch
 		List<String> tvList = new ArrayList<String>();
 		tvList = person.getList("toVouch");
-		
+
 		//get all connections
 		HashMap<String, Person> allMap = LoginActivity.getConnectionHashMap();
-		
+
 		tvMap = new HashMap<String, Person>();
-		
+
 		//go through list of id's we need to vouch for and create hashmap
 		for(int i = 0; i < tvList.size(); i ++){
-			
+
 			String id = tvList.get(i);
 			Person toAdd = allMap.get(id);
 			if(toAdd != null){
-				
+
 				tvMap.put(id, toAdd);
 			}
 		}
-		
+
 		Log.d("Baid", "To Vouch Map contatins " + tvMap.size() + " entries");
 		//once we're done, we can call loadlist
 		loadList();
@@ -98,27 +144,28 @@ public class FindPeopleFragment extends Fragment {
 				// TODO Auto-generated method stub
 				Intent intent = new Intent(getActivity(), ViewConnectionProfileActivity.class);
 
-				String reverseName = LoginActivity.getOrderedNames().get(position);
+				String  reverseName    = (String) cList.getItemAtPosition(position);  
+				
 				HashMap<String, Person> alphaMap = LoginActivity.getAlphaMap();
 				Person toShow = alphaMap.get(reverseName);
 
-				
+
 				String intentID = toShow.getId();
-				
+
 				//if person is in tvMap, then we still need to vouch for them
 				Person checkVouched = tvMap.get(intentID);
-				
+
 				//need to vouch for
 				if(checkVouched != null){
-					
+
 					intent.putExtra("Vouched", false);
 				}
 				//don't need to vouch for
 				else{
-					
+
 					intent.putExtra("Vouched", true);
 				}
-				
+
 				intent.putExtra("ID", intentID);
 				startActivity(intent);
 
@@ -129,7 +176,7 @@ public class FindPeopleFragment extends Fragment {
 
 	}
 
-	
+
 
 
 
@@ -212,6 +259,6 @@ public class FindPeopleFragment extends Fragment {
 		}
 
 	}
-	
-	
+
+
 }
