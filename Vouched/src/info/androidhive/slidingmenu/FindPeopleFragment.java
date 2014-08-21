@@ -108,8 +108,8 @@ public class FindPeopleFragment extends Fragment {
 
 		//get list of connnections toVouch
 		List<String> tvList = new ArrayList<String>();
-		tvList = person.getList("toVouch");
-
+		//tvList = person.getList("toVouch");
+		tvList = LoginActivity.getTvList();
 		//get all connections
 		HashMap<String, Person> allMap = LoginActivity.getConnectionHashMap();
 

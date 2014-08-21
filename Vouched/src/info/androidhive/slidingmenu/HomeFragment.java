@@ -376,8 +376,44 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 				alertDialog.show(); 
 			}
 			else if(id == aboutGiven.getId()){
+				
+				//for better UI, implement asynctask in the future
+				/*new AsyncTask<Void, Void, Object>(){
 
+					ProgressDialog progDailog;
+					@Override
+					protected void onPreExecute() {
+						// TODO Auto-generated method stub
+						super.onPreExecute();
+						progDailog = new ProgressDialog(getActivity());
+						progDailog.setMessage("Loading...");
+						progDailog.setIndeterminate(false);
+						progDailog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+						progDailog.setCancelable(true);
+						progDailog.show();
+					}
+
+					@Override
+					protected Object doInBackground(Void... params) {
+						// TODO Auto-generated method stub
+						
+						return null;
+					}
+
+					@Override
+					protected void onPostExecute(Object result) {
+						// TODO Auto-generated method stub
+						super.onPostExecute(result);
+						progDailog.dismiss();
+					}
+					
+					
+				}.execute();
+					
+					*/
 				getGiven();
+
+				
 			}
 			else if(id == aboutReceived.getId()){
 
