@@ -48,7 +48,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 	FrameLayout homeBackground;
 	LinearLayout aboutVS, aboutGiven, aboutReceived;
 
-	TextView name, info;
+	TextView name, info, info_loc;
 	static TextView score;
 	static TextView numGiven;
 	static TextView numReceived;
@@ -167,6 +167,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 		numReceived = (TextView) rootView.findViewById(R.id.num_received);
 		name = (TextView) rootView.findViewById(R.id.name);
 		info = (TextView) rootView.findViewById(R.id.info);
+		info_loc = (TextView) rootView.findViewById(R.id.info_loc);
 		proPic = (ImageView) rootView.findViewById(R.id.proPic);
 
 
@@ -182,10 +183,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 			String headline = LoginActivity.getHeadline();
 			String loc = LoginActivity.getLocation();
 			info.setText("");
-			if(headline != null && headline.length() <= 45)
-				info.setText(headline + "\n");
+			if(headline != null)
+				info.setText(headline);
 			if(loc != null)
-				info.setText(info.getText() + loc + "\n");
+				info_loc.setText(loc);
 		}
 
 

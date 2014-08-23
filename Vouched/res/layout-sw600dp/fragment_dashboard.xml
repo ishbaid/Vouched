@@ -34,9 +34,9 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/linearLayout2"
             android:layout_below="@+id/linearLayout1"
+            android:layout_marginLeft="40dp"
             android:layout_marginTop="20dp"
-            android:orientation="horizontal"
-            android:layout_marginLeft="40dp" >
+            android:orientation="horizontal" >
 
             <LinearLayout
                 android:id="@+id/about_vs"
@@ -137,22 +137,37 @@
 
         <TextView
             android:id="@+id/info"
-            android:layout_width="wrap_content"
+            android:layout_width="350dp"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/proPic"
             android:layout_below="@+id/name"
             android:layout_marginLeft="25dp"
+            android:layout_toRightOf="@+id/proPic"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:text="Additional Information"
             android:textSize="16dp" />
 
         <TextView
-            android:id="@+id/name"
+            android:id="@+id/info_loc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/info"
+            android:layout_below="@+id/info"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="Location"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="450dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/info"
             android:layout_alignParentTop="true"
-            android:text="Name"
             android:layout_marginTop="17dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="Name"
             android:textColor="#669900"
             android:textSize="36dp" />
         <!-- Displays Vouch Scores -->
@@ -202,8 +217,8 @@
             android:layout_alignLeft="@+id/header"
             android:layout_below="@+id/header"
             android:layout_marginTop="20dp"
-            android:textSize="22dp"
-            android:text="Professionalism" />
+            android:text="Professionalism"
+            android:textSize="22dp" />
 
         <View
             android:id="@+id/bar_prof"
@@ -232,8 +247,8 @@
             android:layout_below="@+id/header"
             android:layout_marginTop="20dp"
             android:layout_toRightOf="@+id/blank_prof"
-            android:textSize = "22dp"
-            android:text="100" />
+            android:text="100"
+            android:textSize="22dp" />
 
         <TextView
             android:id="@+id/label_integ"
@@ -242,8 +257,8 @@
             android:layout_alignLeft="@+id/header"
             android:layout_below="@+id/label_prof"
             android:layout_marginTop="20dp"
-            android:textSize="22dp"
-            android:text="Integrity" />
+            android:text="Integrity"
+            android:textSize="22dp" />
 
         <View
             android:id="@+id/bar_integ"
@@ -271,9 +286,9 @@
             android:layout_alignLeft="@+id/header3"
             android:layout_below="@+id/label_prof"
             android:layout_marginTop="20dp"
-            android:textSize="22dp"
             android:layout_toRightOf="@+id/blank_integ"
-            android:text="100" />
+            android:text="100"
+            android:textSize="22dp" />
 
         <TextView
             android:id="@+id/label_comm"
@@ -282,8 +297,8 @@
             android:layout_alignLeft="@+id/header"
             android:layout_below="@+id/label_integ"
             android:layout_marginTop="20dp"
-            android:textSize="22dp"
-            android:text="Communication" />
+            android:text="Communication"
+            android:textSize="22dp" />
 
         <View
             android:id="@+id/bar_comm"
@@ -310,10 +325,10 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/header3"
             android:layout_below="@+id/label_integ"
-            android:layout_toRightOf="@+id/blank_comm"
             android:layout_marginTop="20dp"
-            android:textSize="22dp"
-            android:text="100" />
+            android:layout_toRightOf="@+id/blank_comm"
+            android:text="100"
+            android:textSize="22dp" />
 
         <TextView
             android:id="@+id/label_innovation"
@@ -322,8 +337,8 @@
             android:layout_alignLeft="@+id/header"
             android:layout_below="@+id/label_comm"
             android:layout_marginTop="20dp"
-            android:textSize="22dp"
-            android:text="Innovation" />
+            android:text="Innovation"
+            android:textSize="22dp" />
 
         <View
             android:id="@+id/bar_innovation"
@@ -351,9 +366,9 @@
             android:layout_alignLeft="@+id/header3"
             android:layout_below="@+id/label_comm"
             android:layout_marginTop="20dp"
-            android:textSize="22dp"
             android:layout_toRightOf="@+id/blank_innovation"
-            android:text="100" />
+            android:text="100"
+            android:textSize="22dp" />
 
         <TextView
             android:id="@+id/label_prod"
@@ -362,8 +377,8 @@
             android:layout_alignLeft="@+id/header"
             android:layout_below="@+id/label_innovation"
             android:layout_marginTop="20dp"
-            android:textSize="22dp"
-            android:text="Productivity" />
+            android:text="Productivity"
+            android:textSize="22dp" />
 
         <View
             android:id="@+id/bar_prod"
@@ -391,9 +406,9 @@
             android:layout_alignLeft="@+id/header3"
             android:layout_below="@+id/label_innovation"
             android:layout_marginTop="20dp"
-            android:textSize="22dp"
             android:layout_toRightOf="@+id/blank_prod"
-            android:text="100" />
+            android:text="100"
+            android:textSize="22dp" />
 
         <TextView
             android:id="@+id/label_adapt"
@@ -402,8 +417,8 @@
             android:layout_alignLeft="@+id/header"
             android:layout_below="@+id/label_prod"
             android:layout_marginTop="20dp"
-            android:textSize="22dp"
-            android:text="Adaptability" />
+            android:text="Adaptability"
+            android:textSize="22dp" />
 
         <View
             android:id="@+id/bar_adapt"
@@ -431,9 +446,9 @@
             android:layout_alignLeft="@+id/header3"
             android:layout_below="@+id/label_prod"
             android:layout_marginTop="20dp"
-            android:textSize="22dp"
             android:layout_toRightOf="@+id/blank_adapt"
-            android:text="100" />
+            android:text="100"
+            android:textSize="22dp" />
 
         <TextView
             android:id="@+id/label_lead"
@@ -442,8 +457,8 @@
             android:layout_alignLeft="@+id/header"
             android:layout_below="@+id/label_adapt"
             android:layout_marginTop="20dp"
-            android:textSize="22dp"
-            android:text="Leadership" />
+            android:text="Leadership"
+            android:textSize="22dp" />
 
         <View
             android:id="@+id/bar_lead"
@@ -471,9 +486,9 @@
             android:layout_alignLeft="@+id/header3"
             android:layout_below="@+id/label_adapt"
             android:layout_marginTop="20dp"
-            android:textSize="22dp"
             android:layout_toRightOf="@+id/blank_lead"
-            android:text="100" />
+            android:text="100"
+            android:textSize="22dp" />
 
         <TextView
             android:id="@+id/label_team"
@@ -482,8 +497,8 @@
             android:layout_alignLeft="@+id/header"
             android:layout_below="@+id/label_lead"
             android:layout_marginTop="20dp"
-            android:textSize="22dp"
-            android:text="Teamwork" />
+            android:text="Teamwork"
+            android:textSize="22dp" />
 
         <View
             android:id="@+id/bar_team"
@@ -511,10 +526,9 @@
             android:layout_alignLeft="@+id/header3"
             android:layout_below="@+id/label_lead"
             android:layout_marginTop="20dp"
-            android:textSize="22dp"
             android:layout_toRightOf="@+id/blank_team"
-            android:text="100" />
-
+            android:text="100"
+            android:textSize="22dp" />
     </RelativeLayout>
 
 </FrameLayout>

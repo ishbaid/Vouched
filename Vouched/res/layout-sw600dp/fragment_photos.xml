@@ -10,6 +10,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/cName"
         android:layout_centerHorizontal="true"
+        android:ellipsize="end"
+        android:singleLine="true"
         android:text="Connection Information" />
 
     <TextView
@@ -18,6 +20,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
+        android:ellipsize="end"
+        android:singleLine="true"
         android:text="Connection Name"
         android:textSize="48dp"
         android:textStyle="bold" />

@@ -9,11 +9,24 @@
         android:layout_height="match_parent" >
 
         <TextView
-            android:id="@+id/info"
+            android:id="@+id/info_loc"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/info"
+            android:layout_below="@+id/info"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="Location"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/info"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/name"
             android:layout_centerHorizontal="true"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:text="Additional Information"
             android:textSize="14dp" />
 
@@ -29,10 +42,12 @@
 
         <TextView
             android:id="@+id/name"
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/info"
             android:layout_alignTop="@+id/proPic"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:text="Name"
             android:textColor="#669900"
             android:textSize="28dp" />
@@ -49,10 +64,10 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity=""
                 android:layout_marginLeft="25dp"
                 android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                android:layout_gravity="" >
+                android:orientation="horizontal" >
 
                 <LinearLayout
                     android:id="@+id/about_vs"
@@ -209,8 +224,7 @@
             android:layout_below="@+id/header"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/label_prof"
-            android:background="#669900"
-             />
+            android:background="#669900" />
 
         <View
             android:id="@+id/blank_prof"
@@ -496,9 +510,6 @@
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/blank_team"
             android:text="100" />
-
-        
-
     </RelativeLayout>
 
 </FrameLayout>

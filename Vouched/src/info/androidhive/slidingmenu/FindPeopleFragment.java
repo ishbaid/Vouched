@@ -83,8 +83,7 @@ public class FindPeopleFragment extends Fragment {
 				{
 					if(textlength <= data.get(i).length())
 					{
-						if(search.getText().toString().equalsIgnoreCase((String) data.get(i).subSequence(0, textlength)))
-						{
+						if(data.get(i).toLowerCase().contains(search.getText().toString().toLowerCase())){
 							sorted.add(data.get(i));
 						}
 					}
@@ -145,7 +144,7 @@ public class FindPeopleFragment extends Fragment {
 				Intent intent = new Intent(getActivity(), ViewConnectionProfileActivity.class);
 
 				String  reverseName    = (String) cList.getItemAtPosition(position);  
-				
+
 				HashMap<String, Person> alphaMap = LoginActivity.getAlphaMap();
 				Person toShow = alphaMap.get(reverseName);
 

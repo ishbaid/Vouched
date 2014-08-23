@@ -265,7 +265,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 				super.onSwipeDown();
 				Log.d("Baid", "swipe down");
 			}
-			
+
 
 
 		});
@@ -305,7 +305,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 					if(objects.size() == 1){
 
 						ParseObject person = objects.get(0);
-						
+
 						//if user does not have an account, bring up option to send an invite
 						List<String>tv = new ArrayList<String>();
 						tv = person.getList("toVouch");
@@ -316,11 +316,11 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 					}//objects.size == 1
 					//account does not exits
 					else if(objects.size() == 0){
-						
+
 						//send invite
 						if(!PagesFragment.neverState)
 							inviteDialog(currentConnection.getId());
-						
+
 						final ParseObject person = new ParseObject("User");
 
 						person.put("linkedinID", connection.getId());
@@ -367,7 +367,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 	}
 
 	private void inviteDialog(final String curID){
-		
+
 		AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
 
 		alert.setTitle("Invite");
@@ -376,25 +376,25 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 		// Set an EditText view to get user input 
 		LinearLayout dialog = new LinearLayout(getActivity());
 		dialog.setOrientation(LinearLayout.VERTICAL);
-		
+
 		final EditText input = new EditText(getActivity());
 		input.setText("Hey " + currentConnection.getFirstName() + ",\n\n");
 		input.setText(input.getText() + getString(R.string.invite_message));
 		input.setText(input.getText() + "\n" + LoginActivity.getFirst());
 		dialog.addView(input);
-		
+
 		final CheckBox ask = new CheckBox(getActivity());
 		ask.setText("Apply to All");
 		dialog.addView(ask);
-		
+
 		alert.setView(dialog);
 
 		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				String value = input.getText().toString();
-				
+
 				if(ask.isChecked()){
-					
+
 					PagesFragment.setAuto(true);
 				}
 				final String message = input.getText().toString();
@@ -426,20 +426,20 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 						super.onPostExecute(result);
 						Log.d("Baid", "Message sent");
 						progDailog.dismiss();
-						
+
 					}
-					
-					
+
+
 				}.execute();
 			}
 		});
-		
-		
+
+
 		alert.setNegativeButton("Not Right Now", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				// Canceled.
 				if(ask.isChecked()){
-					
+
 					PagesFragment.setNever(true);
 				}
 			}
@@ -518,7 +518,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 									Log.d("Baid", "Connection's score has been saved!");
 
 									//add callback if you want to know when it finishes
-									
+
 									updateUserData();
 									vouchContact();
 									setConnection();
@@ -600,8 +600,8 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 				if(e == null)
 					Log.d("Baid", "Saved Vouch object!");
 			}
-			
-			
+
+
 		});
 
 
@@ -671,7 +671,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 		int traitsVouched = curRank - 1;
 		if(traitsVouched == 0){
-			
+
 			//AlertView: Must vouch at least one trait
 			AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();  
 			alertDialog.setTitle("Alert ");  
@@ -680,13 +680,13 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 			alertDialog.show(); 
 		}
 		else{
-			
+
 			uploadToDatabase();
 		}
-		
-		
+
+
 		//Toast.makeText(getActivity(), "Vouched!", Toast.LENGTH_SHORT).show();
-		
+
 	}
 
 
@@ -823,7 +823,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 						List<String> newTvList = new ArrayList<String>();
 						newTvList = person.getList("toVouch");
 						LoginActivity.setToVouchList(newTvList);
-						
+
 					}
 				}
 
@@ -1003,10 +1003,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 		cName.setText(name);
 
 		String header = connection.getHeadline();
-		if(header.length() <= 55)
-			cInfo.setText(connection.getHeadline());
-		else
-			cInfo.setText("");
+		cInfo.setText(header);
 		String url = connection.getPictureUrl();
 		cPic.setTag(url);
 		new DownloadImagesTask().execute(cPic);
@@ -1074,30 +1071,30 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 		String tvID = MainActivity.getTvID();
 		boolean found = false;
 		if(tvID != null){
-			
+
 			//reset id back to null
 			MainActivity.resetTvID();
 			Person toAdd = all.get(tvID);
 			if(toAdd != null){
-				
+
 				IDs.add(tvID);
 				found = true;
-				
+
 			}
 			else{
-				
+
 				Log.d("Baid", "Error: Couldn't find connection to vouch for.");
 			}
 		}
-		
+
 		//creates list of connections to vouch for
 		for(int i = 0; i < tv.size(); i ++){
 
 			String id = tv.get(i);
-			
+
 			//if we are vouching for specific person, only add them to list once
 			if(!found || !id.equals(tvID)){
-				
+
 				//add to IDs
 				IDs.add(id);
 			}
