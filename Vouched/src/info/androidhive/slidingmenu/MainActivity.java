@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 
 
+
 import android.app.Activity;
 import android.app.AlertDialog;
 //import android.app.Fragment;
@@ -34,6 +35,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 import co.pipevine.android.R;
+import co.pipevine.core.LoginActivity;
 
 
 
@@ -61,7 +63,7 @@ public class MainActivity extends FragmentActivity {
 	public static String getTvID(){return toVouchID;}
 	//resets ID when we're done
 	public static void resetTvID(){toVouchID = null;};
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -116,8 +118,6 @@ public class MainActivity extends FragmentActivity {
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
 		// Pages
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
-		// What's hot, We  will add a counter here
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1)));
 
 
 		// Recycle the typed array
@@ -197,6 +197,15 @@ public class MainActivity extends FragmentActivity {
 		switch (item.getItemId()) {
 		case R.id.action_settings:
 			displayView(4);
+			return true;
+		case R.id.logout:
+			Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+			startActivity(intent);
+
+			SharedPreferences settings = MainActivity.this.getSharedPreferences("co.pipevine.core", Context.MODE_PRIVATE);
+			SharedPreferences.Editor edit = settings.edit();
+			edit.putBoolean("LoggedIn", false);
+			edit.commit();
 			return true;
 		case R.id.search:
 			displayView(2);
@@ -345,16 +354,16 @@ public class MainActivity extends FragmentActivity {
 		Intent intent = getIntent();
 		int position = intent.getIntExtra("Fragment", -1);
 		if(position != -1){
-			
-			
+
+
 			if(position == 0){
-				
+
 				//id of person we need to vouch for
 				toVouchID = intent.getStringExtra("ID");
-				
+
 			}
 			displayView(position);
-			
+
 		}
 	}
 

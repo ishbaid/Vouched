@@ -268,8 +268,9 @@ public class ViewProfileFragment extends Fragment implements View.OnClickListene
 						int [] scores = new int[8];
 						for(int i = 0; i < traitScores.length; i ++){
 
-							scores[i] = score.getInt(traitScores[i]);
-
+							//this use to score, but now it represents vouches given for specific trait
+							//scores[i] = score.getInt(traitScores[i]);
+							scores[i] = score.getInt(traitNumbers[i]);
 						}
 						setScores(scores[0], scores[2], scores[4], scores[6], scores[1], scores[3], scores[5], scores[7]);
 

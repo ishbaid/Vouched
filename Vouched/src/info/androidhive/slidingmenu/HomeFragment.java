@@ -237,10 +237,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 						}
 						setGraph(percents[0], percents[2], percents[4], percents[6], percents[1], percents[3], percents[5], percents[7]);
 
+						//this use to represent scores, but now it just represents number of vouches for each trait
 						int [] scores = new int[8];
 						for(int i = 0; i < traitScores.length; i ++){
 
-							scores[i] = score.getInt(traitScores[i]);
+													//use to be traitScores
+							scores[i] = score.getInt(traitNumbers[i]);
 
 						}
 						setScores(scores[0], scores[2], scores[4], scores[6], scores[1], scores[3], scores[5], scores[7]);

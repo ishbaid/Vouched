@@ -16,6 +16,7 @@ import org.json.JSONArray;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -24,8 +25,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 import co.pipevine.android.R;
 
@@ -111,8 +112,9 @@ public class LoginActivity extends Activity {
 	//mutators for connections
 	public static void setToVouchList(List<String> tv){toVouchList = tv;}
 	
-	boolean loggedin;
+
 	LinearLayout background;
+	Button signIn;
 
 	public static LinkedInApiClient client = null;
 
@@ -126,17 +128,21 @@ public class LoginActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
 
-		loggedin = false;
+		//Not loggedin
+		SharedPreferences settings = LoginActivity.this.getSharedPreferences("co.pipevine.core", Context.MODE_PRIVATE);
+		SharedPreferences.Editor edit = settings.edit();
+		edit.putBoolean("LoggedIn", false);
+		edit.commit();
+		
 		background = (LinearLayout) findViewById(R.id.spash_background);
-
-		background.setOnClickListener(new View.OnClickListener() {
+		signIn = (Button) findViewById(R.id.signin);
+		signIn.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-				startActivity(intent);
-
+				//do nothing for now
+				startAutheniticate();
 			}
 		});
 
@@ -474,7 +480,12 @@ public class LoginActivity extends Activity {
 				} else if (result instanceof Person) {
 					final Person p = (Person) result;
 					//tv.setText(getLast() + ", " + getFirst() + "\n" + getEmail() + "\n" + getHeadline() + "\n" + getLocation() + "\nID: " + getUserID() + "\n" + getPicture() + "\n");
-					loggedin = true;
+					
+					//we are now loggedin
+					SharedPreferences settings = LoginActivity.this.getSharedPreferences("co.pipevine.core", Context.MODE_PRIVATE);
+					SharedPreferences.Editor edit = settings.edit();
+					edit.putBoolean("LoggedIn", true);
+					edit.commit();
 					Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 					startActivity(intent);
 				}
@@ -491,7 +502,9 @@ public class LoginActivity extends Activity {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		if(loggedin){
+		SharedPreferences pref = getSharedPreferences("co.pipevine.core", Context.MODE_PRIVATE);
+		boolean loggedIn = pref.getBoolean("LoggedIn", false);
+		if(loggedIn){
 
 			Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 			startActivity(intent);

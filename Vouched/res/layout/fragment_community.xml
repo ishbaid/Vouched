@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:background="#626060"
+        android:background="#669900"
         android:text="TOTAL VOUCH SCORE"
         android:textColor="@android:color/white" />
 
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/button3"
         android:layout_below="@+id/button3"
-        android:background="#767474"
+        android:background="#374150"
         android:text="Communication"
         android:textColor="@android:color/white"
         android:layout_marginTop="5dp" />
@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/button5"
         android:layout_below="@+id/button5"
-        android:background="#767474"
+        android:background="#374150"
         android:text="Productivity"
         android:textColor="@android:color/white"
         android:layout_marginTop="5dp" />
@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/button6"
         android:layout_below="@+id/button6"
-        android:background="#767474"
+        android:background="#374150"
         android:text="Adaptability"
         android:textColor="@android:color/white"
         android:layout_marginTop="5dp" />
@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/button1"
         android:layout_centerHorizontal="true"
-        android:background="#767474"
+        android:background="#374150"
         android:text="Professionalism"
         android:textColor="@android:color/white"
         android:layout_marginTop="5dp" />
@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/button7"
         android:layout_below="@+id/button7"
-        android:background="#767474"
+        android:background="#374150"
         android:text="Leadership"
         android:textColor="@android:color/white"
         android:layout_marginTop="5dp" />
@@ -74,7 +74,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/button2"
         android:layout_below="@+id/button2"
-        android:background="#767474"
+        android:background="#374150"
         android:text="Integrity"
         android:textColor="@android:color/white"
         android:layout_marginTop="5dp" />
@@ -85,7 +85,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/button4"
         android:layout_below="@+id/button4"
-        android:background="#767474"
+        android:background="#374150"
         android:text="Innovation"
         android:textColor="@android:color/white"
         android:layout_marginTop="5dp" />
@@ -96,7 +96,7 @@
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/button8"
         android:layout_below="@+id/button8"
-        android:background="#767474"
+        android:background="#374150"
         android:text="Teamwork"
         android:textColor="@android:color/white"
         android:layout_marginTop="5dp" />

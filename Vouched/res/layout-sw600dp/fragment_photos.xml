@@ -30,9 +30,9 @@
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
+        android:layout_below="@+id/textView1"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="75dp"
+        android:layout_marginTop="50dp"
         android:orientation="vertical" >
 
         <LinearLayout
@@ -139,44 +139,8 @@
                 android:textOn=""
                 android:textSize="12dp" />
         </LinearLayout>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/cPic"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:text="WHAT ARE THEIR TOP TRAITS?"
-        android:textSize="16dp" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
-        android:layout_centerHorizontal="true"
-        android:text="SELECT UP TO (4)"
-        android:textSize="12dp" />
-
-    <Button
-        android:id="@+id/next"
-        android:layout_width="300dp"
-        android:layout_height="80dp"
-        android:layout_alignBaseline="@+id/skip"
-        android:layout_alignBottom="@+id/skip"
-        android:layout_toRightOf="@+id/textView2"
-        android:background="#669900" />
-
-    <Button
-        android:id="@+id/skip"
-        android:layout_width="300dp"
-        android:layout_height="80dp"
-        android:layout_below="@+id/linearLayout1"
-        android:layout_marginTop="70dp"
-        android:layout_toLeftOf="@+id/textView2"
-        android:background="#E91A1A" />
+    </LinearLayout>s
+    
 
     <ImageView
         android:id="@+id/cPic"
@@ -186,5 +150,51 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:src="@drawable/default_face" />
+
+    <Button
+        android:id="@+id/next"
+        android:layout_width="250dp"
+        android:layout_height="80dp"
+        android:layout_alignBaseline="@+id/skip"
+        android:layout_alignBottom="@+id/skip"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/vouch_button" />
+
+    <LinearLayout
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/cPic"
+        android:layout_marginTop="50dp"
+        android:background="#ddd7d7"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="WHAT ARE THEIR TOP TRAITS?"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView1"
+            android:layout_centerHorizontal="true"
+            android:text="SELECT UP TO (4)"
+            android:textSize="20dp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/skip"
+        android:layout_width="250dp"
+        android:layout_height="80dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignBottom="@+id/vouch"
+        android:layout_below="@+id/linearLayout1"
+        android:layout_marginTop="35dp"
+        android:background="@drawable/skip_button" />
 
 </RelativeLayout>

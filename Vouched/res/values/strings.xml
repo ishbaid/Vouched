@@ -19,7 +19,6 @@ Are you a leader? An innovator? A great communicator? Download the app to find o
         <item>Connections</item>
         <item>Leaderboards</item>
         <item>Settings</item>
-        <item>Logout</item>
     </string-array>
 
     <!-- Nav Drawer List Item Icons -->
@@ -30,7 +29,6 @@ Are you a leader? An innovator? A great communicator? Download the app to find o
         <item>@drawable/ic_social_group</item>
         <item>@drawable/ic_leaderboard</item>
         <item>@drawable/ic_settings</item>
-        <item>@drawable/ic_device_access_accounts</item>
     </array>
 
     <!-- Keeps track of vouch button icons -->

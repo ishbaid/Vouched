@@ -256,7 +256,8 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 				// TODO Auto-generated method stub
 				super.onSwipeUp();
 				Log.d("Baid", "swipe up");
-				inviteDialog(currentConnection.getId());
+				//IMPORTANT: uncomment the line of code below to bring up message dialog on swipe up
+				//inviteDialog(currentConnection.getId());
 			}
 
 			@Override
@@ -416,7 +417,8 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 					@Override
 					protected Object doInBackground(Void... params) {
 						// TODO Auto-generated method stub
-						LoginActivity.client.sendMessage(Arrays.asList(curID, LoginActivity.getUserID()), "I just vouched for you", message);
+							//uncomment to enable messaging												//Add loginActivity.getuserId(), if you want user to be cced on message
+						//LoginActivity.client.sendMessage(Arrays.asList(curID/*, LoginActivity.getUserID()*/), "I just vouched for you", message);
 						return null;
 					}
 
@@ -782,7 +784,7 @@ public class PhotosFragment extends Fragment implements View.OnClickListener, On
 
 	}
 
-	//lets upload to database what connections we've vouche for and which connections, we still need
+	//lets upload to database what connections we've vouch for and which connections, we still need
 	//to vouch for
 	@Override
 	public void onPause() {
