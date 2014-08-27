@@ -189,7 +189,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/header"
-            android:text="%VOUHED FOR"
+            android:text="%VOUCHED FOR"
             android:textColor="#669900"
             android:textSize="12dp"
             android:textStyle="bold" />

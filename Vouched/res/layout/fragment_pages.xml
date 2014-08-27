@@ -3,23 +3,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <CheckBox
-        android:id="@+id/checkBox1"
+    <TextView
+        android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/checkBox2"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="67dp"
-        android:checked="false"
-        android:text="Automatically Invite Connections" />
+        android:layout_marginTop="27dp"
+        android:text="Vouched Privacy Policy" />
 
     <CheckBox
         android:id="@+id/checkBox2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/checkBox1"
-        android:layout_below="@+id/checkBox1"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="14dp"
         android:text="Never ask to send invite." />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="27dp"
+        android:text="Vouched Terms of Service" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="108dp"
+        android:text="If you have any problems or spot any bugs, please email vouchedappsupport@pipevine.co"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" />
 
 </RelativeLayout>

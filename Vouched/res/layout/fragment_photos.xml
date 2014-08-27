@@ -185,7 +185,9 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/linearLayout1"
         android:layout_marginTop="29dp"
-        android:background="@drawable/skip_button" />
+        android:background="@drawable/skip_button"
+        
+         />
 
     <Button
         android:id="@+id/next"
@@ -194,6 +196,8 @@
         android:layout_alignBaseline="@+id/skip"
         android:layout_alignBottom="@+id/skip"
         android:layout_alignParentRight="true"
-        android:background="@drawable/vouch_button" />
+        android:background="@drawable/vouch_button"
+
+         />
 
 </RelativeLayout>

@@ -1,7 +1,7 @@
 package co.pipevine.core;
 
 import info.androidhive.slidingmenu.MainActivity;
-import info.androidhive.slidingmenu.PhotosFragment;
+import info.androidhive.slidingmenu.VouchFragment;
 
 import java.util.List;
 

@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 
 
+
+
 import android.app.Activity;
 import android.app.AlertDialog;
 //import android.app.Fragment;
@@ -25,6 +27,7 @@ import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,6 +39,7 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import co.pipevine.android.R;
 import co.pipevine.core.LoginActivity;
+import co.pipevine.core.Tutorial;
 
 
 
@@ -198,6 +202,10 @@ public class MainActivity extends FragmentActivity {
 		case R.id.action_settings:
 			displayView(4);
 			return true;
+		/*case R.id.instructions:
+			Intent start = new Intent(MainActivity.this, Tutorial.class);
+			startActivity(start);
+			return true;*/
 		case R.id.logout:
 			Intent intent = new Intent(MainActivity.this, LoginActivity.class);
 			startActivity(intent);
@@ -238,7 +246,7 @@ public class MainActivity extends FragmentActivity {
 		Fragment fragment = null;
 		switch (position) {
 		case 0:
-			fragment = new PhotosFragment();
+			fragment = new VouchFragment();
 			//fragment = new HomeFragment();
 			break;
 		case 1:
@@ -246,17 +254,17 @@ public class MainActivity extends FragmentActivity {
 			//fragment = new FindPeopleFragment();
 			break;
 		case 2:
-			fragment = new FindPeopleFragment();
+			fragment = new ConnectionListFragment();
 			//fragment = new PhotosFragment();
 			break;
 		case 3:
-			fragment = new CommunityFragment();
+			fragment = new LeaderboardsFragment();
 			break;
 		case 4:
-			fragment = new PagesFragment();
+			fragment = new SettingsFragment();
 			break;
 		case 5:
-			fragment = new WhatsHotFragment();
+			//fragment = new WhatsHotFragment();
 			break;
 
 		default:
@@ -315,7 +323,7 @@ public class MainActivity extends FragmentActivity {
 		final EditText input = new EditText(MainActivity.this);
 		//set pre-formated text
 		input.setText(getString(R.string.share_message));
-
+		input.setAutoLinkMask(Linkify.ALL);
 		alert.setView(input);
 
 		alert.setPositiveButton("Share", new DialogInterface.OnClickListener() {
