@@ -23,7 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
-import co.pipevine.android.R;
+import co.pipevine.vouchedapp.R;
 import co.pipevine.core.LoginActivity;
 import co.pipevine.core.ViewConnectionProfileActivity;
 

@@ -15,7 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import co.pipevine.android.R;
+import co.pipevine.vouchedapp.R;
 
 public class Leaderboards extends Activity {
 

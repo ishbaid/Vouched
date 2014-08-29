@@ -12,7 +12,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
-import co.pipevine.android.R;
+import co.pipevine.vouchedapp.R;
 
 public class SettingsFragment extends Fragment implements OnCheckedChangeListener {
 	

@@ -40,7 +40,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-import co.pipevine.android.R;
+import co.pipevine.vouchedapp.R;
 import co.pipevine.core.DownloadImagesTask;
 import co.pipevine.core.LoginActivity;
 import co.pipevine.core.OnSwipeTouchListener;

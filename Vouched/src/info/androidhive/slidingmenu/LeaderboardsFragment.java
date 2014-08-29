@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import co.pipevine.android.R;
+import co.pipevine.vouchedapp.R;
 import co.pipevine.core.Leaderboards;
 
 public class LeaderboardsFragment extends Fragment implements View.OnClickListener{

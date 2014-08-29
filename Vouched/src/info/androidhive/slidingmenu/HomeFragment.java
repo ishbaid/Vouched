@@ -30,7 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
-import co.pipevine.android.R;
+import co.pipevine.vouchedapp.R;
 import co.pipevine.core.DownloadImagesTask;
 import co.pipevine.core.LoginActivity;
 import co.pipevine.core.OnSwipeTouchListener;

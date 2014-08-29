@@ -1,6 +1,6 @@
 package co.pipevine.core;
 
-import co.pipevine.android.R;
+import co.pipevine.vouchedapp.R;
 import android.app.Activity;
 import android.os.Bundle;
 

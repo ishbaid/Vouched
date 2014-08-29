@@ -17,7 +17,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import co.pipevine.android.R;
+import co.pipevine.vouchedapp.R;
 
 import com.google.code.linkedinapi.schema.Person;
 import com.parse.FindCallback;

@@ -37,7 +37,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
-import co.pipevine.android.R;
+import co.pipevine.vouchedapp.R;
 import co.pipevine.core.LoginActivity;
 import co.pipevine.core.Tutorial;
 

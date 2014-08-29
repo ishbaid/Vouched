@@ -28,7 +28,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-import co.pipevine.android.R;
+import co.pipevine.vouchedapp.R;
 
 import com.google.code.linkedinapi.client.LinkedInApiClient;
 import com.google.code.linkedinapi.client.LinkedInApiClientException;
@@ -142,6 +142,7 @@ public class LoginActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				//do nothing for now
+				Log.d("Baid", "Launch login");
 				startAutheniticate();
 			}
 		});

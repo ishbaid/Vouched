@@ -1,6 +1,6 @@
 package info.androidhive.slidingmenu.adapter;
 
-import co.pipevine.android.R;
+import co.pipevine.vouchedapp.R;
 import info.androidhive.slidingmenu.model.NavDrawerItem;
 
 import java.util.ArrayList;
